@@ -1,0 +1,19 @@
+{
+  "version": "1.0.0-*",
+  "buildOptions": {
+    "emitEntryPoint": true
+  },
+
+    "dependencies": {
+        "BCL": "1.0.0-*",
+        "Microsoft.NETCore.App": "1.0.1",
+        "RestEase": "1.2.0",
+        "System.Diagnostics.Process": "4.1.0"
+    },
+
+  "frameworks": {
+    "netcoreapp1.0": {
+      "imports": "dnxcore50"
+    }
+  }
+}
