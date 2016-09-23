@@ -5,7 +5,9 @@
         "Discord.Net": "1.0.0-beta-00417",
         "Discord.Net.Commands": "1.0.0-beta-00417",
         "NETStandard.Library": "1.6.0",
-        "System.Diagnostics.Process": "4.1.0"
+        "System.Diagnostics.Process": "4.1.0",
+        "System.Net.WebSockets.Client": "4.0.0",
+        "System.Runtime": "4.1.0"
     },
 
   "frameworks": {

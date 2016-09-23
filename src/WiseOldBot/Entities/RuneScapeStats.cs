@@ -11,7 +11,7 @@
 
 #endregion
 
-namespace WiseOldBot.APIs.Entities {
+namespace WiseOldBot.Entities {
     public enum HighScoreType {
         Regular,
         Ironman,
