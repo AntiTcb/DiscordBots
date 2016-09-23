@@ -1,15 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿#region Header
 
-namespace WiseOldBot.TypeReaders
-{
-    using APIs.Entities;
+// Description:
+// 
+// Solution: DiscordBots
+// Project: WiseOldBot
+// 
+// Created: 09/16/2016 11:42 PM
+// Last Revised: 09/23/2016 6:01 AM
+// Last Revised by: Alex Gravely
+
+#endregion
+
+namespace WiseOldBot.TypeReaders {
+    #region Using
+
+    using System.Threading.Tasks;
     using Discord;
     using Discord.Commands;
-    public class HighScoreTypeReader : TypeReader
-    {
+    using Entities;
+
+    #endregion
+
+    public class HighScoreTypeReader : TypeReader {
         #region Overrides of TypeReader
 
         public override Task<TypeReaderResult> Read(IUserMessage context, string input) {
@@ -54,6 +66,6 @@ namespace WiseOldBot.TypeReaders
             }
         }
 
-        #endregion
+        #endregion Overrides of TypeReader
     }
 }

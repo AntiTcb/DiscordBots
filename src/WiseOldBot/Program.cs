@@ -15,10 +15,10 @@ namespace WiseOldBot {
     #region Using
 
     using System.Threading.Tasks;
-    using APIs.Entities;
     using BCL;
     using Discord;
     using Discord.WebSocket;
+    using Entities;
     using TypeReaders;
 
     #endregion
