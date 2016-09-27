@@ -41,7 +41,7 @@ namespace WiseOldBot {
             await LoginAndConnectAsync();
         }
 
-        public override void HandleConfigs() => Configs = ConfigHandler.Load("config.json");
+        public override void HandleConfigs() => Configs = ConfigHandler.Load<WiseOldBotConfig>(CONFIG_PATH);
 
         public async override Task InstallCommandsAsync() {
             Commands = new CommandHandler();
