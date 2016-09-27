@@ -25,27 +25,27 @@ namespace BCL.Preconditions {
     public class RequireOwnerAttribute : PreconditionAttribute {
         #region Private Fields + Properties
 
-        readonly IApplication _app;
+        public ulong Owner { get; }
 
         #endregion Private Fields + Properties
 
         #region Public Constructors
 
-        public RequireOwnerAttribute(IApplication a) {
-            _app = a;
+        public RequireOwnerAttribute(ulong ownerID) {
+            Owner = ownerID;
         }
-
+        
         #endregion Public Constructors
 
         #region Public Methods
 
         public override Task<PreconditionResult> CheckPermissions
-            (IUserMessage context, Command executingCommand, object moduleInstance)
-            =>
-                Task.FromResult
-                    (context.Author.Id == _app.Owner.Id
-                         ? PreconditionResult.FromSuccess()
-                         : PreconditionResult.FromError("You must be the owner of the bot."));
+            (IUserMessage context, Command executingCommand, object moduleInstance) {
+            return Task.FromResult
+                (context.Author.Id == Owner
+                     ? PreconditionResult.FromSuccess()
+                     : PreconditionResult.FromError("You must be the owner of the bot."));
+        }
 
         #endregion Public Methods
     }
