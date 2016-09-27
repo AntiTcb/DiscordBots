@@ -28,7 +28,7 @@ namespace BCL {
         public string BotToken { get; set; }
         public DiscordSocketClient Client { get; set; }
         public ICommandHandler Commands { get; set; }
-        public Config Configs { get; set; }
+        public IConfig Configs { get; set; }
 
         public async Task LoginAndConnectAsync() {
             await Client.LoginAsync(TokenType.Bot, BotToken);

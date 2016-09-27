@@ -19,7 +19,7 @@ namespace BCL.Interfaces {
         string BotToken { get; set; }
         DiscordSocketClient Client { get; set; }
         ICommandHandler Commands { get; set; }
-        Config Configs { get; set; }
+        IConfig Configs { get; set; }
         Task StartAsync();
         void HandleConfigs();
         Task InstallCommandsAsync();
