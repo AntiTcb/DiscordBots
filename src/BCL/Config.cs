@@ -13,9 +13,11 @@ namespace BCL {
     using System.IO;
     using Newtonsoft.Json;
 
-    public class Config {
+    public struct Config {
         [JsonProperty("botToken")]
         public string BotToken { get; set; }
+        [JsonProperty("logChannel")]
+        public ulong LogChannel { get; set; }
     }
 
     public static class ConfigHandler {
