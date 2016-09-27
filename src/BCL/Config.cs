@@ -15,6 +15,8 @@ namespace BCL {
     public struct Config : IConfig {
         [JsonProperty("botToken")]
         public string BotToken { get; set; }
+        [JsonProperty("prefix")]
+        public char CommandPrefix { get; set; }
         [JsonProperty("logChannel")]
         public ulong LogChannel { get; set; }
     }
