@@ -13,15 +13,25 @@ namespace BCL.Modules {
     using Discord;
     using Discord.Commands;
     using Discord.WebSocket;
-    using Preconditions;
 
     [Module]
     public class OwnerModule {
         IApplication _app;
         DiscordSocketClient _client;
-        public OwnerModule(DiscordSocketClient client, IApplication app) {
+        Config _config;
+        public OwnerModule(DiscordSocketClient client, Config config, IApplication app) {
             _client = client;
             _app = app;
+            _config = config;
+        }
+
+        [Command("setlogchan")]
+        public async Task SetLogChannel(IUserMessage msg, ulong chanID) {
+            if (msg.Author.Id != _app.Owner.Id) {
+                return;
+            }
+            _config.LogChannel = chanID;
+            ConfigHandler.Save("config.json", _config);
         }
 
         [Command("shutdown")]
