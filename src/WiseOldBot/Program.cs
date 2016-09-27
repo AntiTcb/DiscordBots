@@ -17,8 +17,9 @@ namespace WiseOldBot {
     using System.Threading.Tasks;
     using BCL;
     using Discord;
+    using Discord.Commands;
     using Discord.WebSocket;
-    using Entities;
+    using OSRS;
     using TypeReaders;
 
     #endregion
@@ -26,24 +27,33 @@ namespace WiseOldBot {
     public class Program : BotBase {
         #region Public Methods
 
-        public static void Main(string[] args) => new Program().Start().GetAwaiter().GetResult();
+        public static void Main(string[] args) => new Program().StartAsync().GetAwaiter().GetResult();
 
         #endregion Public Methods
 
         #region Overrides of BotBase
 
-        public async override Task Start() {
+        public async override Task StartAsync() {
             Client = new DiscordSocketClient(new DiscordSocketConfig { LogLevel = LogSeverity.Debug });
             Client.Ready += ClientOnReadyAsync;
-            Commands = new CommandHandler();
-            Commands.Service.AddTypeReader<HighScoreType>(new HighScoreTypeReader());
-            await LoginAndConnect();
+            HandleConfigs();
+            await InstallCommandsAsync();
+            await LoginAndConnectAsync();
         }
 
-        async Task ClientOnReadyAsync() {
-            var self = Commands.Self;
-            await self.ModifyStatusAsync(x => x.Game = new Game("Spying on the Draynor Bank"));
+        public override void HandleConfigs() => Configs = ConfigHandler.Load("config.json");
+
+        public async override Task InstallCommandsAsync() {
+            Commands = new CommandHandler();
+            Commands.Service.AddTypeReader<HighScoreType>(new HighScoreTypeReader());
+            Commands.Service.AddTypeReader<SkillType>(new SkillTypeReader());
+            Client.Log += Log;
+            var map = new DependencyMap();
+            map.Add(Configs);
+            await Commands.Install(Client, map);
         }
+
+        async Task ClientOnReadyAsync() => await Commands.Self.ModifyStatusAsync(x => x.Game = new Game("Spying on the Draynor Bank"));
 
         #endregion Overrides of BotBase
     }
