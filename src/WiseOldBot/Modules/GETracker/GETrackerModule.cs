@@ -15,7 +15,6 @@ namespace WiseOldBot.GETracker {
     #region Using
 
     using System;
-    using System.Collections.Generic;
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
@@ -69,6 +68,18 @@ namespace WiseOldBot.GETracker {
             await msg.Channel.SendMessageAsync(sb.ToString());
         }
 
+        [Command("alch")]
+        public async Task GetAlchPriceAsync(IUserMessage msg, [Remainder] string itemName) {
+            await msg.Channel.TriggerTypingAsync();
+            var returnItems = _itemMap.ContainsKey(itemName) ? _itemMap[itemName] : _itemMap.PartialMatch(itemName);
+            var sb = new StringBuilder();
+
+            foreach (var item in returnItems) {
+                sb.AppendLine($"`{item.Name} / Low Alch: {item.LowAlchemy} / {item.HighAlchemy}");
+            }
+            await msg.Channel.SendMessageAsync(sb.ToString());
+        }
+
         [Command("rebuild"), Remarks("Rebuilds the item map.")]
         public async Task RebuildItemMapAsync(IUserMessage msg) {
             await msg.Channel.TriggerTypingAsync();
@@ -80,19 +91,6 @@ namespace WiseOldBot.GETracker {
             await msg.Channel.SendMessageAsync("Item map rebuilt! New items:" +
                 $"{Format.Code($"{newItems.Select(x => x.Key.ToString()).Aggregate((x, y) => $"{x}, {y}" )}")}");
         }
-
-        #endregion Public Methods
-    }
-
-    public interface IGETrackerAPI
-    {
-        #region Public Methods
-
-        [Get("items/{itemId}")]
-        Task<GETrackerItem.Wrapper> GetItemAsync([Path("itemId")] int itemId);
-
-        [Get("items")]
-        Task<Dictionary<string, List<GETrackerItem>>> GetItemsAsync();
 
         #endregion Public Methods
     }
