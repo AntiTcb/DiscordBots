@@ -12,7 +12,7 @@ namespace WiseOldBot.TypeReaders {
     using System.Threading.Tasks;
     using Discord;
     using Discord.Commands;
-    using Entities;
+    using OSRS;
 
     public class SkillTypeReader : TypeReader {
         #region Overrides of TypeReader
@@ -118,7 +118,6 @@ namespace WiseOldBot.TypeReaders {
 
                 case "total":
                 case "all":
-                case "":
                     return Task.FromResult(TypeReaderResult.FromSuccess(SkillType.All));
 
                 case "cb":
