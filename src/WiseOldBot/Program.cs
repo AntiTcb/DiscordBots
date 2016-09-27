@@ -50,7 +50,7 @@ namespace WiseOldBot {
             Client.Log += Log;
             var map = new DependencyMap();
             map.Add(Configs);
-            await Commands.Install(Client, map);
+            await Commands.Install(Client, Configs, map);
         }
 
         async Task ClientOnReadyAsync() => await Commands.Self.ModifyStatusAsync(x => x.Game = new Game("Spying on the Draynor Bank"));
