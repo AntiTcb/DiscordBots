@@ -11,13 +11,12 @@
 
 #endregion
 
-namespace WiseOldBot.Entities {
+namespace WiseOldBot.GETracker {
     #region Using
 
     using System;
     using System.Threading.Tasks;
     using Discord;
-    using Modules;
     using Newtonsoft.Json;
 
     #endregion

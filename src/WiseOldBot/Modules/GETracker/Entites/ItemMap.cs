@@ -11,7 +11,7 @@
 
 #endregion
 
-namespace WiseOldBot.Entities {
+namespace WiseOldBot.GETracker {
     #region Using
 
     using System.Collections.Generic;

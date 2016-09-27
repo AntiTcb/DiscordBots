@@ -11,7 +11,7 @@
 
 #endregion
 
-namespace WiseOldBot.Modules {
+namespace WiseOldBot.GETracker {
     #region Using
 
     using System;
@@ -19,7 +19,6 @@ namespace WiseOldBot.Modules {
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
-    using Entities;
     using Discord;
     using Discord.Commands;
     using Discord.WebSocket;
