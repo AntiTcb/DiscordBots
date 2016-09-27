@@ -43,14 +43,6 @@ namespace BCL.Modules {
 
         #region Public Methods
 
-        [Command("dismiss"), Alias("leave"), Remarks("Instructs the bot to leave this Guild"),
-         RequireContext(ContextType.Guild), RequirePermission(GuildPermission.ManageGuild)]
-        public async Task Dismiss(IUserMessage msg) {
-            var guild = (msg.Channel as IGuildChannel)?.Guild;
-            await msg.Channel.SendMessageAsync("I have been dismissed! Ta-ta everyone!");
-            await guild?.LeaveAsync();
-        }
-
         [Command("info")]
         public async virtual Task Info(IUserMessage msg) {
             var app = await _client.GetApplicationInfoAsync();

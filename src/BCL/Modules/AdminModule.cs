@@ -9,15 +9,36 @@
 // Last Revised by: Alex Gravely
 #endregion
 namespace BCL.Modules {
+    using System;
     using System.Threading.Tasks;
     using Discord;
     using Discord.Commands;
+    using Interfaces;
 
     [Module("admin")]
     public class AdminModule {
-        [Command("ban"), RequireContext(ContextType.Guild)]
-        public async Task Ban(IUserMessage msg) {
-            
+        IConfig _config;
+        public AdminModule(IConfig config) {
+            _config = config;
         }
+
+        [Command("ban"), RequireContext(ContextType.Guild), RequirePermission(GuildPermission.BanMembers)]
+        public async Task BanAsync(IUserMessage msg, IUser userToBan) => await (msg.Channel as IGuildChannel)?.Guild.AddBanAsync(userToBan);
+
+        [Command("setprefix"), RequirePermission(ChannelPermission.ManageChannel)]
+        public async Task ChangeBotPrefixAsync(IUserMessage msg, char prefix) {
+            _config.CommandPrefix = prefix;
+            ConfigHandler.Save(BotBase.CONFIG_PATH, _config);
+        }
+
+        [Command("dismiss"), Alias("leave"), Remarks("Instructs the bot to leave this Guild"),
+         RequireContext(ContextType.Guild), RequirePermission(GuildPermission.ManageGuild)]
+        public async Task Dismiss(IUserMessage msg)
+        {
+            var guild = (msg.Channel as IGuildChannel)?.Guild;
+            await msg.Channel.SendMessageAsync("I have been dismissed! Ta-ta everyone!");
+            await guild?.LeaveAsync();
+        }
+
     }
 }

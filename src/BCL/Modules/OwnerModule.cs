@@ -13,6 +13,7 @@ namespace BCL.Modules {
     using Discord;
     using Discord.Commands;
     using Discord.WebSocket;
+    using Preconditions;
 
     [Module]
     public class OwnerModule {
@@ -26,7 +27,7 @@ namespace BCL.Modules {
         }
 
         [Command("setlogchan")]
-        public async Task SetLogChannel(IUserMessage msg, ulong chanID) {
+        public async Task SetLogChannelAsync(IUserMessage msg, ulong chanID) {
             if (msg.Author.Id != _app.Owner.Id) {
                 return;
             }
