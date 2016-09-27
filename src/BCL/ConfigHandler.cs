@@ -14,9 +14,9 @@ namespace BCL {
     using Interfaces;
     using Newtonsoft.Json;
 
-    public static class ConfigHandler<T> where T : IConfig, new()
+    public static class ConfigHandler
     {
-        public static T Load(string path)
+        public static IConfig Load<T>(string path) where T : IConfig, new()
         {
             if (path == null)
             {
@@ -36,6 +36,6 @@ namespace BCL {
             return newConfig;
         }
 
-        public static void Save(string path, T config) => File.WriteAllText(path, JsonConvert.SerializeObject(config));
+        public static void Save(string path, IConfig config) => File.WriteAllText(path, JsonConvert.SerializeObject(config));
     }
 }
