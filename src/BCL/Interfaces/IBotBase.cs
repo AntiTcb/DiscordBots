@@ -20,7 +20,9 @@ namespace BCL.Interfaces {
         DiscordSocketClient Client { get; set; }
         ICommandHandler Commands { get; set; }
         Config Configs { get; set; }
-        Task Start();
-        Task LoginAndConnect();
+        Task StartAsync();
+        void HandleConfigs();
+        Task InstallCommandsAsync();
+        Task LoginAndConnectAsync();
     }
 }
