@@ -30,22 +30,22 @@ namespace BCL {
         public ICommandHandler Commands { get; set; }
         public Config Configs { get; set; }
 
-        public async Task LoginAndConnect() {
-            Configs = ConfigHandler.Load("config.json");
-            Client.Log += Log;
-            await Commands.Install(Client);
+        public async Task LoginAndConnectAsync() {
             await Client.LoginAsync(TokenType.Bot, BotToken);
             await Client.ConnectAsync();
             await Task.Delay(-1);
         }
 
+        public abstract void HandleConfigs();
+
+        public abstract Task InstallCommandsAsync();
 
         /// <summary>
-        /// Create a <see cref="DiscordSocketClient"/> and <see cref="CommandHandler"/>, then call <see cref="LoginAndConnect"/>.
+        /// Create a <see cref="DiscordSocketClient"/> and <see cref="CommandHandler"/>, then call <see cref="HandleConfigs"/> and <see cref="LoginAndConnectAsync"/>.
         /// </summary>
-        public abstract Task Start();
+        public abstract Task StartAsync();
 
-        Task Log(LogMessage log) {
+        public virtual Task Log(LogMessage log) {
             Console.WriteLine(log.ToString());
             return Task.CompletedTask;
         }

@@ -18,7 +18,7 @@ namespace BCL.Interfaces {
         CommandService Service { get; set; }
         DiscordSocketClient Client { get; set; }
         ISelfUser Self { get; set; }
-        Task Install(DiscordSocketClient c);
+        Task Install(DiscordSocketClient c, DependencyMap map = null);
         Task HandleCommand(IMessage paramMessage);
     }
 }

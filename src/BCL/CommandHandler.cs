@@ -23,12 +23,11 @@ namespace BCL {
         public DiscordSocketClient Client { get; set; }
         public ISelfUser Self { get; set; }
 
-        public async Task Install(DiscordSocketClient c) {
+        public async Task Install(DiscordSocketClient c, DependencyMap map = null) {
             Client = c;
             Service = new CommandService();
             Self = await Client.GetCurrentUserAsync();
-
-            var map = new DependencyMap();
+            if (map == null) { map = new DependencyMap();}
             map.Add(Client);
             map.Add(Self);
 
