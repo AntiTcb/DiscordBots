@@ -32,6 +32,7 @@ namespace BCL {
             if (map == null) { map = new DependencyMap();}
             map.Add(Client);
             map.Add(Self);
+            map.Add(_config);
 
             await Service.LoadAssembly(Assembly.GetEntryAssembly(), map);
         }
