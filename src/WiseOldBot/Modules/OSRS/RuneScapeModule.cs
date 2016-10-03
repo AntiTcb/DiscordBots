@@ -15,7 +15,6 @@ namespace WiseOldBot.OSRS {
     #region Using
 
     using System;
-    using System.Collections.Generic;
     using System.Threading.Tasks;
     using BCL;
     using Discord;
@@ -34,8 +33,7 @@ namespace WiseOldBot.OSRS {
         }
 
         [Command("defname"), Alias("account")]
-        public async Task ManageUsernameMapAsync(IUserMessage msg, [Remainder] string username)
-        {
+        public async Task ManageUsernameMapAsync(IUserMessage msg, [Remainder] string username) {
             var userID = msg.Author.Id;
             if (!_config.UsernameMap.ContainsKey(userID))
             {
