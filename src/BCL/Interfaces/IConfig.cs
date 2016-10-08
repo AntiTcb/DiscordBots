@@ -11,6 +11,6 @@
 namespace BCL.Interfaces {
     public interface IConfig {
         string BotToken { get; set; }
-        char CommandPrefix { get; set; }
+        ulong LogChannel { get; set; }
     }
 }
