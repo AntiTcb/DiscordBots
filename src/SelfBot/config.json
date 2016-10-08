@@ -1,0 +1,6 @@
+{
+    "botToken": "mfa.Ce6whrcN1PJHTIHeP6g8ceKwH8n0R26B1AVwNVvtFqIFVWJIWp8HDef9CgZ9PTgytKHovAZNW-b7Dy9h8rbK",
+    "prefix": ";",
+    "LogChannel": 0,
+    "evalImports": [ "System", "System.Linq" ]
+}

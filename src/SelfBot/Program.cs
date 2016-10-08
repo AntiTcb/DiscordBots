@@ -1,35 +1,54 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿#region Header
+
+// Description:
+// 
+// Solution: DiscordBots
+// Project: SelfBot
+// 
+// Created: 10/03/2016 3:09 PM
+// Last Revised: 10/03/2016 3:20 PM
+// Last Revised by: Alex Gravely
+
+#endregion
 
 namespace SelfBot {
+    #region Using
+
+    using System.Threading.Tasks;
+    using System.Linq;
     using BCL;
+    using BCL.Modules;
     using Discord;
-    using Discord.Commands;
     using Discord.WebSocket;
 
+    #endregion
+
     public class Program : BotBase {
+        #region Public Methods
+
         public static void Main(string[] args) => new Program().StartAsync().GetAwaiter().GetResult();
+
+        #endregion Public Methods
 
         #region Overrides of BotBase
 
-        public async override Task StartAsync() {
-            Client = new DiscordSocketClient(new DiscordSocketConfig { LogLevel = LogSeverity.Debug });
-            HandleConfigs();
-            await InstallCommandsAsync();
-            await LoginAndConnectAsync();
-        }
-
-        public override void HandleConfigs() => Configs = ConfigHandler.Load<SelfConfig>(CONFIG_PATH);
+        public async override Task HandleConfigsAsync() => Configs = await ConfigHandler.LoadAsync<SelfConfig>(CONFIG_PATH);
 
         public async override Task InstallCommandsAsync() {
-            Commands = new CommandHandler();
-            var map = new DependencyMap();
-            map.Add(Configs);
-            await Commands.Install(Client, Configs, map);
+            Commands = new SelfCommandHandler();
+            Client.Log += Log;
+            await Commands.Install(Client, Configs);
         }
 
-        #endregion
+        public async override Task StartAsync() {
+            Client = new DiscordSocketClient(new DiscordSocketConfig { LogLevel = LogSeverity.Info });
+            await HandleConfigsAsync();
+            await InstallCommandsAsync();
+
+            Client.MessageReceived += Commands.HandleCommand;
+            await LoginAndConnectAsync(TokenType.User);
+        }
+
+        #endregion Overrides of BotBase
     }
 }
