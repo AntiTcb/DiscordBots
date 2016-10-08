@@ -22,17 +22,17 @@ namespace BCL {
         public CommandService Service { get; set; }
         public DiscordSocketClient Client { get; set; }
         public ISelfUser Self { get; set; }
-        IConfig _config;
+        public IConfig Config { get; set; }
 
         public async Task Install(DiscordSocketClient c, IConfig config, DependencyMap map = null) {
             Client = c;
-            _config = config;
+            Config = config;
             Service = new CommandService();
             Self = await Client.GetCurrentUserAsync();
             if (map == null) { map = new DependencyMap();}
             map.Add(Client);
             map.Add(Self);
-            map.Add(_config);
+            map.Add(Config);
 
             await Service.LoadAssembly(Assembly.GetEntryAssembly(), map);
         }
@@ -42,7 +42,7 @@ namespace BCL {
             if (msg == null) { return;}
             var argPos = 0;
             if (msg.HasMentionPrefix(Self, ref argPos) ||
-                msg.HasCharPrefix(_config.CommandPrefix, ref argPos)) {
+                msg.HasCharPrefix(Config.CommandPrefix, ref argPos)) {
                 var result = await Service.Execute(msg, argPos);
                 if (!result.IsSuccess) {
                     await msg.Channel.SendMessageAsync(result.ErrorReason);
