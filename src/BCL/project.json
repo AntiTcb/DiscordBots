@@ -2,8 +2,8 @@
   "version": "1.0.0-*",
 
     "dependencies": {
-        "Discord.Net": "1.0.0-beta-00417",
-        "Discord.Net.Commands": "1.0.0-beta-00417",
+        "Discord.Net": "1.0.0-beta-00420",
+        "Discord.Net.Commands": "1.0.0-beta-00420",
         "NETStandard.Library": "1.6.0",
         "System.Diagnostics.Process": "4.1.0",
         "System.Net.WebSockets.Client": "4.0.0",
