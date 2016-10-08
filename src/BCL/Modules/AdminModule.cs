@@ -9,13 +9,12 @@
 // Last Revised by: Alex Gravely
 #endregion
 namespace BCL.Modules {
-    using System;
     using System.Threading.Tasks;
     using Discord;
     using Discord.Commands;
     using Interfaces;
 
-    [Module("admin")]
+    [Module("admin", AutoLoad = false)]
     public class AdminModule {
         IConfig _config;
         public AdminModule(IConfig config) {
@@ -26,9 +25,9 @@ namespace BCL.Modules {
         public async Task BanAsync(IUserMessage msg, IUser userToBan) => await (msg.Channel as IGuildChannel)?.Guild.AddBanAsync(userToBan);
 
         [Command("setprefix"), RequirePermission(ChannelPermission.ManageChannel)]
-        public async Task ChangeBotPrefixAsync(IUserMessage msg, char prefix) {
-            _config.CommandPrefix = prefix;
-            ConfigHandler.Save(BotBase.CONFIG_PATH, _config);
+        public async Task ChangeBotPrefixAsync(IUserMessage msg, string prefix) {
+            _config.CommandPrefix = char.Parse(prefix);
+            ConfigHandler.SaveAsync(BotBase.CONFIG_PATH, _config);
         }
 
         [Command("dismiss"), Alias("leave"), Remarks("Instructs the bot to leave this Guild"),

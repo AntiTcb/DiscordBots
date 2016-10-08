@@ -25,7 +25,7 @@ namespace BCL.Modules {
 
     #endregion
 
-    [Module]
+    [Module(AutoLoad = false)]
     public class PublicModule {
         #region Private Fields + Properties
 
@@ -49,7 +49,7 @@ namespace BCL.Modules {
             await
                 msg.Channel.SendMessageAsync
                     ($"{Format.Bold("Info")}\n" + $"- Author: {app.Owner.Username} (ID {app.Owner.Id})\n" +
-                     $"- Repo: <https://github.com/AntiTcb/{app.Name}>\n" +
+                     $"- Repo: <https://github.com/AntiTcb/DiscordBots/{app.Name}>\n" +
                      $"- Library: Discord.Net ({DiscordConfig.Version})\n" +
                      $"- Runtime: {RuntimeInformation.FrameworkDescription} {RuntimeInformation.OSArchitecture}\n" +
                      $"- Uptime: {GetUptime()}\n\n" + $"{Format.Bold("Stats")}\n" + $"- Heap Size: {GetHeapSize()} MB\n" +

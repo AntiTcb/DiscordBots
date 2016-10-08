@@ -13,14 +13,16 @@ namespace BCL.Modules {
     using Discord;
     using Discord.Commands;
     using Discord.WebSocket;
-    using Preconditions;
+    using Interfaces;
 
-    [Module]
+
+    // TODO: Complete Refactor
+    [Module("owner", AutoLoad = false)]
     public class OwnerModule {
         IApplication _app;
         DiscordSocketClient _client;
-        Config _config;
-        public OwnerModule(DiscordSocketClient client, Config config, IApplication app) {
+        IConfig _config;
+        public OwnerModule(DiscordSocketClient client, IConfig config, IApplication app) {
             _client = client;
             _app = app;
             _config = config;
@@ -29,15 +31,19 @@ namespace BCL.Modules {
         [Command("setlogchan")]
         public async Task SetLogChannelAsync(IUserMessage msg, ulong chanID) {
             if (msg.Author.Id != _app.Owner.Id) {
+                await msg.Channel.SendMessageAsync("Insufficient permissions.");
                 return;
             }
             _config.LogChannel = chanID;
-            ConfigHandler.Save("config.json", _config);
+            ConfigHandler.SaveAsync("config.json", _config);
         }
 
         [Command("shutdown")]
         public async Task ShutDown(IUserMessage msg) {
-            if (msg.Author.Id != _app.Owner.Id) { return; }
+            if (msg.Author.Id != _app.Owner.Id) {
+                await msg.Channel.SendMessageAsync("Insufficient permissions.");
+                return;
+            }
             await msg.Channel.SendMessageAsync("Shutting down...");
             await _client.DisconnectAsync();
         }
