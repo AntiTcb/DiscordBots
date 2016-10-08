@@ -13,16 +13,16 @@
 
 namespace BCL.Interfaces {
     using System.Threading.Tasks;
+    using Discord;
     using Discord.WebSocket;
 
     public interface IBotBase {
-        string BotToken { get; set; }
         DiscordSocketClient Client { get; set; }
         ICommandHandler Commands { get; set; }
         IConfig Configs { get; set; }
         Task StartAsync();
-        void HandleConfigs();
+        Task HandleConfigsAsync();
         Task InstallCommandsAsync();
-        Task LoginAndConnectAsync();
+        Task LoginAndConnectAsync(TokenType tokenType);
     }
 }
