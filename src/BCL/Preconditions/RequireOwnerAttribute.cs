@@ -5,8 +5,8 @@
 // Solution: DiscordBots
 // Project: BCL
 // 
-// Created: 09/14/2016 11:08 PM
-// Last Revised: 09/14/2016 11:17 PM
+// Created: 09/26/2016 11:16 PM
+// Last Revised: 10/05/2016 7:01 PM
 // Last Revised by: Alex Gravely
 
 #endregion
@@ -34,7 +34,7 @@ namespace BCL.Preconditions {
         public RequireOwnerAttribute(ulong ownerID) {
             Owner = ownerID;
         }
-        
+
         #endregion Public Constructors
 
         #region Public Methods
