@@ -16,9 +16,9 @@ namespace BCL.Modules {
 
     [Module("admin", AutoLoad = false)]
     public class AdminModule {
-        IConfig _config;
-        public AdminModule(IConfig config) {
-            _config = config;
+        IBotConfig _botConfig;
+        public AdminModule(IBotConfig botConfig) {
+            _botConfig = botConfig;
         }
 
         [Command("ban"), RequireContext(ContextType.Guild), RequirePermission(GuildPermission.BanMembers)]
@@ -26,8 +26,8 @@ namespace BCL.Modules {
 
         [Command("setprefix"), RequirePermission(ChannelPermission.ManageChannel)]
         public async Task ChangeBotPrefixAsync(IUserMessage msg, string prefix) {
-            _config.CommandPrefix = char.Parse(prefix);
-            ConfigHandler.SaveAsync(BotBase.CONFIG_PATH, _config);
+            _botConfig.CommandPrefix = char.Parse(prefix);
+            ConfigHandler.SaveAsync(BotBase.CONFIG_PATH, _botConfig);
         }
 
         [Command("dismiss"), Alias("leave"), Remarks("Instructs the bot to leave this Guild"),

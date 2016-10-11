@@ -9,7 +9,7 @@
 // Last Revised by: Alex Gravely
 #endregion
 namespace BCL.Interfaces {
-    public interface IConfig {
+    public interface IBotConfig {
         string BotToken { get; set; }
         ulong LogChannel { get; set; }
     }

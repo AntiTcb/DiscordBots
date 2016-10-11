@@ -26,5 +26,9 @@ namespace BCL {
         public char CommandPrefix { get; set; }
 
         #endregion Implementation of IServerConfig
+
+        public ServerConfig(char commandPrefix) {
+            CommandPrefix = commandPrefix;
+        }
     }
 }

@@ -18,8 +18,8 @@ namespace BCL.Interfaces {
         CommandService Service { get; set; }
         DiscordSocketClient Client { get; set; }
         ISelfUser Self { get; set; }
-        IConfig Config { get; set; }
-        Task Install(DiscordSocketClient c, IConfig config, DependencyMap map = null);
+        IBotConfig BotConfig { get; set; }
+        Task Install(DiscordSocketClient c, IBotConfig botConfig, DependencyMap map = null);
         Task HandleCommand(IMessage paramMessage);
     }
 }

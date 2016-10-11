@@ -21,11 +21,11 @@ namespace BCL.Modules {
     public class OwnerModule {
         IApplication _app;
         DiscordSocketClient _client;
-        IConfig _config;
-        public OwnerModule(DiscordSocketClient client, IConfig config, IApplication app) {
+        IBotConfig _botConfig;
+        public OwnerModule(DiscordSocketClient client, IBotConfig botConfig, IApplication app) {
             _client = client;
             _app = app;
-            _config = config;
+            _botConfig = botConfig;
         }
 
         [Command("setlogchan")]
@@ -34,8 +34,8 @@ namespace BCL.Modules {
                 await msg.Channel.SendMessageAsync("Insufficient permissions.");
                 return;
             }
-            _config.LogChannel = chanID;
-            ConfigHandler.SaveAsync("config.json", _config);
+            _botConfig.LogChannel = chanID;
+            ConfigHandler.SaveAsync("config.json", _botConfig);
         }
 
         [Command("shutdown")]

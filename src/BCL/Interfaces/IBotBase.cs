@@ -19,7 +19,7 @@ namespace BCL.Interfaces {
     public interface IBotBase {
         DiscordSocketClient Client { get; set; }
         ICommandHandler Commands { get; set; }
-        IConfig Configs { get; set; }
+        IBotConfig BotConfig { get; set; }
         Task StartAsync();
         Task HandleConfigsAsync();
         Task InstallCommandsAsync();
