@@ -1,25 +1,47 @@
 ﻿#region Header
+
 // Description:
-// 
+//
 // Solution: DiscordBots
 // Project: BCL
-// 
-// Created: 09/14/2016 4:19 PM
-// Last Revised: 09/14/2016 4:19 PM
+//
+// Created: 09/26/2016 11:16 PM
+// Last Revised: 10/13/2016 7:54 PM
 // Last Revised by: Alex Gravely
-#endregion
-namespace BCL.Interfaces {
-    using System.Threading.Tasks;
-    using Discord;
+
+#endregion Header
+
+namespace BCL.Interfaces
+{
+    #region Using
+
     using Discord.Commands;
     using Discord.WebSocket;
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
+
+    #endregion Using
 
     public interface ICommandHandler {
-        CommandService Service { get; set; }
-        DiscordSocketClient Client { get; set; }
-        ISelfUser Self { get; set; }
+
+        #region Public Fields + Properties
+
         IBotConfig BotConfig { get; set; }
-        Task Install(DiscordSocketClient c, IBotConfig botConfig, DependencyMap map = null);
-        Task HandleCommand(IMessage paramMessage);
+        DiscordSocketClient Client { get; set; }
+        CommandService Service { get; set; }
+
+        #endregion Public Fields + Properties
+
+        #region Public Methods
+
+        Task HandleCommandAsync(CommandContext ctx);
+
+        Task InstallAsync
+        (DiscordSocketClient c,
+         IBotConfig botConfig,
+         Dictionary<ulong, IServerConfig> serverConfigs,
+         DependencyMap map = null);
+
+        #endregion Public Methods
     }
 }

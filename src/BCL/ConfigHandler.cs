@@ -6,7 +6,7 @@
 // Project: BCL
 // 
 // Created: 09/27/2016 1:44 AM
-// Last Revised: 10/10/2016 6:10 AM
+// Last Revised: 10/13/2016 7:53 PM
 // Last Revised by: Alex Gravely
 
 #endregion
@@ -19,7 +19,6 @@ namespace BCL {
     using System.IO;
     using System.Reflection;
     using System.Threading.Tasks;
-    using Discord;
     using Interfaces;
     using Newtonsoft.Json;
 
@@ -50,7 +49,8 @@ namespace BCL {
 
         public static async Task<T> LoadBotConfigAsync<T>(string path = Globals.CONFIG_PATH) where T : IBotConfig, new() {
             if (File.Exists(path)) {
-                return await Task.Run(() => JsonConvert.DeserializeObject<T>(File.ReadAllText(path))).ConfigureAwait(false);
+                return
+                    await Task.Run(() => JsonConvert.DeserializeObject<T>(File.ReadAllText(path))).ConfigureAwait(false);
             }
             Console.WriteLine("No config file detected.");
             var newConfig = ConfigBuilder.CreateBotConfig<T>();
@@ -60,11 +60,14 @@ namespace BCL {
         }
 
         public static async Task<Dictionary<ulong, IServerConfig>> LoadServerConfigsAsync
-            (ITextChannel chan, string path = Globals.SERVER_CONFIG_PATH) {
+            (string path = Globals.SERVER_CONFIG_PATH) {
             if (File.Exists(path)) {
-                return await Task.Run(() =>
-                                              JsonConvert.DeserializeObject<Dictionary<ulong, IServerConfig>>(File.ReadAllText(path))
-                                     ).ConfigureAwait(false);
+                return
+                    await
+                        Task.Run
+                            (() =>
+                                 JsonConvert.DeserializeObject<Dictionary<ulong, IServerConfig>>
+                                     (File.ReadAllText(path))).ConfigureAwait(false);
             }
             var newConfig = new Dictionary<ulong, IServerConfig>();
             await SaveAsync(path, newConfig).ConfigureAwait(false);
@@ -75,7 +78,8 @@ namespace BCL {
             => File.WriteAllText(path, await Task.Run(() => JsonConvert.SerializeObject(configs)).ConfigureAwait(false));
 
         public static async Task SaveAsync(string path, IBotConfig botConfig)
-            => File.WriteAllText(path, await Task.Run(() => JsonConvert.SerializeObject(botConfig)).ConfigureAwait(false));
+            =>
+            File.WriteAllText(path, await Task.Run(() => JsonConvert.SerializeObject(botConfig)).ConfigureAwait(false));
 
         #endregion Public Methods
     }

@@ -6,7 +6,7 @@
 // Project: BCL
 // 
 // Created: 09/26/2016 11:16 PM
-// Last Revised: 10/05/2016 7:01 PM
+// Last Revised: 10/13/2016 7:32 PM
 // Last Revised by: Alex Gravely
 
 #endregion
@@ -16,37 +16,21 @@ namespace BCL.Preconditions {
 
     using System;
     using System.Threading.Tasks;
-    using Discord;
     using Discord.Commands;
 
     #endregion
 
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
     public class RequireOwnerAttribute : PreconditionAttribute {
-        #region Private Fields + Properties
-
-        public ulong Owner { get; }
-
-        #endregion Private Fields + Properties
-
-        #region Public Constructors
-
-        public RequireOwnerAttribute(ulong ownerID) {
-            Owner = ownerID;
-        }
-
-        #endregion Public Constructors
-
-        #region Public Methods
+        #region Overrides of PreconditionAttribute
 
         public override Task<PreconditionResult> CheckPermissions
-            (IUserMessage context, Command executingCommand, object moduleInstance) {
+            (CommandContext context, CommandInfo command, IDependencyMap map) {
             return Task.FromResult
-                (context.Author.Id == Owner
-                     ? PreconditionResult.FromSuccess()
-                     : PreconditionResult.FromError("You must be the owner of the bot."));
+                (context.User.Id == Globals.OWNER_ID
+                     ? PreconditionResult.FromSuccess() : PreconditionResult.FromError("You are not the bot owner."));
         }
 
-        #endregion Public Methods
+        #endregion Overrides of PreconditionAttribute
     }
 }

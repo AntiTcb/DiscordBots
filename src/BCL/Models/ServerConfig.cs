@@ -20,6 +20,9 @@ namespace BCL {
     #endregion
 
     public struct ServerConfig : IServerConfig {
+
+        public static char DefaultPrefix = ';';
+
         #region Implementation of IServerConfig
 
         [JsonProperty("commandPrefix")]

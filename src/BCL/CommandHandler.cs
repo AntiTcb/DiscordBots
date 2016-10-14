@@ -1,55 +1,74 @@
 ﻿#region Header
+
 // Description:
 // 
 // Solution: DiscordBots
 // Project: BCL
 // 
-// Created: 09/14/2016 4:15 PM
-// Last Revised: 09/14/2016 4:15 PM
+// Created: 09/26/2016 11:17 PM
+// Last Revised: 10/13/2016 7:15 PM
 // Last Revised by: Alex Gravely
+
 #endregion
+
 namespace BCL {
+    #region Using
+
+    using System.Collections.Generic;
     using System.Reflection;
     using System.Threading.Tasks;
-    using Discord;
     using Discord.Commands;
     using Discord.WebSocket;
     using Interfaces;
 
+    #endregion
+
     public class CommandHandler : ICommandHandler {
         #region Implementation of ICommandHandler
 
-        public CommandService Service { get; set; }
-        public DiscordSocketClient Client { get; set; }
-        public ISelfUser Self { get; set; }
         public IBotConfig BotConfig { get; set; }
+        public DiscordSocketClient Client { get; set; }
+        public Dictionary<ulong, IServerConfig> ServerConfigs { get; set; }
+        public CommandService Service { get; set; }
 
-        public async Task Install(DiscordSocketClient c, IBotConfig botConfig, DependencyMap map = null) {
-            Client = c;
-            BotConfig = botConfig;
-            Service = new CommandService();
-            Self = await Client.GetCurrentUserAsync();
-            if (map == null) { map = new DependencyMap();}
-            map.Add(Client);
-            map.Add(Self);
-            map.Add(BotConfig);
+        public async virtual Task HandleCommandAsync(CommandContext ctx) {
+            if (ctx.User.IsBot) {
+                return;
+            }
 
-            await Service.LoadAssembly(Assembly.GetEntryAssembly(), map);
-        }
-
-        public async virtual Task HandleCommand(IMessage paramMessage) {
-            var msg = paramMessage as IUserMessage;
-            if (msg == null) { return;}
             var argPos = 0;
-            if (msg.HasMentionPrefix(Self, ref argPos) ||
-                msg.HasCharPrefix(BotConfig.CommandPrefix, ref argPos)) {
-                var result = await Service.Execute(msg, argPos);
+            var prefix = ctx.Guild == null ? ServerConfig.DefaultPrefix : ServerConfigs[ctx.Guild.Id].CommandPrefix;
+            bool isCharPrefix = false, isMentionPrefix = false;
+
+            if (!string.IsNullOrEmpty(prefix.ToString())) {
+                isCharPrefix = ctx.Message.HasCharPrefix(prefix, ref argPos);
+            }
+            else {
+                isMentionPrefix = ctx.Message.HasMentionPrefix(Client.CurrentUser, ref argPos);
+            }
+            if (isCharPrefix || isMentionPrefix) {
+                var result = await Service.Execute(ctx, argPos).ConfigureAwait(false);
                 if (!result.IsSuccess) {
-                    await msg.Channel.SendMessageAsync(result.ErrorReason);
+                    await ctx.Channel.SendMessageAsync(result.ErrorReason).ConfigureAwait(false);
                 }
             }
         }
 
-        #endregion
+        public async Task InstallAsync(DiscordSocketClient c,IBotConfig botConfig,
+             Dictionary<ulong, IServerConfig> serverConfigs, DependencyMap map = null) {
+            Client = c;
+            BotConfig = botConfig;
+            Service = new CommandService();
+            if (map == null) {
+                map = new DependencyMap();
+            }
+
+            map.Add(Client);
+            map.Add(BotConfig);
+
+            await Service.AddModules(Assembly.GetEntryAssembly(), map).ConfigureAwait(false);
+        }
+
+        #endregion Implementation of ICommandHandler
     }
 }
