@@ -21,7 +21,7 @@ namespace BCL {
 
     #endregion
 
-    public struct BotConfig : IBotConfig {
+    struct BotConfig : IBotConfig {
 
         [JsonProperty("botToken")]
         public string BotToken { get; set; }

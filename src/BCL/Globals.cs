@@ -9,10 +9,16 @@
 // Last Revised by: Alex Gravely
 #endregion
 namespace BCL {
-    public struct Globals {
+    using System.Collections.Generic;
+    using Interfaces;
+
+    public static class Globals {
         public const string CONFIG_PATH = "config.json";
         public const string SERVER_CONFIG_PATH = "server_configs.json";
         public const ulong OWNER_ID = 89613772372574208;
-        public const char DEFAULT_PREFIX = ';';
+        public const string DEFAULT_PREFIX = ";";
+
+        public static IBotConfig BotConfig { get; set; }
+        public static Dictionary<ulong, IServerConfig> ServerConfigs { get; set; }
     }
 }

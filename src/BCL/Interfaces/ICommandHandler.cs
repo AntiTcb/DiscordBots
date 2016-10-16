@@ -26,21 +26,17 @@ namespace BCL.Interfaces
 
         #region Public Fields + Properties
 
-        IBotConfig BotConfig { get; set; }
         DiscordSocketClient Client { get; set; }
         CommandService Service { get; set; }
+        IDependencyMap Map { get; set; }
 
         #endregion Public Fields + Properties
 
         #region Public Methods
 
-        Task HandleCommandAsync(CommandContext ctx);
+        Task HandleCommandAsync(SocketMessage msg);
 
-        Task InstallAsync
-        (DiscordSocketClient c,
-         IBotConfig botConfig,
-         Dictionary<ulong, IServerConfig> serverConfigs,
-         DependencyMap map = null);
+        Task InstallAsync(IDependencyMap map = null);
 
         #endregion Public Methods
     }

@@ -10,6 +10,6 @@
 #endregion
 namespace BCL.Interfaces {
     public interface IServerConfig {
-        char CommandPrefix { get; set; }
+        string CommandPrefix { get; set; }
     }
 }

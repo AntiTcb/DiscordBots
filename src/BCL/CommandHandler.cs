@@ -6,7 +6,7 @@
 // Project: BCL
 // 
 // Created: 09/26/2016 11:17 PM
-// Last Revised: 10/13/2016 7:15 PM
+// Last Revised: 10/16/2016 4:37 PM
 // Last Revised by: Alex Gravely
 
 #endregion
@@ -14,7 +14,6 @@
 namespace BCL {
     #region Using
 
-    using System.Collections.Generic;
     using System.Reflection;
     using System.Threading.Tasks;
     using Discord.Commands;
@@ -26,47 +25,42 @@ namespace BCL {
     public class CommandHandler : ICommandHandler {
         #region Implementation of ICommandHandler
 
-        public IBotConfig BotConfig { get; set; }
         public DiscordSocketClient Client { get; set; }
-        public Dictionary<ulong, IServerConfig> ServerConfigs { get; set; }
+        public IDependencyMap Map { get; set; }
         public CommandService Service { get; set; }
 
-        public async virtual Task HandleCommandAsync(CommandContext ctx) {
-            if (ctx.User.IsBot) {
+        public async virtual Task HandleCommandAsync(SocketMessage msg) {
+            var message = msg as SocketUserMessage;
+            if (message == null) {
                 return;
             }
 
             var argPos = 0;
-            var prefix = ctx.Guild == null ? ServerConfig.DefaultPrefix : ServerConfigs[ctx.Guild.Id].CommandPrefix;
-            bool isCharPrefix = false, isMentionPrefix = false;
+            var guildChannel = message.Channel as SocketGuildChannel;
+            var prefix = guildChannel?.Guild == null
+                             ? ServerConfig.DefaultPrefix : Globals.ServerConfigs[guildChannel.Guild.Id].CommandPrefix;
 
-            if (!string.IsNullOrEmpty(prefix.ToString())) {
-                isCharPrefix = ctx.Message.HasCharPrefix(prefix, ref argPos);
+            if (
+                !(message.HasMentionPrefix(Client.CurrentUser, ref argPos) ||
+                  message.HasStringPrefix(prefix, ref argPos))) {
+                return;
             }
-            else {
-                isMentionPrefix = ctx.Message.HasMentionPrefix(Client.CurrentUser, ref argPos);
-            }
-            if (isCharPrefix || isMentionPrefix) {
-                var result = await Service.Execute(ctx, argPos).ConfigureAwait(false);
-                if (!result.IsSuccess) {
-                    await ctx.Channel.SendMessageAsync(result.ErrorReason).ConfigureAwait(false);
-                }
+            var ctx = new CommandContext(Client, message);
+            var result = await Service.Execute(ctx, argPos, Map).ConfigureAwait(false);
+            if (!result.IsSuccess) {
+                var loggingChannel = Client.GetChannel(Globals.BotConfig.LogChannel) as SocketTextChannel;
+                await loggingChannel.SendMessageAsync($"**Error:** {result.ErrorReason}", false).ConfigureAwait(false);
+                await ctx.Channel.SendMessageAsync($"**Error:** {result.ErrorReason}").ConfigureAwait(false);
             }
         }
 
-        public async Task InstallAsync(DiscordSocketClient c,IBotConfig botConfig,
-             Dictionary<ulong, IServerConfig> serverConfigs, DependencyMap map = null) {
-            Client = c;
-            BotConfig = botConfig;
+        public async Task InstallAsync(IDependencyMap map = null) {
             Service = new CommandService();
-            if (map == null) {
-                map = new DependencyMap();
-            }
-
-            map.Add(Client);
-            map.Add(BotConfig);
-
-            await Service.AddModules(Assembly.GetEntryAssembly(), map).ConfigureAwait(false);
+            Map = map ?? new DependencyMap();
+            Client = Map.Get<DiscordSocketClient>();
+            Map.Add(Service);
+            await Service.AddModules(Assembly.GetEntryAssembly(), Map).ConfigureAwait(false);
+            Client.MessageReceived += HandleCommandAsync;
         }
 
         #endregion Implementation of ICommandHandler

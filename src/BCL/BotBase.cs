@@ -29,7 +29,6 @@ namespace BCL {
         public IBotConfig BotConfig { get; set; }
         public DiscordSocketClient Client { get; set; }
         public ICommandHandler Commands { get; set; }
-
         public Dictionary<ulong, IServerConfig> ServerConfigs { get; set; } = new Dictionary<ulong, IServerConfig>();
 
         public async virtual Task ClientOnJoinedGuildAsync(IGuild guild) {
@@ -37,14 +36,14 @@ namespace BCL {
             await defaultChannel.SendMessageAsync("Thank you for adding me to the server!").ConfigureAwait(false);
             var newServerConfig = new ServerConfig(Globals.DEFAULT_PREFIX);
             ServerConfigs.Add(guild.Id, newServerConfig);
-            await ConfigHandler.SaveAsync(Globals.SERVER_CONFIG_PATH, ServerConfigs);
+            await ConfigHandler.SaveAsync(Globals.SERVER_CONFIG_PATH, ServerConfigs).ConfigureAwait(false);
         }
 
         public async virtual Task ClientOnLeftGuildAsync(IGuild guild) {
             if (ServerConfigs.ContainsKey(guild.Id)) {
                 ServerConfigs.Remove(guild.Id);
             }
-            await ConfigHandler.SaveAsync(Globals.SERVER_CONFIG_PATH, ServerConfigs);
+            await ConfigHandler.SaveAsync(Globals.SERVER_CONFIG_PATH, ServerConfigs).ConfigureAwait(false);
         }
 
         public async virtual Task HandleConfigsAsync() {

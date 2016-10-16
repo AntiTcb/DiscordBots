@@ -20,17 +20,16 @@ namespace BCL {
     #endregion
 
     public struct ServerConfig : IServerConfig {
-
-        public static char DefaultPrefix = ';';
+        public const string DefaultPrefix = ";";
 
         #region Implementation of IServerConfig
 
         [JsonProperty("commandPrefix")]
-        public char CommandPrefix { get; set; }
+        public string CommandPrefix { get; set; }
 
         #endregion Implementation of IServerConfig
 
-        public ServerConfig(char commandPrefix) {
+        public ServerConfig(string commandPrefix) {
             CommandPrefix = commandPrefix;
         }
     }
