@@ -15,9 +15,10 @@
             "System.Runtime": "4.1.0"
         },
 
-  "frameworks": {
-    "netcoreapp1.0": {
-      "imports": "dnxcore50"
-    }
-  }
+    "frameworks": {
+        "netcoreapp1.0": {
+            "imports": "dnxcore50"
+        }
+    },
+    "userSecretsId": "aspnet-WiseOldBot-20161016110825"
 }
