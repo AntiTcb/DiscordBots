@@ -14,13 +14,16 @@
 namespace WiseOldBot {
     #region Using
 
+    using System.Reflection;
     using System.Threading.Tasks;
     using BCL;
+    using BCL.Modules;
     using Discord;
     using Discord.Commands;
     using Discord.WebSocket;
     using OSRS;
     using TypeReaders;
+    using Game = Discord.API.Game;
 
     #endregion
 
@@ -36,22 +39,24 @@ namespace WiseOldBot {
         public async override Task StartAsync() {
             Client = new DiscordSocketClient(new DiscordSocketConfig { LogLevel = LogSeverity.Debug });
             Client.Ready += ClientOnReadyAsync;
-            HandleConfigs();
+            await HandleConfigsAsync();
             await InstallCommandsAsync();
-            await LoginAndConnectAsync();
+            await LoginAndConnectAsync(TokenType.Bot);
         }
-
-        public override void HandleConfigs() => Configs = ConfigHandler.Load<WiseOldBotConfig>(CONFIG_PATH);
 
         public async override Task InstallCommandsAsync() {
             Commands = new CommandHandler();
             Commands.Service.AddTypeReader<HighScoreType>(new HighScoreTypeReader());
             Commands.Service.AddTypeReader<SkillType>(new SkillTypeReader());
             Client.Log += Log;
-            await Commands.Install(Client, Configs);
+
+            var map = new DependencyMap();
+            map.Add(Client);
+            await Commands.InstallAsync(map);
         }
 
-        async Task ClientOnReadyAsync() => await Commands.Self.ModifyStatusAsync(x => x.Game = new Game("Spying on the Draynor Bank"));
+        async Task ClientOnReadyAsync() => await Client.CurrentUser.ModifyStatusAsync(
+            x => x.Game = new Optional<Game>(new Game {Name = "Spying on the Draynor Bank"}));
 
         #endregion Overrides of BotBase
     }

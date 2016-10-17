@@ -17,7 +17,7 @@ namespace WiseOldBot.TypeReaders {
     public class SkillTypeReader : TypeReader {
         #region Overrides of TypeReader
 
-        public override Task<TypeReaderResult> Read(IUserMessage context, string input) {
+        public override Task<TypeReaderResult> Read(CommandContext context, string input) {
             switch (input.ToLower()) {
                 case "agility":
                 case "agi":

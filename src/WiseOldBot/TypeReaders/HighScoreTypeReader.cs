@@ -17,14 +17,14 @@ namespace WiseOldBot.TypeReaders {
     using System.Threading.Tasks;
     using Discord;
     using Discord.Commands;
-    using Entities;
+    using OSRS;
 
     #endregion
 
     public class HighScoreTypeReader : TypeReader {
         #region Overrides of TypeReader
 
-        public override Task<TypeReaderResult> Read(IUserMessage context, string input) {
+        public override Task<TypeReaderResult> Read(CommandContext context, string input) {
             if (input.Split(' ').Length > 1) {
                 return Task.FromResult
                     (TypeReaderResult.FromError(CommandError.BadArgCount, "Invalid highscore type argument count"));

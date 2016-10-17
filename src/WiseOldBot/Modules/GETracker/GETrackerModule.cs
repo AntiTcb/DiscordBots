@@ -25,70 +25,47 @@ namespace WiseOldBot.GETracker {
 
     #endregion
 
-    [Module]
-    public class GETrackerModule {
-        #region Private Fields + Properties
-
-        const string BASE_URI = "https://ge-tracker.com/STATS_API";
-        static readonly IGETrackerAPI API = RestClient.For<IGETrackerAPI>(BASE_URI);
-        ItemMap _itemMap;
-        DiscordSocketClient _client;
-
-        #endregion Private Fields + Properties
-
-        #region Public Constructors
-
-        public GETrackerModule(DiscordSocketClient client) {
-            _client = client;
-            var items = API.GetItemsAsync()
-                .Result["data"]
-                .GroupBy(x => x.Name.ToLower())
-                .ToDictionary(g => g.Key, g => g.OrderBy(x => x.ItemID).ToList());
-            _itemMap = new ItemMap(items);
-        }
-
-        #endregion Public Constructors
-
+    public class GETrackerModule : ModuleBase {         
         #region Public Methods
 
         [Command("price"), Alias("p"), Remarks("Gets the GE-Tracker Price Info for an item")]
-        public async Task GetPriceAsync(IUserMessage msg, [Remainder, Summary("The item name")] string itemName) {
-            await msg.Channel.TriggerTypingAsync();
-            var returnItems = _itemMap.ContainsKey(itemName) ?
-                _itemMap[itemName] : _itemMap.PartialMatch(itemName);
+        public async Task GetPriceAsync([Remainder, Summary("The item name")] string itemName) {
+            await Context.Channel.TriggerTypingAsync();
+            var returnItems = GETrackerAPIClient.ItemMap.ContainsKey(itemName) ?
+                GETrackerAPIClient.ItemMap[itemName] : GETrackerAPIClient.ItemMap.PartialMatch(itemName);
             var sb = new StringBuilder();
 
             foreach (var item in returnItems) {
                 if (item.CachedUntil <= DateTime.Now) {
-                    await item.UpdateAsync(API);
+                    await item.UpdateAsync(GETrackerAPIClient.API);
                 }
                 sb.AppendLine(item.ToDiscordMessage());
             }
 
-            await msg.Channel.SendMessageAsync(sb.ToString());
+            await Context.Channel.SendMessageAsync(sb.ToString());
         }
 
         [Command("alch")]
-        public async Task GetAlchPriceAsync(IUserMessage msg, [Remainder] string itemName) {
-            await msg.Channel.TriggerTypingAsync();
-            var returnItems = _itemMap.ContainsKey(itemName) ? _itemMap[itemName] : _itemMap.PartialMatch(itemName);
+        public async Task GetAlchPriceAsync([Remainder] string itemName) {
+            await Context.Channel.TriggerTypingAsync();
+            var returnItems = GETrackerAPIClient.ItemMap.ContainsKey(itemName) ? GETrackerAPIClient.ItemMap[itemName] : GETrackerAPIClient.ItemMap.PartialMatch(itemName);
             var sb = new StringBuilder();
 
             foreach (var item in returnItems) {
                 sb.AppendLine($"`{item.Name} / Low Alch: {item.LowAlchemy} / {item.HighAlchemy}");
             }
-            await msg.Channel.SendMessageAsync(sb.ToString());
+            await Context.Channel.SendMessageAsync(sb.ToString());
         }
 
         [Command("rebuild"), Remarks("Rebuilds the item map.")]
-        public async Task RebuildItemMapAsync(IUserMessage msg) {
-            await msg.Channel.TriggerTypingAsync();
-            var inItems = await API.GetItemsAsync();
+        public async Task RebuildItemMapAsync() {
+            await Context.Channel.TriggerTypingAsync();
+            var inItems = await GETrackerAPIClient.API.GetItemsAsync();
             var a = inItems["data"].GroupBy(x => x.Name).
                                ToDictionary(g => g.Key, g => g.OrderBy(x => x.ItemID).ToList());
-            var newItems = a.Where(x => _itemMap.ContainsKey(x.Key));
-            _itemMap = new ItemMap(a);
-            await msg.Channel.SendMessageAsync("Item map rebuilt! New items:" +
+            var newItems = a.Where(x => GETrackerAPIClient.ItemMap.ContainsKey(x.Key));
+            GETrackerAPIClient.ItemMap = new ItemMap(a);
+            await Context.Channel.SendMessageAsync("Item map rebuilt! New items:" +
                 $"{Format.Code($"{newItems.Select(x => x.Key.ToString()).Aggregate((x, y) => $"{x}, {y}" )}")}");
         }
 

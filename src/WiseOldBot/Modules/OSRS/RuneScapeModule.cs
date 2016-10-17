@@ -5,8 +5,8 @@
 // Solution: DiscordBots
 // Project: WiseOldBot
 // 
-// Created: 09/25/2016 6:29 AM
-// Last Revised: 09/25/2016 6:55 AM
+// Created: 10/11/2016 6:18 PM
+// Last Revised: 10/16/2016 10:44 PM
 // Last Revised by: Alex Gravely
 
 #endregion
@@ -22,77 +22,71 @@ namespace WiseOldBot.OSRS {
 
     #endregion
 
-    [Module]
-    public partial class RuneScapeModule {
-        WiseOldBotConfig _config;
+    public partial class RuneScapeModule : ModuleBase {
         #region Public Structs + Classes
 
-        public RuneScapeModule(WiseOldBotConfig config) {
-            _config = config;
-
-        }
-
-        [Command("defname"), Alias("account")]
-        public async Task ManageUsernameMapAsync(IUserMessage msg, [Remainder] string username) {
-            var userID = msg.Author.Id;
-            if (!_config.UsernameMap.ContainsKey(userID))
-            {
-                _config.UsernameMap.Add(userID, null);
-            }
-            switch (username)
-            {
-                case "--unset":
-                    _config.UsernameMap[userID] = null;
-                    await msg.Channel.SendMessageAsync("Default account name unset!");
-                    break;
-                default:
-                    _config.UsernameMap[userID] = username;
-                    await msg.Channel.SendMessageAsync($"Default account name set to {Format.Code(_config.UsernameMap[userID])}");
-                    break;
-            }
-            ConfigHandler.Save(BotBase.CONFIG_PATH, _config);
-        }
+        [Command("exp2lvl"), Alias("e2l")]
+        public async Task CalculateExperienceAsync(uint exp)
+            => await Context.Channel.SendMessageAsync($"Level: {ExperienceToLevel(exp)}");
 
         [Command("lvl2exp"), Alias("l2e")]
-        public async Task CalculateLevelAsync(IUserMessage msg, uint level) {
+        public async Task CalculateLevelAsync(uint level) {
             var exp = LevelToExperience(level);
 
             if (level > 99) {
-                await msg.Channel.SendMessageAsync($"Minimum exp: {exp}.");
+                await Context.Channel.SendMessageAsync($"Minimum exp: {exp}.");
             }
             else {
                 var nextLevelExp = LevelToExperience(level + 1);
-                await msg.Channel.SendMessageAsync($"Minimum exp: {exp}. Next level: {nextLevelExp}. Difference:{nextLevelExp - exp}");
+                await
+                    Context.Channel.SendMessageAsync
+                            ($"Minimum exp: {exp}. Next level: {nextLevelExp}. Difference:{nextLevelExp - exp}");
             }
         }
 
-
-        [Command("exp2lvl"), Alias("e2l")]
-        public async Task CalculateExperienceAsync(IUserMessage msg, uint exp) => await msg.Channel.SendMessageAsync($"Level: {ExperienceToLevel(exp)}");
-
-        double LevelToExperience(uint level) {
-            double total = 0;
-            for (var i = 1 ; i < level ; i++) {
-                total += Math.Floor(i + 300 * Math.Pow(2, i / 7.0));
+        [Command("defname"), Alias("account")]
+        public async Task ManageUsernameMapAsync([Remainder] string username) {
+            var userID = Context.User.Id;
+            if (!((WiseOldBotConfig) Globals.BotConfig).UsernameMap.ContainsKey(userID)) {
+                ((WiseOldBotConfig) Globals.BotConfig).UsernameMap.Add(userID, null);
             }
-            return Math.Floor(total / 4);
+            switch (username) {
+                case "--unset":
+                    ((WiseOldBotConfig) Globals.BotConfig).UsernameMap[userID] = null;
+                    await Context.Channel.SendMessageAsync("Default account name unset!");
+                    break;
+
+                default:
+                    ((WiseOldBotConfig) Globals.BotConfig).UsernameMap[userID] = username;
+                    await
+                        Context.Channel.SendMessageAsync
+                                ($"Default account name set to {Format.Code(((WiseOldBotConfig) Globals.BotConfig).UsernameMap[userID])}");
+                    break;
+            }
+            await ConfigHandler.SaveAsync(Globals.CONFIG_PATH, Globals.BotConfig);
         }
 
         uint ExperienceToLevel(double exp) {
             double pts = 0;
-            for (var lvl = 1; lvl < 99; ++lvl)
-            {
+            for (var lvl = 1 ; lvl < 99 ; ++lvl) {
                 pts += Math.Floor(lvl + (300 * Math.Pow(2, lvl / 7D)));
                 var output = pts / 4D;
-                if (!(exp - output < 0)) {
+                if (!((exp - output) < 0)) {
                     continue;
                 }
                 var l_out = (pts - Math.Floor(lvl + (300 * Math.Pow(2, lvl / 7D)))) / 4;
-                return (uint) (lvl + (exp - l_out) / (output - l_out));
+                return (uint) (lvl + ((exp - l_out) / (output - l_out)));
             }
             return 99;
         }
 
+        double LevelToExperience(uint level) {
+            double total = 0;
+            for (var i = 1 ; i < level ; i++) {
+                total += Math.Floor(i + (300 * Math.Pow(2, i / 7.0)));
+            }
+            return Math.Floor(total / 4);
+        }
 
         #endregion Public Structs + Classes
     }
