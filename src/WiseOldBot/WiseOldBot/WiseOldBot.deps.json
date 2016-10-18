@@ -1,7 +1,7 @@
 {
   "runtimeTarget": {
     "name": ".NETCoreApp,Version=v1.0",
-    "signature": "8aaf548d746420daa265ee93d36f87dae5a434e6"
+    "signature": "474583f60d1a67f8e31145859f4ab95c9ca93178"
   },
   "compilationOptions": {},
   "targets": {
@@ -53,7 +53,7 @@
         "dependencies": {
           "Discord.Net.Core": "1.0.0-beta2-00435",
           "Discord.Net.Rest": "1.0.0-beta2-00435",
-          "System.Net.WebSockets.Client": "4.0.0"
+          "System.Net.WebSockets.Client": "4.0.1-beta-24425-02"
         },
         "runtime": {
           "lib/netstandard1.3/Discord.Net.Rpc.dll": {}
@@ -63,7 +63,7 @@
         "dependencies": {
           "Discord.Net.Core": "1.0.0-beta2-00435",
           "Discord.Net.Rest": "1.0.0-beta2-00435",
-          "System.Net.WebSockets.Client": "4.0.0"
+          "System.Net.WebSockets.Client": "4.0.1-beta-24425-02"
         },
         "runtime": {
           "lib/netstandard1.3/Discord.Net.WebSocket.dll": {}
@@ -137,6 +137,7 @@
           "lib/netstandard1.0/Microsoft.Extensions.Primitives.dll": {}
         }
       },
+      "Microsoft.NETCore.Platforms/1.0.2-beta-24425-02": {},
       "Newtonsoft.Json/9.0.1": {
         "dependencies": {
           "System.Runtime.Serialization.Primitives": "4.1.1"
@@ -155,6 +156,9 @@
         }
       },
       "System.Diagnostics.FileVersionInfo/4.0.0": {
+        "dependencies": {
+          "Microsoft.NETCore.Platforms": "1.0.2-beta-24425-02"
+        },
         "runtimeTargets": {
           "runtimes/unix/lib/netstandard1.3/System.Diagnostics.FileVersionInfo.dll": {
             "rid": "unix",
@@ -181,8 +185,9 @@
           "lib/netstandard1.3/System.Net.WebSockets.dll": {}
         }
       },
-      "System.Net.WebSockets.Client/4.0.0": {
+      "System.Net.WebSockets.Client/4.0.1-beta-24425-02": {
         "dependencies": {
+          "Microsoft.NETCore.Platforms": "1.0.2-beta-24425-02",
           "System.Net.WebSockets": "4.0.0"
         },
         "runtimeTargets": {
@@ -202,6 +207,9 @@
         }
       },
       "System.Text.Encoding.CodePages/4.0.1": {
+        "dependencies": {
+          "Microsoft.NETCore.Platforms": "1.0.2-beta-24425-02"
+        },
         "runtimeTargets": {
           "runtimes/unix/lib/netstandard1.3/System.Text.Encoding.CodePages.dll": {
             "rid": "unix",
@@ -240,7 +248,7 @@
         "dependencies": {
           "Discord.Net": "1.0.0-beta2-00435",
           "Discord.Net.Commands": "1.0.0-beta2-00435",
-          "System.Net.WebSockets.Client": "4.0.0",
+          "System.Net.WebSockets.Client": "4.0.1-beta-24425-02",
           "Microsoft.CodeAnalysis.CSharp.Scripting": "1.3.2",
           "Microsoft.Extensions.DependencyModel": "1.0.1-beta-003206"
         },
@@ -331,6 +339,11 @@
       "serviceable": true,
       "sha512": "sha512-3q2vzfKEDjL6JFkRpk5SFA3zarYsO6+ZYgoucNImrUMzDn0mFbEOL5p9oPoWiypwypbJVVjWTf557bXZ0YFLig=="
     },
+    "Microsoft.NETCore.Platforms/1.0.2-beta-24425-02": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-yRF0q+UeuDRq0OLlxLTMzgQmMWW3dsoBW3HT3Xb1vghUfihuPVIwy1VHDIhuxiFQLj8WJNPKtifJoRcrib4cVw=="
+    },
     "Newtonsoft.Json/9.0.1": {
       "type": "package",
       "serviceable": true,
@@ -361,10 +374,10 @@
       "serviceable": true,
       "sha512": "sha512-2KJo8hir6Edi9jnMDAMhiJoI691xRBmKcbNpwjrvpIMOCTYOtBpSsSEGBxBDV7PKbasJNaFp1+PZz1D7xS41Hg=="
     },
-    "System.Net.WebSockets.Client/4.0.0": {
+    "System.Net.WebSockets.Client/4.0.1-beta-24425-02": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-GY5h9cn0ZVsG4ORQqMytTldrqxet2RC2CSEsgWGf4XNW5jhL5SxzcUZph03xbZsgn7K3qMr+Rq+gkbJNI+FEXg=="
+      "sha512": "sha512-V+byJ8w8m8tP6uE5gdr3CcOpYQNSmfIb+fpxur2soN7jhDXD4L2RrpLRchgFfyRm/w9sLOCtTvhDbDJImIciDw=="
     },
     "System.Runtime.Serialization.Primitives/4.1.1": {
       "type": "package",
