@@ -86,12 +86,12 @@ namespace WiseOldBot.GETracker {
         public string ToDiscordMessage()
             =>
             $"{Format.Bold(Name)} (ID:{Format.Italics(ItemID.ToString())})\n" + $"{Format.Underline("Prices:")}\n" +
-            $"\t\tBuying: {Format.Code($"{BuyingPrice}gp")}\t" + $"Average: {Format.Code($"{AveragePrice}gp")}\t" +
-            $"Selling: {Format.Code($"{SellingPrice}gp")}\n" + $"{Format.Underline("Volume:")}\n" +
-            $"\t\tBuying Qty: {Format.Code($"{BuyingQuantity}")}\t" +
-            $"Selling Qty: {Format.Code($"{SellingQuantity}")}\n" + $"{Format.Underline("Misc:")}\n" +
-            $"\t\tLow Alch: {Format.Code($"{LowAlchemy}gp")}\t" + $"High Alch: {Format.Code($"{HighAlchemy}gp")}\t" +
-            $"Buy Limit: {Format.Code($"{BuyingLimit}")}\n";
+            $"\t\tBuying: {Format.Code($"{BuyingPrice:N0}gp")}\t" + $"Average: {Format.Code($"{AveragePrice:N0}gp")}\t" +
+            $"Selling: {Format.Code($"{SellingPrice:N0}gp")}\n" + $"{Format.Underline("Volume:")}\n" +
+            $"\t\tBuying Qty: {Format.Code($"{BuyingQuantity:N0}")}\t" +
+            $"Selling Qty: {Format.Code($"{SellingQuantity:N0}")}\n" + $"{Format.Underline("Misc:")}\n" +
+            $"\t\tLow Alch: {Format.Code($"{LowAlchemy:N0}gp")}\t" + $"High Alch: {Format.Code($"{HighAlchemy:N0}gp")}\t" +
+            $"Buy Limit: {Format.Code($"{BuyingLimit:N0}")}\n";
 
         public async Task UpdateAsync(IGETrackerAPI api) {
             if (CachedUntil > DateTime.UtcNow) {

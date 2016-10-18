@@ -14,6 +14,7 @@
 namespace BCL.Modules.Owner {
     #region Using
 
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
@@ -34,6 +35,7 @@ namespace BCL.Modules.Owner {
         public async Task PowerdownAsync() {
             await ReplyAsync("Powering down!").ConfigureAwait(false);
             await Context.Client.DisconnectAsync().ConfigureAwait(false);
+            Environment.Exit(0);
         }
 
         #region Private Structs + Classes
