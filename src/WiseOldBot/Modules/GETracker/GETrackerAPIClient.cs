@@ -13,7 +13,7 @@ namespace WiseOldBot.GETracker {
     using System.Linq;
 
     public static class GETrackerAPIClient {
-        const string BASE_URI = "https://ge-tracker.com/STATS_API";
+        const string BASE_URI = "https://ge-tracker.com/api";
         public static readonly IGETrackerAPI API = RestClient.For<IGETrackerAPI>(BASE_URI);
         public static ItemMap ItemMap { get; set; }
 

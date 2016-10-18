@@ -25,17 +25,17 @@ namespace WiseOldBot.GETracker {
 
     #endregion
 
-    public class GETrackerModule : ModuleBase {         
+    public class GETrackerModule : ModuleBase {
         #region Public Methods
 
         [Command("price"), Alias("p"), Remarks("Gets the GE-Tracker Price Info for an item")]
-        public async Task GetPriceAsync([Remainder, Summary("The item name")] string itemName) {
+        public async Task GetPriceAsync([Remainder, Summary("The item name")] string itemName = "cabbage") {
             await Context.Channel.TriggerTypingAsync();
             var returnItems = GETrackerAPIClient.ItemMap.ContainsKey(itemName) ?
                 GETrackerAPIClient.ItemMap[itemName] : GETrackerAPIClient.ItemMap.PartialMatch(itemName);
             var sb = new StringBuilder();
 
-            foreach (var item in returnItems) {
+            foreach (var item in returnItems.Take(5)) {
                 if (item.CachedUntil <= DateTime.Now) {
                     await item.UpdateAsync(GETrackerAPIClient.API);
                 }
@@ -46,12 +46,12 @@ namespace WiseOldBot.GETracker {
         }
 
         [Command("alch")]
-        public async Task GetAlchPriceAsync([Remainder] string itemName) {
+        public async Task GetAlchPriceAsync([Remainder] string itemName = "cabbage") {
             await Context.Channel.TriggerTypingAsync();
             var returnItems = GETrackerAPIClient.ItemMap.ContainsKey(itemName) ? GETrackerAPIClient.ItemMap[itemName] : GETrackerAPIClient.ItemMap.PartialMatch(itemName);
             var sb = new StringBuilder();
 
-            foreach (var item in returnItems) {
+            foreach (var item in returnItems.Take(5)) {
                 sb.AppendLine($"`{item.Name} / Low Alch: {item.LowAlchemy} / {item.HighAlchemy}");
             }
             await Context.Channel.SendMessageAsync(sb.ToString());

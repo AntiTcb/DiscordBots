@@ -1,7 +1,7 @@
 {
   "runtimeTarget": {
     "name": ".NETCoreApp,Version=v1.0",
-    "signature": "ac007e8eaa4fc66dd7af0295a464644e3d432c0f"
+    "signature": "8aaf548d746420daa265ee93d36f87dae5a434e6"
   },
   "compilationOptions": {},
   "targets": {
@@ -118,6 +118,20 @@
           "lib/dotnet/Microsoft.CodeAnalysis.Scripting.dll": {}
         }
       },
+      "Microsoft.DotNet.InternalAbstractions/1.0.1-beta-003206": {
+        "runtime": {
+          "lib/netstandard1.3/Microsoft.DotNet.InternalAbstractions.dll": {}
+        }
+      },
+      "Microsoft.Extensions.DependencyModel/1.0.1-beta-003206": {
+        "dependencies": {
+          "Microsoft.DotNet.InternalAbstractions": "1.0.1-beta-003206",
+          "Newtonsoft.Json": "9.0.1"
+        },
+        "runtime": {
+          "lib/netstandard1.6/Microsoft.Extensions.DependencyModel.dll": {}
+        }
+      },
       "Microsoft.Extensions.Primitives/1.0.0": {
         "runtime": {
           "lib/netstandard1.0/Microsoft.Extensions.Primitives.dll": {}
@@ -227,7 +241,8 @@
           "Discord.Net": "1.0.0-beta2-00435",
           "Discord.Net.Commands": "1.0.0-beta2-00435",
           "System.Net.WebSockets.Client": "4.0.0",
-          "Microsoft.CodeAnalysis.CSharp.Scripting": "1.3.2"
+          "Microsoft.CodeAnalysis.CSharp.Scripting": "1.3.2",
+          "Microsoft.Extensions.DependencyModel": "1.0.1-beta-003206"
         },
         "runtime": {
           "BCL.dll": {}
@@ -300,6 +315,16 @@
       "type": "package",
       "serviceable": true,
       "sha512": "sha512-bKbqnP0g1DxseaICwpmUhabiGYexYwhUGuXici0sOeNQgOXbH04UHmmyAigEOXnY2dnMw5tTIdWgKGo9RqeUoQ=="
+    },
+    "Microsoft.DotNet.InternalAbstractions/1.0.1-beta-003206": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-FznBxQy6fucPtW8c8R8Y4vYYc1f9t5pROz7fFV02cDwpx93TEXBiM7rn29TtZTe51TPJsHfX37CzBx8mGNFWhg=="
+    },
+    "Microsoft.Extensions.DependencyModel/1.0.1-beta-003206": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-3NksdRkng/dzYmaW4GDJx8ZIrVvugZu/vAcg7US+lAd3K4+xYo7QOnLxkQxi3UGLuTZW8f5c3TP1qKgsElKrIQ=="
     },
     "Microsoft.Extensions.Primitives/1.0.0": {
       "type": "package",

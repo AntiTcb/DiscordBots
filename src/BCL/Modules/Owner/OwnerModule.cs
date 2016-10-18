@@ -29,6 +29,13 @@ namespace BCL.Modules.Owner {
 
     [RequireOwner]
     public class OwnerModule : ModuleBase {
+
+        [Command("powerdown"), Alias("pd")]
+        public async Task PowerdownAsync() {
+            await ReplyAsync("Powering down!").ConfigureAwait(false);
+            await Context.Client.DisconnectAsync().ConfigureAwait(false);
+        }
+
         #region Private Structs + Classes
 
         sealed class EvalGlobals {

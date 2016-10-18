@@ -6,69 +6,44 @@
 // Project: WiseOldBot
 // 
 // Created: 10/11/2016 6:18 PM
-// Last Revised: 10/16/2016 10:46 PM
+// Last Revised: 10/17/2016 9:09 PM
 // Last Revised by: Alex Gravely
 
 #endregion
 
-namespace WiseOldBot.OSRS {
+namespace WiseOldBot.Modules.OSRS {
     #region Using
 
     using System;
     using System.Threading.Tasks;
     using BCL;
     using Discord.Commands;
-    using RestEase;
+    using Modules.OSRS;
+    using WiseOldBot.OSRS;
 
     #endregion
 
-    public partial class RuneScapeModule {
+    public partial class OSRSModule {
         #region Public Structs + Classes
 
-        [Group("stats")]
+        [Group("stats"), DontAutoLoad]
         public class StatsGroup : ModuleBase {
-            #region Internal Fields + Properties
-
-            internal static IOSRSApi STATS_API = RestClient.For<IOSRSApi>(HS_ENDPOINT);
-            const string HS_ENDPOINT = "http://services.runescape.com/";
-
-            #endregion Internal Fields + Properties
-
             #region Public Methods
 
-            internal static async Task<Account> DownloadStatsAsync(string playerName, HighScoreType hsType) {
-                switch (hsType) {
-                    case HighScoreType.Regular:
-                        return await STATS_API.GetRegularHighScoresAsync(playerName);
-
-                    case HighScoreType.Ironman:
-                        return await STATS_API.GetIronmanHighScoresAsync(playerName);
-
-                    case HighScoreType.Ultimate:
-                        return await STATS_API.GetUltimateHighScoresAsync(playerName);
-
-                    case HighScoreType.Deadman:
-                        return await STATS_API.GetDeadmanHighScoresAsync(playerName);
-
-                    case HighScoreType.Seasonal:
-                        return await STATS_API.GetSeasonalHighScoresAsync(playerName);
-
-                    default:
-                        throw new ArgumentOutOfRangeException(nameof(hsType), hsType, null);
-                }
-            }
-
-            #endregion Public Methods
-
-            [Command("stats")]
+            [Command("lookup")]
             public async Task GetStatsAsync
-            ([Summary("High Score Type")] HighScoreType hsType = HighScoreType.Regular,
-             [Summary("Skill. Leave blank for all.")] SkillType skillType = SkillType.All,
-             [Remainder] string playerName = "") {
+                (HighScoreType hsType, SkillType skillType) {
+                var playerName = "";
                 if (playerName == string.Empty) {
-                    playerName = ((WiseOldBotConfig) Globals.BotConfig).UsernameMap[Context.User.Id];
+                    if (((WiseOldBotConfig) Globals.BotConfig).UsernameMap.ContainsKey(Context.User.Id)) {
+                        playerName = ((WiseOldBotConfig) Globals.BotConfig).UsernameMap[Context.User.Id];
+                    }
+                    else {
+                        await ReplyAsync("You must specify a username.");
+                        return;
+                    }
                 }
-                var player = await DownloadStatsAsync(playerName, hsType);
+                var player = await OSRSAPIClient.DownloadStatsAsync(playerName, hsType);
 
                 switch (skillType) {
                     case SkillType.Agility:
@@ -181,6 +156,8 @@ namespace WiseOldBot.OSRS {
                         throw new ArgumentOutOfRangeException(nameof(skillType), skillType, null);
                 }
             }
+
+            #endregion Public Methods
         }
 
         #endregion Public Structs + Classes

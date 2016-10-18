@@ -12,6 +12,7 @@
 #endregion
 
 namespace BCL.Interfaces {
+    using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using Discord;
@@ -21,11 +22,9 @@ namespace BCL.Interfaces {
     public interface IBotBase {
         DiscordSocketClient Client { get; set; }
         ICommandHandler Commands { get; set; }
-        IBotConfig BotConfig { get; set; }
-        Dictionary<ulong, IServerConfig> ServerConfigs { get; set; }
 
-        Task StartAsync();
-        Task HandleConfigsAsync();
+        Task StartAsync<T>() where T : IBotConfig, new();
+        Task HandleConfigsAsync<T>() where T : IBotConfig, new();
         Task InstallCommandsAsync();
         Task LoginAndConnectAsync(TokenType tokenType);
     }

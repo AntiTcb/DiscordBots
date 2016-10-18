@@ -14,11 +14,13 @@
 namespace BCL {
     #region Using
 
+    using System;
     using System.Reflection;
     using System.Threading.Tasks;
     using Discord.Commands;
     using Discord.WebSocket;
     using Interfaces;
+    using Microsoft.Extensions.DependencyModel;
 
     #endregion
 
@@ -40,16 +42,17 @@ namespace BCL {
             var prefix = guildChannel?.Guild == null
                              ? ServerConfig.DefaultPrefix : Globals.ServerConfigs[guildChannel.Guild.Id].CommandPrefix;
 
-            if (
-                !(message.HasMentionPrefix(Client.CurrentUser, ref argPos) ||
+            if (!(message.HasMentionPrefix(Client.CurrentUser, ref argPos) ||
                   message.HasStringPrefix(prefix, ref argPos))) {
                 return;
             }
             var ctx = new CommandContext(Client, message);
-            var result = await Service.Execute(ctx, argPos, Map).ConfigureAwait(false);
+            var result = await Service.Execute(ctx, argPos, Map, MultiMatchHandling.Best).ConfigureAwait(false);
             if (!result.IsSuccess) {
                 var loggingChannel = Client.GetChannel(Globals.BotConfig.LogChannel) as SocketTextChannel;
-                await loggingChannel.SendMessageAsync($"**Error:** {result.ErrorReason}", false).ConfigureAwait(false);
+                await loggingChannel.SendMessageAsync(
+                    $"**Error:** {result.ErrorReason}\n" +
+                    $"**Caller:** {ctx.User} ({ctx.User.Id}) / {ctx.Guild.Name} | {ctx.Channel.Name}", false).ConfigureAwait(false);
                 await ctx.Channel.SendMessageAsync($"**Error:** {result.ErrorReason}").ConfigureAwait(false);
             }
         }
@@ -59,6 +62,7 @@ namespace BCL {
             Map = map ?? new DependencyMap();
             Client = Map.Get<DiscordSocketClient>();
             Map.Add(Service);
+            await Service.AddModules(typeof(BotBase).GetTypeInfo().Assembly).ConfigureAwait(false);
             await Service.AddModules(Assembly.GetEntryAssembly(), Map).ConfigureAwait(false);
             Client.MessageReceived += HandleCommandAsync;
         }

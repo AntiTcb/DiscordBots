@@ -19,6 +19,6 @@ namespace BCL {
         public const string DEFAULT_PREFIX = ";";
 
         public static IBotConfig BotConfig { get; set; }
-        public static Dictionary<ulong, IServerConfig> ServerConfigs { get; set; }
+        public static Dictionary<ulong, ServerConfig> ServerConfigs { get; set; } = new Dictionary<ulong, ServerConfig>();
     }
 }

@@ -11,7 +11,7 @@
 
 #endregion
 
-namespace WiseOldBot.OSRS {
+namespace WiseOldBot.Modules.OSRS {
     #region Using
 
     using System;
@@ -21,8 +21,8 @@ namespace WiseOldBot.OSRS {
     using Discord.Commands;
 
     #endregion
-
-    public partial class RuneScapeModule : ModuleBase {
+    [DontAutoLoad]
+    public partial class OSRSModule : ModuleBase {
         #region Public Structs + Classes
 
         [Command("exp2lvl"), Alias("e2l")]
@@ -52,7 +52,7 @@ namespace WiseOldBot.OSRS {
             }
             switch (username) {
                 case "--unset":
-                    ((WiseOldBotConfig) Globals.BotConfig).UsernameMap[userID] = null;
+                    ((WiseOldBotConfig) Globals.BotConfig).UsernameMap.Remove(userID);
                     await Context.Channel.SendMessageAsync("Default account name unset!");
                     break;
 

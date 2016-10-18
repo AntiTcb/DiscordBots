@@ -97,10 +97,10 @@ namespace WiseOldBot.GETracker {
             if (CachedUntil > DateTime.UtcNow) {
                 return;
             }
-            await Update((await api.GetItemAsync(ItemID)).Item);
+            Update((await api.GetItemAsync(ItemID)).Item);
         }
 
-        internal async Task Update(GETrackerItem updatedItem) {
+        internal void Update(GETrackerItem updatedItem) {
             if (updatedItem.ItemID != ItemID) {
                 return;
             }

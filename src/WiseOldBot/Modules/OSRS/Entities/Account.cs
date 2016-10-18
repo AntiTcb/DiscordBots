@@ -5,8 +5,8 @@
 // Solution: DiscordBots
 // Project: WiseOldBot
 // 
-// Created: 09/20/2016 11:48 AM
-// Last Revised: 09/25/2016 6:22 AM
+// Created: 09/25/2016 6:48 AM
+// Last Revised: 10/17/2016 6:06 PM
 // Last Revised by: Alex Gravely
 
 #endregion
@@ -18,89 +18,58 @@ namespace WiseOldBot.OSRS {
 
     #endregion
 
-    public enum HighScoreType {
-        Regular,
-        Ironman,
-        Ultimate,
-        Deadman,
-        Seasonal
-    }
-
-    public enum SkillType {
-        Agility,
-        Attack,
-        Construction,
-        Cooking,
-        Crafting,
-        Defense,
-        Farming,
-        Firemaking,
-        Fishing,
-        Fletching,
-        Herblore,
-        Hitpoints,
-        Hunter,
-        Magic,
-        Mining,
-        Prayer,
-        Ranged,
-        Runecrafting,
-        Slayer,
-        Smithing,
-        Strength,
-        Thieving,
-        Woodcutting,
-        Total,
-        All,
-        Combat,
-        NonCombat
-    }
-
     public class Account {
         #region Public Structs + Classes
 
-        public struct Skill {
-            #region Internal Fields + Properties
+        public Account(string username, string hsType, string[] skills) {
+            Username = username;
 
-            internal ulong Experience { get; set; }
-            internal int Level { get; set; }
-            internal ulong Rank { get; set; }
+            switch (hsType) {
+                case "hiscore_oldschool":
+                    StatsSource = HighScoreType.Regular;
+                    break;
 
-            #endregion Internal Fields + Properties
+                case "hiscore_oldschool_ironman":
+                    StatsSource = HighScoreType.Ironman;
+                    break;
 
-            #region Public Methods
+                case "hiscore_oldschool_deadman":
+                    StatsSource = HighScoreType.Deadman;
+                    break;
 
-            public string ToDiscordMessage() => "```xl" + $"{Level}\t\t" + $"{Rank:N0}\t\t\t" + $"{Experience}";
+                case "hiscore_oldschool_seasonal":
+                    StatsSource = HighScoreType.Seasonal;
+                    break;
 
-            #endregion Public Methods
+                case "hiscore_oldschool_ultimate":
+                    StatsSource = HighScoreType.Ultimate;
+                    break;
+            }
 
-            public static int operator -(Skill a, Skill b) => a.Level - b.Level;
-
-            public static int operator *(Skill a, Skill b) => a.Level * b.Level;
-
-            public static int operator *(Skill a, int b) => a.Level * b;
-
-            public static int operator *(int a, Skill b) => a * b.Level;
-
-            public static double operator *(Skill a, double b) => a.Level * b;
-
-            public static double operator *(double a, Skill b) => a * b.Level;
-
-            public static int operator /(Skill a, Skill b) => a.Level / b.Level;
-
-            public static decimal operator /(Skill a, decimal b) => a.Level / b;
-
-            public static decimal operator /(decimal a, Skill b) => a / b.Level;
-
-            public static int operator /(Skill a, int b) => a.Level / b;
-
-            public static int operator /(int a, Skill b) => a / b.Level;
-
-            public static int operator +(Skill a, Skill b) => a.Level + b.Level;
-
-            public static int operator +(Skill a, int b) => a.Level + b;
-
-            public static int operator +(int a, Skill b) => a + b.Level;
+            Total = new Skill(skills[(int) SkillType.Total]);
+            Attack = new Skill(skills[(int) SkillType.Attack]);
+            Defense = new Skill(skills[(int) SkillType.Defense]);
+            Strength = new Skill(skills[(int) SkillType.Strength]);
+            Hitpoints = new Skill(skills[(int) SkillType.Hitpoints]);
+            Ranged = new Skill(skills[(int) SkillType.Ranged]);
+            Prayer = new Skill(skills[(int) SkillType.Prayer]);
+            Magic = new Skill(skills[(int) SkillType.Magic]);
+            Agility = new Skill(skills[(int) SkillType.Agility]);
+            Construction = new Skill(skills[(int) SkillType.Construction]);
+            Cooking = new Skill(skills[(int) SkillType.Cooking]);
+            Woodcutting = new Skill(skills[(int) SkillType.Woodcutting]);
+            Fletching = new Skill(skills[(int) SkillType.Fletching]);
+            Crafting = new Skill(skills[(int) SkillType.Crafting]);
+            Farming = new Skill(skills[(int) SkillType.Farming]);
+            Firemaking = new Skill(skills[(int) SkillType.Firemaking]);
+            Fishing = new Skill(skills[(int) SkillType.Fishing]);
+            Smithing = new Skill(skills[(int) SkillType.Smithing]);
+            Mining = new Skill(skills[(int) SkillType.Mining]);
+            Herblore = new Skill(skills[(int) SkillType.Herblore]);
+            Thieving = new Skill(skills[(int) SkillType.Thieving]);
+            Slayer = new Skill(skills[(int) SkillType.Slayer]);
+            Runecrafting = new Skill(skills[(int) SkillType.Runecrafting]);
+            Hunter = new Skill(skills[(int) SkillType.Hunter]);
         }
 
         #endregion Public Structs + Classes
@@ -150,31 +119,31 @@ namespace WiseOldBot.OSRS {
 
         public string ToDiscordMessage()
             =>
-            $"```xl\n{Username} / {StatsSource} / CB: {Combat} \nSKILL / LEVEL / EXPERIENCE / RANK\n" +
-            $"TOTAL / {Total.Level} / {Total.Experience} / {Total.Rank}\n" +
-            $"AGILITY / {Agility.Level} / {Agility.Experience} / {Agility.Rank}\n" +
-            $"ATTACK / {Attack.Level} / {Attack.Experience} / {Attack.Rank}\n" +
-            $"CONSTRUCTION / {Construction.Level} / {Construction.Experience} / {Construction.Rank}\n" +
-            $"COOKING / {Cooking.Level} / {Cooking.Experience} / {Cooking.Rank}\n" +
-            $"CRAFTING / {Crafting.Level} / {Crafting.Experience} / {Crafting.Rank}\n" +
-            $"DEFENSE / {Defense.Level} / {Defense.Experience} / {Defense.Rank}\n" +
-            $"FARMING / {Farming.Level} / {Farming.Experience} / {Farming.Rank}\n" +
-            $"FIREMAKING / {Firemaking.Level} / {Firemaking.Experience} / {Firemaking.Rank}\n" +
-            $"FISHING / {Fishing.Level} / {Fishing.Experience} / {Fishing.Rank}\n" +
-            $"FLETCHING / {Fletching.Level} / {Fletching.Experience} / {Fletching.Rank}\n" +
-            $"HERBLORE / {Herblore.Level} / {Herblore.Experience} / {Herblore.Rank}\n" +
-            $"HITPOINTS / {Hitpoints.Level} / {Hitpoints.Experience} / {Hitpoints.Rank}\n" +
-            $"HUNTER / {Hunter.Level} / {Hunter.Experience} / {Hunter.Rank}\n" +
-            $"MAGIC / {Magic.Level} / {Magic.Experience} / {Magic.Rank}\n" +
-            $"MINING / {Mining.Level} / {Mining.Experience} / {Mining.Rank}\n" +
-            $"PRAYER / {Prayer.Level} / {Prayer.Experience} / {Prayer.Rank}\n" +
-            $"RANGED / {Ranged.Level} / {Ranged.Experience} / {Ranged.Rank}\n" +
-            $"RUNECRAFTING / {Runecrafting.Level} / {Runecrafting.Experience} / {Runecrafting.Rank}\n" +
-            $"SLAYER / {Slayer.Level} / {Slayer.Experience} / {Slayer.Rank}\n" +
-            $"SMITHING / {Smithing.Level} / {Smithing.Experience} / {Smithing.Rank}\n" +
-            $"STRENGTH / {Strength.Level} / {Strength.Experience} / {Strength.Rank}\n" +
-            $"THIEVING / {Thieving.Level} / {Thieving.Experience} / {Thieving.Rank}\n" +
-            $"WOODCUTTING / {Woodcutting.Level} / {Woodcutting.Experience} / {Woodcutting.Rank}\n```";
+            $"```xl\n{Username} / {StatsSource} / CB: {Combat} \nSKILL / LEVEL / EXPERIENCE / RANK\n\n" +
+            $"TOTAL / {Total.Level} / {Total.Experience:N0} / {Total.Rank:N0}\n" +
+            $"AGILITY / {Agility.Level} / {Agility.Experience:N0} / {Agility.Rank:N0}\n" +
+            $"ATTACK / {Attack.Level} / {Attack.Experience:N0} / {Attack.Rank:N0}\n" +
+            $"CONSTRUCTION / {Construction.Level} / {Construction.Experience:N0} / {Construction.Rank:N0}\n" +
+            $"COOKING / {Cooking.Level} / {Cooking.Experience:N0} / {Cooking.Rank:N0}\n" +
+            $"CRAFTING / {Crafting.Level} / {Crafting.Experience:N0} / {Crafting.Rank:N0}\n" +
+            $"DEFENSE / {Defense.Level} / {Defense.Experience:N0} / {Defense.Rank:N0}\n" +
+            $"FARMING / {Farming.Level} / {Farming.Experience:N0} / {Farming.Rank:N0}\n" +
+            $"FIREMAKING / {Firemaking.Level} / {Firemaking.Experience:N0} / {Firemaking.Rank:N0}\n" +
+            $"FISHING / {Fishing.Level} / {Fishing.Experience:N0} / {Fishing.Rank:N0}\n" +
+            $"FLETCHING / {Fletching.Level} / {Fletching.Experience:N0} / {Fletching.Rank:N0}\n" +
+            $"HERBLORE / {Herblore.Level} / {Herblore.Experience:N0} / {Herblore.Rank:N0}\n" +
+            $"HITPOINTS / {Hitpoints.Level} / {Hitpoints.Experience:N0} / {Hitpoints.Rank:N0}\n" +
+            $"HUNTER / {Hunter.Level} / {Hunter.Experience:N0} / {Hunter.Rank:N0}\n" +
+            $"MAGIC / {Magic.Level} / {Magic.Experience:N0} / {Magic.Rank:N0}\n" +
+            $"MINING / {Mining.Level} / {Mining.Experience:N0} / {Mining.Rank:N0}\n" +
+            $"PRAYER / {Prayer.Level} / {Prayer.Experience:N0} / {Prayer.Rank:N0}\n" +
+            $"RANGED / {Ranged.Level} / {Ranged.Experience:N0} / {Ranged.Rank:N0}\n" +
+            $"RUNECRAFTING / {Runecrafting.Level} / {Runecrafting.Experience:N0} / {Runecrafting.Rank:N0}\n" +
+            $"SLAYER / {Slayer.Level} / {Slayer.Experience:N0} / {Slayer.Rank:N0}\n" +
+            $"SMITHING / {Smithing.Level} / {Smithing.Experience:N0} / {Smithing.Rank:N0}\n" +
+            $"STRENGTH / {Strength.Level} / {Strength.Experience:N0} / {Strength.Rank:N0}\n" +
+            $"THIEVING / {Thieving.Level} / {Thieving.Experience:N0} / {Thieving.Rank:N0}\n" +
+            $"WOODCUTTING / {Woodcutting.Level} / {Woodcutting.Experience:N0} / {Woodcutting.Rank:N0}\n```";
     }
 
     #endregion Public Methods

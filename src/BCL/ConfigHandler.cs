@@ -33,6 +33,9 @@ namespace BCL {
             internal static T CreateBotConfig<T>() where T : IBotConfig, new() {
                 object boxedConfig = new T();
                 foreach (var prop in typeof(T).GetRuntimeProperties()) {
+                    if (prop.PropertyType != typeof(string) || prop.PropertyType != typeof(ulong)) {
+                        continue;
+                    }
                     Console.WriteLine($"Input the value for property {prop.Name}:");
                     var propValue = Console.ReadLine();
                     prop.SetValue(boxedConfig, Convert.ChangeType(propValue, prop.PropertyType));
@@ -59,22 +62,21 @@ namespace BCL {
             return newConfig;
         }
 
-        public static async Task<Dictionary<ulong, IServerConfig>> LoadServerConfigsAsync
-            (string path = Globals.SERVER_CONFIG_PATH) {
+        public static async Task<Dictionary<ulong, T>> LoadServerConfigsAsync<T>(string path = Globals.SERVER_CONFIG_PATH) where T : IServerConfig, new() {
             if (File.Exists(path)) {
                 return
                     await
                         Task.Run
                             (() =>
-                                 JsonConvert.DeserializeObject<Dictionary<ulong, IServerConfig>>
+                                 JsonConvert.DeserializeObject<Dictionary<ulong, T>>
                                      (File.ReadAllText(path))).ConfigureAwait(false);
             }
-            var newConfig = new Dictionary<ulong, IServerConfig>();
+            var newConfig = new Dictionary<ulong, T>();
             await SaveAsync(path, newConfig).ConfigureAwait(false);
             return newConfig;
         }
 
-        public static async Task SaveAsync(string path, Dictionary<ulong, IServerConfig> configs)
+        public static async Task SaveAsync<T>(string path, Dictionary<ulong, T> configs) where T : IServerConfig
             => File.WriteAllText(path, await Task.Run(() => JsonConvert.SerializeObject(configs)).ConfigureAwait(false));
 
         public static async Task SaveAsync(string path, IBotConfig botConfig)

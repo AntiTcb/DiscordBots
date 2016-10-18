@@ -26,29 +26,27 @@ namespace BCL {
     public abstract class BotBase : IBotBase {
         #region Implementation of IBotBase
 
-        public IBotConfig BotConfig { get; set; }
         public DiscordSocketClient Client { get; set; }
         public ICommandHandler Commands { get; set; }
-        public Dictionary<ulong, IServerConfig> ServerConfigs { get; set; } = new Dictionary<ulong, IServerConfig>();
 
         public async virtual Task ClientOnJoinedGuildAsync(IGuild guild) {
             var defaultChannel = await guild.GetDefaultChannelAsync().ConfigureAwait(false);
             await defaultChannel.SendMessageAsync("Thank you for adding me to the server!").ConfigureAwait(false);
             var newServerConfig = new ServerConfig(Globals.DEFAULT_PREFIX);
-            ServerConfigs.Add(guild.Id, newServerConfig);
-            await ConfigHandler.SaveAsync(Globals.SERVER_CONFIG_PATH, ServerConfigs).ConfigureAwait(false);
+            Globals.ServerConfigs.Add(guild.Id, newServerConfig);
+            await ConfigHandler.SaveAsync(Globals.SERVER_CONFIG_PATH, Globals.ServerConfigs).ConfigureAwait(false);
         }
 
         public async virtual Task ClientOnLeftGuildAsync(IGuild guild) {
-            if (ServerConfigs.ContainsKey(guild.Id)) {
-                ServerConfigs.Remove(guild.Id);
+            if (Globals.ServerConfigs.ContainsKey(guild.Id)) {
+                Globals.ServerConfigs.Remove(guild.Id);
             }
-            await ConfigHandler.SaveAsync(Globals.SERVER_CONFIG_PATH, ServerConfigs).ConfigureAwait(false);
+            await ConfigHandler.SaveAsync(Globals.SERVER_CONFIG_PATH, Globals.ServerConfigs).ConfigureAwait(false);
         }
 
-        public async virtual Task HandleConfigsAsync() {
-            BotConfig = await ConfigHandler.LoadBotConfigAsync<BotConfig>().ConfigureAwait(false);
-            ServerConfigs = await ConfigHandler.LoadServerConfigsAsync().ConfigureAwait(false);
+        public async virtual Task HandleConfigsAsync<T>() where T : IBotConfig, new() {
+            Globals.BotConfig = await ConfigHandler.LoadBotConfigAsync<T>().ConfigureAwait(false);
+            Globals.ServerConfigs = await ConfigHandler.LoadServerConfigsAsync<ServerConfig>().ConfigureAwait(false);
         }
 
         public abstract Task InstallCommandsAsync();
@@ -59,16 +57,16 @@ namespace BCL {
         }
 
         public async virtual Task LoginAndConnectAsync(TokenType tokenType) {
-            await Client.LoginAsync(tokenType, BotConfig.BotToken).ConfigureAwait(false);
+            await Client.LoginAsync(tokenType, Globals.BotConfig.BotToken).ConfigureAwait(false);
             await Client.ConnectAsync().ConfigureAwait(false);
             await Task.Delay(-1).ConfigureAwait(false);
         }
 
-        public async virtual Task StartAsync() {
+        public async virtual Task StartAsync<T>() where T : IBotConfig, new() {
             Client = new DiscordSocketClient(new DiscordSocketConfig { LogLevel = LogSeverity.Info });
             Client.JoinedGuild += ClientOnJoinedGuildAsync;
             Client.LeftGuild += ClientOnLeftGuildAsync;
-            await HandleConfigsAsync().ConfigureAwait(false);
+            await HandleConfigsAsync<T>().ConfigureAwait(false);
             await InstallCommandsAsync().ConfigureAwait(false);
             await LoginAndConnectAsync(TokenType.Bot).ConfigureAwait(false);
         }
