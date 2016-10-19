@@ -31,13 +31,13 @@ namespace WiseOldBot.GETracker {
         [Command("price"), Alias("p"), Remarks("Gets the GE-Tracker Price Info for an item")]
         public async Task GetPriceAsync([Remainder, Summary("The item name")] string itemName = "cabbage") {
             await Context.Channel.TriggerTypingAsync();
-            var returnItems = GETrackerAPIClient.ItemMap.ContainsKey(itemName) ?
-                GETrackerAPIClient.ItemMap[itemName] : GETrackerAPIClient.ItemMap.PartialMatch(itemName);
+            var returnItems = GETrackerAPIClient.Items.ContainsKey(itemName) ?
+                GETrackerAPIClient.Items[itemName] : GETrackerAPIClient.Items.PartialMatch(itemName);
             var sb = new StringBuilder();
 
             foreach (var item in returnItems.Take(5)) {
                 if (item.CachedUntil <= DateTime.Now) {
-                    await item.UpdateAsync(GETrackerAPIClient.API);
+                    await item.UpdateAsync();
                 }
                 sb.AppendLine(item.ToDiscordMessage());
             }
@@ -48,7 +48,7 @@ namespace WiseOldBot.GETracker {
         [Command("alch")]
         public async Task GetAlchPriceAsync([Remainder] string itemName = "cabbage") {
             await Context.Channel.TriggerTypingAsync();
-            var returnItems = GETrackerAPIClient.ItemMap.ContainsKey(itemName) ? GETrackerAPIClient.ItemMap[itemName] : GETrackerAPIClient.ItemMap.PartialMatch(itemName);
+            var returnItems = GETrackerAPIClient.Items.ContainsKey(itemName) ? GETrackerAPIClient.Items[itemName] : GETrackerAPIClient.Items.PartialMatch(itemName);
             var sb = new StringBuilder();
 
             foreach (var item in returnItems.Take(5)) {
@@ -60,11 +60,11 @@ namespace WiseOldBot.GETracker {
         [Command("rebuild"), Remarks("Rebuilds the item map.")]
         public async Task RebuildItemMapAsync() {
             await Context.Channel.TriggerTypingAsync();
-            var inItems = await GETrackerAPIClient.API.GetItemsAsync();
+            var inItems = await GETrackerAPIClient.GetItemsAsync();
             var a = inItems["data"].GroupBy(x => x.Name).
                                ToDictionary(g => g.Key, g => g.OrderBy(x => x.ItemID).ToList());
-            var newItems = a.Where(x => GETrackerAPIClient.ItemMap.ContainsKey(x.Key));
-            GETrackerAPIClient.ItemMap = new ItemMap(a);
+            var newItems = a.Where(x => GETrackerAPIClient.Items.ContainsKey(x.Key));
+            GETrackerAPIClient.Items = new ItemMap(a);
             await Context.Channel.SendMessageAsync("Item map rebuilt! New items:" +
                 $"{Format.Code($"{newItems.Select(x => x.Key.ToString()).Aggregate((x, y) => $"{x}, {y}" )}")}");
         }

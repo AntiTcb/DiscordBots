@@ -1,20 +1,26 @@
 ﻿#region Header
+
 // Description:
 // 
 // Solution: DiscordBots
 // Project: WiseOldBot
 // 
 // Created: 09/27/2016 1:57 AM
-// Last Revised: 09/27/2016 1:57 AM
+// Last Revised: 10/18/2016 10:04 PM
 // Last Revised by: Alex Gravely
+
 #endregion
+
 namespace WiseOldBot.GETracker {
+    #region Using
+
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using RestEase;
 
-    public interface IGETrackerAPI
-    {
+    #endregion
+
+    public interface IGETrackerAPI {
         #region Public Methods
 
         [Get("items/{itemId}")]

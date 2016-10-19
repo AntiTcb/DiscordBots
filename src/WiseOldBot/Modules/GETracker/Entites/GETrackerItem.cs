@@ -93,11 +93,11 @@ namespace WiseOldBot.GETracker {
             $"\t\tLow Alch: {Format.Code($"{LowAlchemy:N0}gp")}\t" + $"High Alch: {Format.Code($"{HighAlchemy:N0}gp")}\t" +
             $"Buy Limit: {Format.Code($"{BuyingLimit:N0}")}\n";
 
-        public async Task UpdateAsync(IGETrackerAPI api) {
+        public async Task UpdateAsync() {
             if (CachedUntil > DateTime.UtcNow) {
                 return;
             }
-            Update((await api.GetItemAsync(ItemID)).Item);
+            Update((await GETrackerAPIClient.GetItemAsync(ItemID)).Item);
         }
 
         internal void Update(GETrackerItem updatedItem) {
