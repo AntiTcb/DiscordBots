@@ -49,6 +49,9 @@ namespace BCL {
             var ctx = new CommandContext(Client, message);
             var result = await Service.Execute(ctx, argPos, Map, MultiMatchHandling.Best).ConfigureAwait(false);
             if (!result.IsSuccess) {
+                if (result.Error.GetValueOrDefault() == CommandError.UnknownCommand) {
+                    return;
+                }
                 var loggingChannel = Client.GetChannel(Globals.BotConfig.LogChannel) as SocketTextChannel;
                 await loggingChannel.SendMessageAsync(
                     $"**Error:** {result.ErrorReason}\n" +
