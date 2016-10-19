@@ -25,7 +25,7 @@ namespace OrgBot.Modules.YGOCard {
         #region Public Methods
 
         [Command("card"), Alias("c")]
-        public async Task GetCardAsync(string cardName) {
+        public async Task GetCardAsync([Remainder] string cardName) {
             if (cardName == "") {
                 await ReplyAsync("I need a card name!");
                 return;
