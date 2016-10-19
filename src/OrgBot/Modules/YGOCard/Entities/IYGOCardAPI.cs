@@ -26,7 +26,7 @@ namespace OrgBot.Modules.YGOCard.Entities {
         [Get("cards/{id}/?media=json")]
         Task<YGOCard> GetCardAsync([Path("id")] uint cardId);
 
-        [Get("cards/?media=json&$size=20000")]
+        [Get("cards/?media=json&$size=10000")]
         Task<List<YGOCard>> GetCardsAsync();
 
         #endregion Public Methods

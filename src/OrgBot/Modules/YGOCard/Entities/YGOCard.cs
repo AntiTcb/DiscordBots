@@ -111,7 +111,49 @@ namespace OrgBot.Modules.YGOCard.Entities {
         }
 
         public string ToDiscordMessage() {
-            return "";
+            switch (CardType)
+            {
+                case YGOCardType.Effect:
+                case YGOCardType.Fusion:
+                case YGOCardType.Normal:
+                case YGOCardType.Ritual:
+                case YGOCardType.Synchro:
+                case YGOCardType.Monster:
+                    return
+                        $"```xl\n{Name} \t\t {Attribute.ToUpper()} \t {Type}\n" +
+                        $"Level: {Level} \t ATK/DEF: {Attack}/{Defence}\n{Description}\n```";
+
+                case YGOCardType.Xyz:
+                    return
+                        $"```xl\n{Name} \t\t {Attribute.ToUpper()} \t {Type}\n" +
+                        $"Rank: {Level} \t ATK/DEF: {Attack}/{Defence}\n{Description}\n```";
+
+                case YGOCardType.P_Normal:
+                case YGOCardType.P_Effect:
+                    return
+                        $"```xl\n{Name} \t\t {Attribute.ToUpper()} \t {Type}\n" +
+                        $"Level: {Level} \t Scales: {LeftScale}/{RightScale} \t ATK/DEF: {Attack}/{Defence}\n" +
+                        $"Pendulum Effect:\n{PendulumEffect}\n\nMonster Effect:\n{Description}\n```";
+
+                case YGOCardType.P_Synchro:
+                    return $"```xl\n{Name} \t\t {Attribute.ToUpper()} \t {Type}\n" +
+                           $"Level: {Level} \t Scales {LeftScale}/{RightScale} \t ATK/DEF: {Attack}/{Defence}\n" +
+                           $"Pendulum Effect: \n{PendulumEffect}\n\nMonster Effect:\n{Description}\n```";
+
+                case YGOCardType.P_Xyz:
+                    return
+                        $"```xl\n**{Name} \t\t {Attribute.ToUpper()} \t {Type}\n" +
+                        $"Rank: {Level} \t Scales: {LeftScale}/{RightScale} \t ATK/DEF: {Attack}/{Defence}\n" +
+                        $"Pendulum Effect:\n{PendulumEffect}\n\nMonster Effect:\n{Description}\n```";
+
+                case YGOCardType.Spell:
+                case YGOCardType.Trap:
+                    return
+                        $"```xl\n{Name} \t\t {Type} {CardType}\n{Description}\n```";
+
+                default:
+                    return "Invalid Card Name";
+            };
         }
     }
 }

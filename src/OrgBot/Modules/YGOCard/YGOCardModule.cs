@@ -30,10 +30,14 @@ namespace OrgBot.Modules.YGOCard {
                 await ReplyAsync("I need a card name!");
                 return;
             }
-            var card = YGOCardAPIClient.Cards.FindCards(cardName).FirstOrDefault();
+            var card = YGOCardAPIClient.Cards.FindCards(cardName.ToLower()).FirstOrDefault();
             if (card == null) {
                 await ReplyAsync("Card not found");
                 return;
+            }
+            if (card.Name == "Spirit Elimination") {
+                await ReplyAsync("NO! NO, NO, NO, NO, NO! NO! STOP ASKING QUESTIONS ABOUT THIS CARD!");
+                await Task.Delay(4000);
             }
             await ReplyAsync(card.ToDiscordMessage());
         }

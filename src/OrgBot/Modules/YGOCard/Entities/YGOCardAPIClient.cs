@@ -30,7 +30,7 @@ namespace OrgBot.Modules.YGOCard.Entities {
 
         #region Private Fields + Properties
 
-        const string BASE_URI = "https://dncardsapi.apispark.net/v2";
+        const string BASE_URI = "https://dncardsapi.apispark.net/v1";
 
         #endregion Private Fields + Properties
 

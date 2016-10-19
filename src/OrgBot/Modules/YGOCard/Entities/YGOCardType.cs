@@ -21,6 +21,7 @@ namespace OrgBot.Modules.YGOCard.Entities {
         Xyz,
         P_Normal,
         P_Effect,
+        P_Synchro,
         P_Xyz
     }
 }

@@ -27,6 +27,6 @@ namespace OrgBot.Modules.YGOCard.Entities {
         }
 
         public YGOCard GetCard(uint id) => this.FirstOrDefault(x => x.Id == id);
-        public IEnumerable<YGOCard> FindCards(string cardName) => this.Where(x => x.Name.Contains(cardName));
+        public IEnumerable<YGOCard> FindCards(string cardName) => this.Where(x => x.Name.ToLower().Contains(cardName));
     }
 }
