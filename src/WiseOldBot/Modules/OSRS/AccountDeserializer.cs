@@ -1,4 +1,4 @@
-﻿namespace WiseOldBot.OSRS {
+﻿namespace WiseOldBot.Modules.OSRS {
     using System;
     using System.Net.Http;
     using System.Text.RegularExpressions;

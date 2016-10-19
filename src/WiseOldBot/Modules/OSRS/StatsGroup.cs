@@ -18,8 +18,6 @@ namespace WiseOldBot.Modules.OSRS {
     using System.Threading.Tasks;
     using BCL;
     using Discord.Commands;
-    using Modules.OSRS;
-    using WiseOldBot.OSRS;
 
     #endregion
 

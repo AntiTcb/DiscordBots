@@ -6,7 +6,7 @@
 // Project: WiseOldBot
 // 
 // Created: 09/16/2016 11:42 PM
-// Last Revised: 09/23/2016 6:01 AM
+// Last Revised: 10/19/2016 6:17 PM
 // Last Revised by: Alex Gravely
 
 #endregion
@@ -15,9 +15,8 @@ namespace WiseOldBot.TypeReaders {
     #region Using
 
     using System.Threading.Tasks;
-    using Discord;
     using Discord.Commands;
-    using OSRS;
+    using Modules.OSRS;
 
     #endregion
 

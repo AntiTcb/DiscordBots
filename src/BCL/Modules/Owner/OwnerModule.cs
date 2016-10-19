@@ -17,14 +17,18 @@ namespace BCL.Modules.Owner {
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Net.Http;
     using System.Reflection;
     using System.Threading.Tasks;
+    using Discord;
+    using Discord.API;
     using Discord.Commands;
     using Discord.WebSocket;
     using Interfaces;
     using Microsoft.CodeAnalysis.CSharp.Scripting;
     using Microsoft.CodeAnalysis.Scripting;
     using Preconditions;
+    using Game = Discord.API.Game;
 
     #endregion
 
@@ -59,6 +63,7 @@ namespace BCL.Modules.Owner {
             "System.Collections.Generic",
             "System.Linq",
             "System.Reflection",
+            "System.Runtime",
             "System.Threading.Tasks"
         };
 
@@ -74,9 +79,11 @@ namespace BCL.Modules.Owner {
 
         [Command("evaluate"), Alias("eval")]
         public async Task EvaluateAsync([Remainder] string expression) {
+            await Context.Channel.TriggerTypingAsync().ConfigureAwait(false);
             var options =
                 ScriptOptions.Default.AddReferences
                               (typeof(object).GetTypeInfo().Assembly.Location,
+                               typeof(Object).GetTypeInfo().Assembly.Location,
                                typeof(Enumerable).GetTypeInfo().Assembly.Location,
                                typeof(DiscordSocketClient).GetTypeInfo().Assembly.Location,
                                typeof(CommandContext).GetTypeInfo().Assembly.Location,
@@ -102,6 +109,49 @@ namespace BCL.Modules.Owner {
         public async Task RemoveImportAsync(string import) {
             EvalImports.Remove(import);
             await ReplyAsync($"Removed {import}").ConfigureAwait(false);
+        }
+
+        [Command("echo")]
+        public async Task EchoAsync([Remainder] string text) {
+            await ReplyAsync(text).ConfigureAwait(false);
+        }
+
+        [Command("set")]
+        public async Task SetAsync(UserProperty prop, [Remainder]string value) {
+            switch (prop) {
+                case UserProperty.User:
+                    await Context.Client.CurrentUser.ModifyAsync(x => x.Username = new Optional<string>(value)).ConfigureAwait(false);
+                    break;
+                case UserProperty.Nick:
+                    await (await Context.Guild.GetCurrentUserAsync().ConfigureAwait(false))
+                        .ModifyAsync(x => x.Nickname = value).ConfigureAwait(false);
+                    break;
+                case UserProperty.Avatar:
+                    var url = value;
+                    if (value == "reset") {
+                        var app = await Context.Client.GetApplicationInfoAsync().ConfigureAwait(false);
+                        url = app.IconUrl;
+                    }
+                    var q = Uri.EscapeUriString(url);
+                    using (var client = new HttpClient()) {
+                        var imagestream = await client.GetStreamAsync(q).ConfigureAwait(false);
+                        await Context.Client.CurrentUser
+                            .ModifyAsync(x => x.Avatar = new Image(imagestream)).ConfigureAwait(false);
+                    }
+                    break;
+                case UserProperty.Game:
+                    await Context.Client.CurrentUser
+                        .ModifyStatusAsync(x => x.Game = new Optional<Game>(new Game {Name = value})).ConfigureAwait(false);
+                    break;
+                case UserProperty.Status:
+                    var newStatus = Enum.Parse(typeof(UserStatus), value);
+                    await Context.Client.CurrentUser
+                        .ModifyStatusAsync(x => x.Status = new Optional<UserStatus>((UserStatus)newStatus)).ConfigureAwait(false);
+                    break;
+                default:
+                    await ReplyAsync($"**ERROR**: {nameof(prop)}, {prop}").ConfigureAwait(false);
+                    return;
+            }
         }
 
         #endregion Public Methods

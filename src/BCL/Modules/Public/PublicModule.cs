@@ -24,7 +24,7 @@ namespace BCL.Modules {
             var app = await Context.Client.GetApplicationInfoAsync().ConfigureAwait(false);
             await
                 ReplyAsync
-                    ($"{Format.Bold("InfoAsync")}\n" + $"- Author: {app.Owner.Username} (ID {app.Owner.Id})\n" +
+                    ($"{Format.Bold("Info")}\n" + $"- Author: {app.Owner.Username} (ID {app.Owner.Id})\n" +
                      $"- Repo: <https://github.com/AntiTcb/DiscordBots/{app.Name}>\n" +
                      $"- Library: Discord.Net ({DiscordConfig.Version})\n" +
                      $"- Runtime: {RuntimeInformation.FrameworkDescription} {RuntimeInformation.OSArchitecture}\n" +
@@ -39,7 +39,6 @@ namespace BCL.Modules {
             var app = await Context.Client.GetApplicationInfoAsync().ConfigureAwait(false);
             await ReplyAsync($"<https://discordapp.com/oauth2/authorize?client_id={app.Id}&scope=bot>").ConfigureAwait(false);
         }
-
 
         static string GetHeapSize() => Math.Round(GC.GetTotalMemory(true) / (1024.0 * 1024.0), 2).ToString(CultureInfo.InvariantCulture);
         static string GetUptime() => (DateTime.Now - Process.GetCurrentProcess().StartTime).ToString(@"dd\.hh\:mm\:ss");

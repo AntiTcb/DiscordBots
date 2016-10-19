@@ -17,7 +17,6 @@ namespace WiseOldBot.Modules.OSRS {
     using System;
     using System.Threading.Tasks;
     using RestEase;
-    using WiseOldBot.OSRS;
 
     #endregion
 

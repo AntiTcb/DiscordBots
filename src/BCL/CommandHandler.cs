@@ -66,7 +66,7 @@ namespace BCL {
             Client = Map.Get<DiscordSocketClient>();
             Map.Add(Service);
             await Service.AddModules(typeof(BotBase).GetTypeInfo().Assembly).ConfigureAwait(false);
-            await Service.AddModules(Assembly.GetEntryAssembly(), Map).ConfigureAwait(false);
+            await Service.AddModules(Assembly.GetEntryAssembly()).ConfigureAwait(false);
             Client.MessageReceived += HandleCommandAsync;
         }
 

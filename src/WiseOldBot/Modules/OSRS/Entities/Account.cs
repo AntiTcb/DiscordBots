@@ -6,12 +6,12 @@
 // Project: WiseOldBot
 // 
 // Created: 09/25/2016 6:48 AM
-// Last Revised: 10/17/2016 6:06 PM
+// Last Revised: 10/19/2016 6:08 PM
 // Last Revised by: Alex Gravely
 
 #endregion
 
-namespace WiseOldBot.OSRS {
+namespace WiseOldBot.Modules.OSRS {
     #region Using
 
     using System;

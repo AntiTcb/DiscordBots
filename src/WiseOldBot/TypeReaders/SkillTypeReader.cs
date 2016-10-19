@@ -1,18 +1,24 @@
 ﻿#region Header
+
 // Description:
 // 
 // Solution: DiscordBots
 // Project: WiseOldBot
 // 
 // Created: 09/23/2016 6:01 AM
-// Last Revised: 09/23/2016 6:01 AM
+// Last Revised: 10/19/2016 6:16 PM
 // Last Revised by: Alex Gravely
+
 #endregion
+
 namespace WiseOldBot.TypeReaders {
+    #region Using
+
     using System.Threading.Tasks;
-    using Discord;
     using Discord.Commands;
-    using OSRS;
+    using Modules.OSRS;
+
+    #endregion
 
     public class SkillTypeReader : TypeReader {
         #region Overrides of TypeReader
@@ -131,10 +137,11 @@ namespace WiseOldBot.TypeReaders {
                     return Task.FromResult(TypeReaderResult.FromSuccess(SkillType.NonCombat));
 
                 default:
-                    return Task.FromResult(TypeReaderResult.FromError(CommandError.ParseFailed, "Could not parse skill declaration."));
+                    return Task.FromResult
+                        (TypeReaderResult.FromError(CommandError.ParseFailed, "Could not parse skill declaration."));
             }
         }
 
-        #endregion
+        #endregion Overrides of TypeReader
     }
 }

@@ -8,7 +8,7 @@
 // Last Revised: 09/25/2016 6:37 AM
 // Last Revised by: Alex Gravely
 #endregion
-namespace WiseOldBot.OSRS {
+namespace WiseOldBot.Modules.OSRS {
     using System.Threading.Tasks;
     using RestEase;
 

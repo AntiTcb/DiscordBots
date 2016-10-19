@@ -11,7 +11,7 @@
 
 #endregion
 
-namespace WiseOldBot.OSRS {
+namespace WiseOldBot.Modules.OSRS {
     public enum HighScoreType {
         Regular,
         Ironman,
