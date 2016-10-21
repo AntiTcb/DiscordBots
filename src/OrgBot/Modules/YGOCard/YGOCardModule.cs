@@ -15,13 +15,14 @@ namespace OrgBot.Modules.YGOCard {
     #region Using
 
     using System.Linq;
+    using System.Text;
     using System.Threading.Tasks;
     using Discord.Commands;
     using Entities;
 
     #endregion
 
-    public class YGOCardModule : ModuleBase {
+    public partial class YGOCardModule : ModuleBase {
         #region Public Methods
 
         [Command("card"), Alias("c")]
@@ -32,15 +33,29 @@ namespace OrgBot.Modules.YGOCard {
             }
             var card = YGOCardAPIClient.Cards.FindCards(cardName.ToLower()).FirstOrDefault();
             if (card == null) {
-                await ReplyAsync("Card not found");
+                await ReplyAsync("Card not found.");
                 return;
             }
             if (card.Name == "Spirit Elimination") {
                 await ReplyAsync("NO! NO, NO, NO, NO, NO! NO! STOP ASKING QUESTIONS ABOUT THIS CARD!");
                 await Task.Delay(4000);
             }
+            if (card.Name.Contains("Bujin")) {
+                await ReplyAsync("Bujin master race!");
+            }
             await ReplyAsync(card.ToDiscordMessage());
         }
+
+        [Command("listcards")]
+        public async Task GetCardsAsync([Remainder] string cardName) {
+            if (cardName == "") {
+                await ReplyAsync("I need a card name!");
+                return;
+            }
+            var cards = YGOCardAPIClient.Cards.FindCards(cardName.ToLower());
+            await ReplyAsync(string.Join(", ", cards.Select(x => x.Name)));
+        }
+
 
         #endregion Public Methods
     }

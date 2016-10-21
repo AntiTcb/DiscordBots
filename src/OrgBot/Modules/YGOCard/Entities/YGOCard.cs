@@ -16,6 +16,7 @@ namespace OrgBot.Modules.YGOCard.Entities {
 
     using System.Globalization;
     using System.Threading.Tasks;
+    using Discord;
     using Extensions;
     using Newtonsoft.Json;
 
@@ -25,7 +26,7 @@ namespace OrgBot.Modules.YGOCard.Entities {
         #region Public Fields + Properties
 
         [JsonProperty("id")]
-        public uint Id { get; }
+        public uint Id { get; set; }
 
         [JsonProperty("atk")]
         public uint Attack { get; set; }
@@ -110,6 +111,12 @@ namespace OrgBot.Modules.YGOCard.Entities {
             Type = updatedCard.Type;
         }
 
+        #region Overrides of Object
+
+        public override string ToString() => $"{Name}";
+
+    #endregion
+
         public string ToDiscordMessage() {
             switch (CardType)
             {
@@ -120,39 +127,37 @@ namespace OrgBot.Modules.YGOCard.Entities {
                 case YGOCardType.Synchro:
                 case YGOCardType.Monster:
                     return
-                        $"```xl\n{Name} \t\t {Attribute.ToUpper()} \t {Type}\n" +
-                        $"Level: {Level} \t ATK/DEF: {Attack}/{Defence}\n{Description}\n```";
+                        $"{Format.Code($"{Name} | {Attribute.ToUpper()} | {Type}", "elm")}\n" +
+                        $"{Format.Code($"Level: {Level} | ATK/DEF: {Attack}/{Defence}\n{Description}\n", "elm")}";
 
                 case YGOCardType.Xyz:
                     return
-                        $"```xl\n{Name} \t\t {Attribute.ToUpper()} \t {Type}\n" +
-                        $"Rank: {Level} \t ATK/DEF: {Attack}/{Defence}\n{Description}\n```";
+                        $"{Format.Code($"{Name} | {Attribute.ToUpper()} | {Type}", "elm")}\n"+
+                        $"{Format.Code($"Rank: {Level} | ATK/DEF: {Attack}/{Defence}\n{Description}\n", "elm")}";
 
                 case YGOCardType.P_Normal:
                 case YGOCardType.P_Effect:
-                    return
-                        $"```xl\n{Name} \t\t {Attribute.ToUpper()} \t {Type}\n" +
-                        $"Level: {Level} \t Scales: {LeftScale}/{RightScale} \t ATK/DEF: {Attack}/{Defence}\n" +
-                        $"Pendulum Effect:\n{PendulumEffect}\n\nMonster Effect:\n{Description}\n```";
+                    return $"{Format.Code($"{Name} | {Attribute.ToUpper()} | {Type}", "elm")}\n" +
+                           $"{Format.Code($"Level: {Level} | Scales: {LeftScale}/{RightScale} | ATK/DEF: {Attack}/{Defence}", "elm")}" +
+                           $"{Format.Code($"Pendulum Effect:\n{PendulumEffect}\n\nMonster Effect:{Description}", "elm")}";
 
                 case YGOCardType.P_Synchro:
-                    return $"```xl\n{Name} \t\t {Attribute.ToUpper()} \t {Type}\n" +
-                           $"Level: {Level} \t Scales {LeftScale}/{RightScale} \t ATK/DEF: {Attack}/{Defence}\n" +
-                           $"Pendulum Effect: \n{PendulumEffect}\n\nMonster Effect:\n{Description}\n```";
+                    return $"{Format.Code($"{Name} | {Attribute.ToUpper()} | {Type}", "elm")}\n" +
+                           $"{Format.Code($"Level: {Level} | Scales {LeftScale}/{RightScale} | ATK/DEF: {Attack}/{Defence}", "elm")}" +
+                           $"{Format.Code($"Pendulum Effect:\n{PendulumEffect}\n\nMonster Effect:{Description}", "elm")}";
 
                 case YGOCardType.P_Xyz:
                     return
-                        $"```xl\n**{Name} \t\t {Attribute.ToUpper()} \t {Type}\n" +
-                        $"Rank: {Level} \t Scales: {LeftScale}/{RightScale} \t ATK/DEF: {Attack}/{Defence}\n" +
-                        $"Pendulum Effect:\n{PendulumEffect}\n\nMonster Effect:\n{Description}\n```";
+                        $"{Format.Code($"{Name} | {Attribute.ToUpper()} | {Type}", "elm")}\n" +
+                        $"{Format.Code($"Rank: {Level} | Scales {LeftScale}/{RightScale} | ATK/DEF: {Attack}/{Defence}", "elm")}" +
+                        $"{Format.Code($"Pendulum Effect:\n{PendulumEffect}\n\nMonster Effect:{Description}", "elm")}";
 
                 case YGOCardType.Spell:
                 case YGOCardType.Trap:
-                    return
-                        $"```xl\n{Name} \t\t {Type} {CardType}\n{Description}\n```";
+                    return $"{Format.Code($"{Name} | {Type} {CardType}\n{Description}","elm")}";
 
                 default:
-                    return "Invalid Card Name";
+                    return "Invalid Card Name.";
             };
         }
     }

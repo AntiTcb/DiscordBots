@@ -20,6 +20,7 @@ namespace OrgBot.Modules.YGOCard.Entities {
     #endregion
 
     public class CardMap : List<YGOCard> {
+        public CardMap() { } 
         public CardMap(IEnumerable<YGOCard> cards) {
             foreach (var card in cards) {
                 Add(card);
@@ -27,6 +28,6 @@ namespace OrgBot.Modules.YGOCard.Entities {
         }
 
         public YGOCard GetCard(uint id) => this.FirstOrDefault(x => x.Id == id);
-        public IEnumerable<YGOCard> FindCards(string cardName) => this.Where(x => x.Name.ToLower().Contains(cardName));
+        public IEnumerable<YGOCard> FindCards(string cardName) => this.OrderBy(x => x.Name.Length).Where(x => x.Name.ToLower().Contains(cardName));
     }
 }
