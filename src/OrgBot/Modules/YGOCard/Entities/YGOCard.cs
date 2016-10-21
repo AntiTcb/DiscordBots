@@ -127,28 +127,28 @@ namespace OrgBot.Modules.YGOCard.Entities {
                 case YGOCardType.Synchro:
                 case YGOCardType.Monster:
                     return
-                        $"{Format.Code($"{Name} | {Attribute.ToUpper()} | {Type}", "elm")}\n" +
+                        $"{Format.Code($"{Name} | {Attribute.ToUpper()} | {Type}", "elm")}" +
                         $"{Format.Code($"Level: {Level} | ATK/DEF: {Attack}/{Defence}\n{Description}\n", "elm")}";
 
                 case YGOCardType.Xyz:
                     return
-                        $"{Format.Code($"{Name} | {Attribute.ToUpper()} | {Type}", "elm")}\n"+
+                        $"{Format.Code($"{Name} | {Attribute.ToUpper()} | {Type}", "elm")}"+
                         $"{Format.Code($"Rank: {Level} | ATK/DEF: {Attack}/{Defence}\n{Description}\n", "elm")}";
 
                 case YGOCardType.P_Normal:
                 case YGOCardType.P_Effect:
-                    return $"{Format.Code($"{Name} | {Attribute.ToUpper()} | {Type}", "elm")}\n" +
+                    return $"{Format.Code($"{Name} | {Attribute.ToUpper()} | {Type}", "elm")}" +
                            $"{Format.Code($"Level: {Level} | Scales: {LeftScale}/{RightScale} | ATK/DEF: {Attack}/{Defence}", "elm")}" +
                            $"{Format.Code($"Pendulum Effect:\n{PendulumEffect}\n\nMonster Effect:{Description}", "elm")}";
 
                 case YGOCardType.P_Synchro:
-                    return $"{Format.Code($"{Name} | {Attribute.ToUpper()} | {Type}", "elm")}\n" +
+                    return $"{Format.Code($"{Name} | {Attribute.ToUpper()} | {Type}", "elm")}" +
                            $"{Format.Code($"Level: {Level} | Scales {LeftScale}/{RightScale} | ATK/DEF: {Attack}/{Defence}", "elm")}" +
                            $"{Format.Code($"Pendulum Effect:\n{PendulumEffect}\n\nMonster Effect:{Description}", "elm")}";
 
                 case YGOCardType.P_Xyz:
                     return
-                        $"{Format.Code($"{Name} | {Attribute.ToUpper()} | {Type}", "elm")}\n" +
+                        $"{Format.Code($"{Name} | {Attribute.ToUpper()} | {Type}", "elm")}" +
                         $"{Format.Code($"Rank: {Level} | Scales {LeftScale}/{RightScale} | ATK/DEF: {Attack}/{Defence}", "elm")}" +
                         $"{Format.Code($"Pendulum Effect:\n{PendulumEffect}\n\nMonster Effect:{Description}", "elm")}";
 
