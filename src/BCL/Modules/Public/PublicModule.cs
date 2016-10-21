@@ -30,8 +30,8 @@ namespace BCL.Modules {
                      $"- Runtime: {RuntimeInformation.FrameworkDescription} {RuntimeInformation.OSArchitecture}\n" +
                      $"- Uptime: {GetUptime()}\n\n" + $"{Format.Bold("Stats")}\n" + $"- Heap Size: {GetHeapSize()} MB\n" +
                      $"- Guilds: {(await Context.Client.GetGuildsAsync().ConfigureAwait(false)).Count}\n" +
-                     $"- Channels: {(await Context.Client.GetGuildsAsync().ConfigureAwait(false)).Select(async g => await g.GetChannelsAsync().ConfigureAwait(false)).Count()}" +
-                     $"- Users: {(await Context.Client.GetGuildsAsync().ConfigureAwait(false)).Select(async g => await g.GetUsersAsync().ConfigureAwait(false)).Count()}").ConfigureAwait(false);
+                     $"- Channels: {(await Context.Client.GetGuildsAsync()).Select(async g => await g.GetChannelsAsync().ConfigureAwait(false)).Count()} " +
+                     $"- Users: {(await Context.Client.GetGuildsAsync()).Select(async g => await g.GetUsersAsync().ConfigureAwait(false)).Count()}").ConfigureAwait(false);
         }
 
         [Command("join"), Alias("invite"), Remarks("Returns the Invite URL of the bot")]
