@@ -114,19 +114,19 @@ namespace OrgBot.Modules.YGOCard.Entities {
                 case YGOCardType.P_Normal:
                 case YGOCardType.P_Effect:
                     returnString = $"{Name} | {Attribute.ToUpper()} | {Type}\n" +
-                                   $"Level: {Level} | Scales: {LeftScale}/{RightScale} | ATK/DEF: {Attack}/{Defence}" +
+                                   $"Level: {Level} | Scales: {LeftScale}/{RightScale} | ATK/DEF: {Attack}/{Defence}\n" +
                                    $"Pendulum Effect:\n{PendulumEffect}\n\nMonster Effect:{Description}";
                     break;
 
                 case YGOCardType.P_Synchro:
-                    returnString = $"{Name} | {Attribute.ToUpper()} | {Type}" +
-                                   $"Level: {Level} | Scales {LeftScale}/{RightScale} | ATK/DEF: {Attack}/{Defence}" +
+                    returnString = $"{Name} | {Attribute.ToUpper()} | {Type}\n" +
+                                   $"Level: {Level} | Scales {LeftScale}/{RightScale} | ATK/DEF: {Attack}/{Defence}\n" +
                                    $"Pendulum Effect:\n{PendulumEffect}\n\nMonster Effect:{Description}";
                     break;
 
                 case YGOCardType.P_Xyz:
-                    returnString = $"{Name} | {Attribute.ToUpper()} | {Type}" +
-                                   $"Rank: {Level} | Scales {LeftScale}/{RightScale} | ATK/DEF: {Attack}/{Defence}" +
+                    returnString = $"{Name} | {Attribute.ToUpper()} | {Type}\n" +
+                                   $"Rank: {Level} | Scales {LeftScale}/{RightScale} | ATK/DEF: {Attack}/{Defence}\n" +
                                    $"Pendulum Effect:\n{PendulumEffect}\n\nMonster Effect:{Description}";
                     break;
 
