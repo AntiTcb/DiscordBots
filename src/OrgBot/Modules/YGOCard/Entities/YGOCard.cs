@@ -6,7 +6,7 @@
 // Project: OrgBot
 // 
 // Created: 10/18/2016 7:22 PM
-// Last Revised: 10/18/2016 7:24 PM
+// Last Revised: 10/21/2016 4:22 AM
 // Last Revised by: Alex Gravely
 
 #endregion
@@ -14,7 +14,6 @@
 namespace OrgBot.Modules.YGOCard.Entities {
     #region Using
 
-    using System.Globalization;
     using System.Threading.Tasks;
     using Discord;
     using Extensions;
@@ -24,9 +23,6 @@ namespace OrgBot.Modules.YGOCard.Entities {
 
     public class YGOCard {
         #region Public Fields + Properties
-
-        [JsonProperty("id")]
-        public uint Id { get; set; }
 
         [JsonProperty("atk")]
         public uint Attack { get; set; }
@@ -49,6 +45,9 @@ namespace OrgBot.Modules.YGOCard.Entities {
 
         [JsonProperty("description")]
         public string Description { get; set; }
+
+        [JsonProperty("id")]
+        public uint Id { get; set; }
 
         [JsonProperty("scale_left")]
         public uint LeftScale { get; set; }
@@ -92,7 +91,61 @@ namespace OrgBot.Modules.YGOCard.Entities {
 
         #endregion Private Fields + Properties
 
+        #region Public Methods
+
+        public string ToDiscordMessage() {
+            var returnString = "";
+            switch (CardType) {
+                case YGOCardType.Effect:
+                case YGOCardType.Fusion:
+                case YGOCardType.Normal:
+                case YGOCardType.Ritual:
+                case YGOCardType.Synchro:
+                case YGOCardType.Monster:
+                    returnString = $"{Name} | {Attribute.ToUpper()} | {Type}\n" +
+                                   $"Level: {Level} | ATK/DEF: {Attack}/{Defence}\n{Description}";
+                    break;
+
+                case YGOCardType.Xyz:
+                    returnString = $"{Name} | {Attribute.ToUpper()} | {Type}\n" +
+                                   $"Rank: {Level} | ATK/DEF: {Attack}/{Defence}\n{Description}";
+                    break;
+
+                case YGOCardType.P_Normal:
+                case YGOCardType.P_Effect:
+                    returnString = $"{Name} | {Attribute.ToUpper()} | {Type}\n" +
+                                   $"Level: {Level} | Scales: {LeftScale}/{RightScale} | ATK/DEF: {Attack}/{Defence}" +
+                                   $"Pendulum Effect:\n{PendulumEffect}\n\nMonster Effect:{Description}";
+                    break;
+
+                case YGOCardType.P_Synchro:
+                    returnString = $"{Name} | {Attribute.ToUpper()} | {Type}" +
+                                   $"Level: {Level} | Scales {LeftScale}/{RightScale} | ATK/DEF: {Attack}/{Defence}" +
+                                   $"Pendulum Effect:\n{PendulumEffect}\n\nMonster Effect:{Description}";
+                    break;
+
+                case YGOCardType.P_Xyz:
+                    returnString = $"{Name} | {Attribute.ToUpper()} | {Type}" +
+                                   $"Rank: {Level} | Scales {LeftScale}/{RightScale} | ATK/DEF: {Attack}/{Defence}" +
+                                   $"Pendulum Effect:\n{PendulumEffect}\n\nMonster Effect:{Description}";
+                    break;
+
+                case YGOCardType.Spell:
+                case YGOCardType.Trap:
+                    returnString = $"{Name} | {Type} {CardType}\n{Description}";
+                    break;
+
+                default:
+                    return "Invalid Card Name.";
+            }
+            return Format.Code(returnString, "elm");
+        }
+
         public async Task UpdateAsync() => Update(await YGOCardAPIClient.GetCardAsync(Id));
+
+        #endregion Public Methods
+
+        #region Private Methods
 
         void Update(YGOCard updatedCard) {
             if (updatedCard.Id != Id) {
@@ -111,54 +164,12 @@ namespace OrgBot.Modules.YGOCard.Entities {
             Type = updatedCard.Type;
         }
 
+        #endregion Private Methods
+
         #region Overrides of Object
 
         public override string ToString() => $"{Name}";
 
-    #endregion
-
-        public string ToDiscordMessage() {
-            switch (CardType)
-            {
-                case YGOCardType.Effect:
-                case YGOCardType.Fusion:
-                case YGOCardType.Normal:
-                case YGOCardType.Ritual:
-                case YGOCardType.Synchro:
-                case YGOCardType.Monster:
-                    return
-                        $"{Format.Code($"{Name} | {Attribute.ToUpper()} | {Type}", "elm")}" +
-                        $"{Format.Code($"Level: {Level} | ATK/DEF: {Attack}/{Defence}\n{Description}\n", "elm")}";
-
-                case YGOCardType.Xyz:
-                    return
-                        $"{Format.Code($"{Name} | {Attribute.ToUpper()} | {Type}", "elm")}"+
-                        $"{Format.Code($"Rank: {Level} | ATK/DEF: {Attack}/{Defence}\n{Description}\n", "elm")}";
-
-                case YGOCardType.P_Normal:
-                case YGOCardType.P_Effect:
-                    return $"{Format.Code($"{Name} | {Attribute.ToUpper()} | {Type}", "elm")}" +
-                           $"{Format.Code($"Level: {Level} | Scales: {LeftScale}/{RightScale} | ATK/DEF: {Attack}/{Defence}", "elm")}" +
-                           $"{Format.Code($"Pendulum Effect:\n{PendulumEffect}\n\nMonster Effect:{Description}", "elm")}";
-
-                case YGOCardType.P_Synchro:
-                    return $"{Format.Code($"{Name} | {Attribute.ToUpper()} | {Type}", "elm")}" +
-                           $"{Format.Code($"Level: {Level} | Scales {LeftScale}/{RightScale} | ATK/DEF: {Attack}/{Defence}", "elm")}" +
-                           $"{Format.Code($"Pendulum Effect:\n{PendulumEffect}\n\nMonster Effect:{Description}", "elm")}";
-
-                case YGOCardType.P_Xyz:
-                    return
-                        $"{Format.Code($"{Name} | {Attribute.ToUpper()} | {Type}", "elm")}" +
-                        $"{Format.Code($"Rank: {Level} | Scales {LeftScale}/{RightScale} | ATK/DEF: {Attack}/{Defence}", "elm")}" +
-                        $"{Format.Code($"Pendulum Effect:\n{PendulumEffect}\n\nMonster Effect:{Description}", "elm")}";
-
-                case YGOCardType.Spell:
-                case YGOCardType.Trap:
-                    return $"{Format.Code($"{Name} | {Type} {CardType}\n{Description}","elm")}";
-
-                default:
-                    return "Invalid Card Name.";
-            };
-        }
+        #endregion Overrides of Object
     }
 }
