@@ -17,6 +17,7 @@ namespace OrgBot.Modules.YGOCard {
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
+    using Discord;
     using Discord.Commands;
     using Entities;
 
@@ -44,6 +45,22 @@ namespace OrgBot.Modules.YGOCard {
                 await ReplyAsync("Bujin master race!");
             }
             await ReplyAsync(card.ToDiscordMessage());
+        }
+
+        [Command("cardupdate")]
+        public async Task ForceCardUpdateAsync([Remainder] string cardName) {
+            if (cardName == "") {
+                await ReplyAsync("I need a card name!");
+                return;
+            }
+            var card = YGOCardAPIClient.Cards.FindCards(cardName.ToLower()).FirstOrDefault();
+            if (card == null)
+            {
+                await ReplyAsync("Card not found.");
+                return;
+            }
+            await card.UpdateAsync();
+            await ReplyAsync(":thumbsup:");
         }
 
         [Command("listcards")]
