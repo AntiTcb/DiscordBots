@@ -1,33 +1,30 @@
 ﻿#region Header
 
 // Description:
-//
+// 
 // Solution: DiscordBots
 // Project: WiseOldBot
-//
+// 
 // Created: 10/18/2016 4:17 PM
-// Last Revised: 10/19/2016 6:17 PM
+// Last Revised: 10/23/2016 6:51 PM
 // Last Revised by: Alex Gravely
 
-#endregion Header
+#endregion
 
-namespace WiseOldBot
-{
+namespace WiseOldBot {
     #region Using
 
+    using System.Threading.Tasks;
     using BCL;
     using Discord;
     using Discord.Commands;
     using Discord.WebSocket;
     using Modules.OSRS;
-    using System.Threading.Tasks;
     using TypeReaders;
-    using Game = Discord.API.Game;
 
-    #endregion Using
+    #endregion
 
     public class WiseOldBot : BotBase {
-
         #region Overrides of BotBase
 
         public async override Task InstallCommandsAsync() {
@@ -60,11 +57,7 @@ namespace WiseOldBot
             }
         }
 
-        async Task ClientOnReadyAsync()
-            =>
-            await
-                Client.CurrentUser.ModifyStatusAsync
-                       (x => x.Game = new Optional<Game>(new Game { Name = "Spying on the Draynor Bank" }));
+        async Task ClientOnReadyAsync() => await Client.SetGame("Spying on the Draynor Bank");
 
         #endregion Overrides of BotBase
     }

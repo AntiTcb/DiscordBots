@@ -56,7 +56,7 @@ namespace OrgBot
             }
         }
 
-        async Task ClientOnReadyAsync() => await Client.CurrentUser.ModifyStatusAsync(x => x.Game = new Optional<Game>(new Game { Name = "Ending Misinformation" }));
+        async Task ClientOnReadyAsync() => await Client.SetGame("Ending Misinformation");
 
         #endregion Overrides of BotBase
     }
