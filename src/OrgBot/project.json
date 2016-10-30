@@ -5,10 +5,11 @@
   },
 
   "dependencies": {
+    "AngleSharp": "0.9.9",
     "BCL": "1.0.0-*",
     "Microsoft.NETCore.App": {
         "type": "platform",
-        "version": "1.0.1"  
+        "version": "1.0.1"
     },
     "RestEase": "1.2.2"
   },
