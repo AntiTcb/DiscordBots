@@ -18,6 +18,7 @@ namespace OrgBot.Modules.YGOWikia {
     public partial class YGOWikiaModule : ModuleBase{
         [Command("card"), Alias("c")]
         public async Task GetCardAsync([Remainder] string cardName) {
+            await Context.Channel.TriggerTypingAsync();
             var card = await YGOWikiaClient.GetCardAsync(cardName);
             await ReplyAsync(card?.ToDiscordMessage() ?? "Invalid card name/Card not found");
         }
