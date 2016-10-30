@@ -20,5 +20,18 @@ namespace BCL {
 
         public static IBotConfig BotConfig { get; set; }
         public static Dictionary<ulong, ServerConfig> ServerConfigs { get; set; } = new Dictionary<ulong, ServerConfig>();
+
+        public static List<string> EvalImports { get; } = new List<string> {
+            "Discord",
+            "Discord.Commands",
+            "Discord.WebSocket",
+            "System",
+            "System.Collections",
+            "System.Collections.Generic",
+            "System.Linq",
+            "System.Reflection",
+            "System.Runtime",
+            "System.Threading.Tasks"
+        };
     }
 }
