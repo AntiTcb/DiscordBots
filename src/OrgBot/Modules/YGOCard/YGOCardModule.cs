@@ -47,7 +47,7 @@ namespace OrgBot.Modules.YGOCard {
             await ReplyAsync(card.ToDiscordMessage());
         }
 
-        [Command("cardupdate")]
+        [Command("cardupdate"), Alias("cu")]
         public async Task ForceCardUpdateAsync([Remainder] string cardName) {
             if (cardName == "") {
                 await ReplyAsync("I need a card name!");
@@ -69,6 +69,11 @@ namespace OrgBot.Modules.YGOCard {
                 await ReplyAsync("I need a card name!");
                 return;
             }
+            if (Context.Channel.Id == 87463676595949568) {
+                await ReplyAsync("Command is disabled in this channel. Please use <#171483830845177857>");
+                return;
+            }
+            // TODO: Multi-message for 2k+
             var cards = YGOCardAPIClient.Cards.FindCards(cardName.ToLower());
             await ReplyAsync(string.Join(", ", cards.Select(x => x.Name)));
         }
