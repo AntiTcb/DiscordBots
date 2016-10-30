@@ -28,7 +28,7 @@ namespace OrgBot.Modules.YGOCard {
         #region Public Structs + Classes
 
         [Group("edit"), RequireContext(ContextType.Guild), RequireRole(OrgBotGlobals.NUMBERS_ROLE_ID)]
-        public class EditGroup : ModuleBase {
+        public class CardEditGroup : ModuleBase {
             #region Public Methods
 
             [Command("preview")]
@@ -127,7 +127,7 @@ namespace OrgBot.Modules.YGOCard {
             [Command("start")]
             public async Task StartEditingCardAsync([Remainder] string cardName) {
                 var card = YGOCardAPIClient.Cards.FindCards(cardName).FirstOrDefault();
-                if (card.IsBeingEdited()) {
+                if (card.IsBeingEdited() || YGOCardAPIClient.IsEditing(Context.User)) {
                     var editingUser = YGOCardAPIClient.GetEditor(card);
                     await ReplyAsync($"{card.Name} is currently being edited by {editingUser.Username}.");
                     return;
