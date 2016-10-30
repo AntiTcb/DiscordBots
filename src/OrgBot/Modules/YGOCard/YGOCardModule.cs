@@ -70,7 +70,8 @@ namespace OrgBot.Modules.YGOCard {
                 return;
             }
             if (Regex.Match(cardName, @"^(\W|\D){1,2}$").Success) {
-                await ReplyAsync("I need a longer card name");
+                await ReplyAsync("I need a longer card name.");
+                return;
             }
             if (Context.Channel.Id == 87463676595949568) {
                 await ReplyAsync("Command is disabled in this channel. Please use <#171483830845177857>");
