@@ -14,7 +14,7 @@ namespace OrgBot.Modules.YGOWikia {
     using Discord.Commands;
     using YGOCard.Entities;
 
-    [Group("wikia"), RequireOwner]
+    [Group("wikia")]
     public partial class YGOWikiaModule : ModuleBase{
         [Command("card"), Alias("c")]
         public async Task GetCardAsync([Remainder] string cardName) {
