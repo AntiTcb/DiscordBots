@@ -52,7 +52,7 @@ namespace OrgBot.Modules.YGOCard.Entities {
         public static async Task<List<YGOCard>> GetCardsAsync() => await API.GetCardsAsync();
 
         public static async Task EditCardAsync(YGOCard card)
-            => API.UpdateCardAsync(((OrgBotConfig) Globals.BotConfig).DatabaseToken, card.Id, card);
+            => await API.UpdateCardAsync(((OrgBotConfig) Globals.BotConfig).DatabaseToken, card.Id, card);
 
         public static YGOCard GetEditedCard(IUser editingUser) => EditedCards.GetCard(EditingCollection[editingUser]);
 
@@ -67,6 +67,7 @@ namespace OrgBot.Modules.YGOCard.Entities {
         public static IUser GetEditor(uint cardID) => EditingCollection.FirstOrDefault(x => x.Value == cardID).Key;
 
         public static bool IsBeingEdited(this YGOCard card) => EditedCards.Contains(card);
+        public static bool IsEditing(IUser user) => EditingCollection.ContainsKey(user);
 
         public static void StartEditing(IUser callingUser, YGOCard card) {
             EditingCollection.Add(callingUser, card.Id);
