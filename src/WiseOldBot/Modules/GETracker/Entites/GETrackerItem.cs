@@ -79,13 +79,16 @@ namespace WiseOldBot.GETracker {
         [JsonProperty("sellingQuantity")]
         public int SellingQuantity { get; set; }
 
+        [JsonProperty("url")]
+        public Uri URL { get; set; }
+
         #endregion Public Fields + Properties
 
         #region Public Methods
 
         public string ToDiscordMessage()
             =>
-            $"{Format.Bold(Name)} (ID:{Format.Italics(ItemID.ToString())})\n" + $"{Format.Underline("Prices:")}\n" +
+            $"{Format.Bold(Name)} ({Format.Italics("ID:" + ItemID)}) <{URL}>\n" + $"{Format.Underline("Prices:")}\n" +
             $"\t\tBuying: {Format.Code($"{BuyingPrice:N0}gp")}\t" + $"Average: {Format.Code($"{AveragePrice:N0}gp")}\t" +
             $"Selling: {Format.Code($"{SellingPrice:N0}gp")}\n" + $"{Format.Underline("Volume:")}\n" +
             $"\t\tBuying Qty: {Format.Code($"{BuyingQuantity:N0}")}\t" +
