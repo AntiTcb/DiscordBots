@@ -62,7 +62,7 @@ namespace WiseOldBot.GETracker {
             var inItems = await GETrackerAPIClient.GetItemsAsync();
             var a = inItems["data"].GroupBy(x => x.Name).
                                     ToDictionary(g => g.Key, g => g.OrderBy(x => x.ItemID).ToList());
-            var newItems = a.Where(x => GETrackerAPIClient.Items.ContainsKey(x.Key));
+            var newItems = a.Where(x => !GETrackerAPIClient.Items.ContainsKey(x.Key));
             GETrackerAPIClient.Items = new ItemMap(a);
             await
                 Context.Channel.SendMessageAsync
