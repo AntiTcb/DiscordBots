@@ -54,8 +54,9 @@ namespace BCL {
                 }
                 var loggingChannel = Client.GetChannel(Globals.BotConfig.LogChannel) as SocketTextChannel;
                 await loggingChannel.SendMessageAsync(
+                    $"**Command:** {ctx.Message}\n" +
                     $"**Error:** {result.ErrorReason}\n" +
-                    $"**Caller:** {ctx.User} ({ctx.User.Id}) / {ctx.Guild.Name} | {ctx.Channel.Name}", false).ConfigureAwait(false);
+                    $"**Caller:** {ctx.User} ({ctx.User.Id}) / {ctx.Guild.Name} | {ctx.Channel.Name}").ConfigureAwait(false);
                 await ctx.Channel.SendMessageAsync($"**Error:** {result.ErrorReason}").ConfigureAwait(false);
             }
         }
