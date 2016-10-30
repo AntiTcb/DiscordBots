@@ -14,6 +14,7 @@
 namespace BCL.Modules.Utility {
     #region Using
 
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -65,7 +66,12 @@ namespace BCL.Modules.Utility {
 
                      foreach (var msg in delete.OrderByDescending(msg => msg.Timestamp)) {
                          if (index >= count) {
-                             await EndCleanAsync(deleteMessages, deleteStrategy).ConfigureAwait(false);
+                             try {
+                                 await EndCleanAsync(deleteMessages, deleteStrategy).ConfigureAwait(false);
+                             }
+                             catch (Exception e) {
+                                 await ReplyAsync($"Error! {e.Message}").ConfigureAwait(false);
+                            }
                              return;
                          }
                          deleteMessages.Add(msg);
