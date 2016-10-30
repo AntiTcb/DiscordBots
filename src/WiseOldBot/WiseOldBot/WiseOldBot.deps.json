@@ -1,12 +1,12 @@
 {
   "runtimeTarget": {
     "name": ".NETCoreApp,Version=v1.0",
-    "signature": "fe2c8d97568d0ce0a970cdd5638893d9edac734c"
+    "signature": "07ee385eacc6ce8339df7db16d030611c3d9fead"
   },
   "compilationOptions": {},
   "targets": {
     ".NETCoreApp,Version=v1.0": {
-      "WiseOldBot/1.0.0": {
+      "WiseOldBot/1.3.0": {
         "dependencies": {
           "BCL": "1.0.0",
           "RestEase": "1.2.2"
@@ -15,24 +15,24 @@
           "WiseOldBot.dll": {}
         }
       },
-      "Discord.Net/1.0.0-beta2-00440": {
+      "Discord.Net/1.0.0-beta2-00451": {
         "dependencies": {
-          "Discord.Net.Commands": "1.0.0-beta2-00440",
-          "Discord.Net.Core": "1.0.0-beta2-00440",
-          "Discord.Net.Rest": "1.0.0-beta2-00440",
-          "Discord.Net.Rpc": "1.0.0-beta2-00440",
-          "Discord.Net.WebSocket": "1.0.0-beta2-00440"
+          "Discord.Net.Commands": "1.0.0-beta2-00451",
+          "Discord.Net.Core": "1.0.0-beta2-00451",
+          "Discord.Net.Rest": "1.0.0-beta2-00451",
+          "Discord.Net.Rpc": "1.0.0-beta2-00451",
+          "Discord.Net.WebSocket": "1.0.0-beta2-00451"
         }
       },
-      "Discord.Net.Commands/1.0.0-beta2-00440": {
+      "Discord.Net.Commands/1.0.0-beta2-00451": {
         "dependencies": {
-          "Discord.Net.Core": "1.0.0-beta2-00440"
+          "Discord.Net.Core": "1.0.0-beta2-00451"
         },
         "runtime": {
           "lib/netstandard1.3/Discord.Net.Commands.dll": {}
         }
       },
-      "Discord.Net.Core/1.0.0-beta2-00440": {
+      "Discord.Net.Core/1.0.0-beta2-00451": {
         "dependencies": {
           "Newtonsoft.Json": "9.0.1",
           "System.Interactive.Async": "3.0.0"
@@ -41,28 +41,28 @@
           "lib/netstandard1.3/Discord.Net.Core.dll": {}
         }
       },
-      "Discord.Net.Rest/1.0.0-beta2-00440": {
+      "Discord.Net.Rest/1.0.0-beta2-00451": {
         "dependencies": {
-          "Discord.Net.Core": "1.0.0-beta2-00440"
+          "Discord.Net.Core": "1.0.0-beta2-00451"
         },
         "runtime": {
           "lib/netstandard1.3/Discord.Net.Rest.dll": {}
         }
       },
-      "Discord.Net.Rpc/1.0.0-beta2-00440": {
+      "Discord.Net.Rpc/1.0.0-beta2-00451": {
         "dependencies": {
-          "Discord.Net.Core": "1.0.0-beta2-00440",
-          "Discord.Net.Rest": "1.0.0-beta2-00440",
+          "Discord.Net.Core": "1.0.0-beta2-00451",
+          "Discord.Net.Rest": "1.0.0-beta2-00451",
           "System.Net.WebSockets.Client": "4.0.1-beta-24425-02"
         },
         "runtime": {
           "lib/netstandard1.3/Discord.Net.Rpc.dll": {}
         }
       },
-      "Discord.Net.WebSocket/1.0.0-beta2-00440": {
+      "Discord.Net.WebSocket/1.0.0-beta2-00451": {
         "dependencies": {
-          "Discord.Net.Core": "1.0.0-beta2-00440",
-          "Discord.Net.Rest": "1.0.0-beta2-00440",
+          "Discord.Net.Core": "1.0.0-beta2-00451",
+          "Discord.Net.Rest": "1.0.0-beta2-00451",
           "System.Net.WebSockets.Client": "4.0.1-beta-24425-02"
         },
         "runtime": {
@@ -246,8 +246,8 @@
       },
       "BCL/1.0.0": {
         "dependencies": {
-          "Discord.Net": "1.0.0-beta2-00440",
-          "Discord.Net.Commands": "1.0.0-beta2-00440",
+          "Discord.Net": "1.0.0-beta2-00451",
+          "Discord.Net.Commands": "1.0.0-beta2-00451",
           "System.Net.WebSockets.Client": "4.0.1-beta-24425-02",
           "Microsoft.CodeAnalysis.CSharp.Scripting": "1.3.2",
           "Microsoft.Extensions.DependencyModel": "1.0.1-beta-003206"
@@ -259,40 +259,40 @@
     }
   },
   "libraries": {
-    "WiseOldBot/1.0.0": {
+    "WiseOldBot/1.3.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
     },
-    "Discord.Net/1.0.0-beta2-00440": {
+    "Discord.Net/1.0.0-beta2-00451": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-1x8Gf32xDLP3o+ryThhzvFrW3X31YYetXDmNGzitk1h88T2edI82bLY7MpVq+P9euwx2em0gLQcUuQWlujLRtw=="
+      "sha512": "sha512-ITJpbsOj1IwBQdWbhIfIM++pvvFPAUj01i2bITPiuYPFyKJDCpK0nHoKLNAg3qgUsvEgp+JFuu4GjgovTv2uPQ=="
     },
-    "Discord.Net.Commands/1.0.0-beta2-00440": {
+    "Discord.Net.Commands/1.0.0-beta2-00451": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-GWGJws7KYG/HMOLY6PimanIk1ultQ7t49TT52UghPY+1Yk/2nbitqFJZO5kJ41DFudb7V+oyVxnPCa5H5k+5wQ=="
+      "sha512": "sha512-wOxIHn51640OnsZGJpQW68UnFLd676Hh8PVqDvJZuJOEn99FJMFrHX3B2M/aUIGx5MXlTp5uQQKxz2pLGfLCww=="
     },
-    "Discord.Net.Core/1.0.0-beta2-00440": {
+    "Discord.Net.Core/1.0.0-beta2-00451": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-6pB7Tq4lR9Z+m+Jp54Swi+2+KluYTfu3Qn13wnbiBoS8iETVYEXK59JQDV39qV18lcIvg1gBt+g2COJvQrtEQQ=="
+      "sha512": "sha512-kZ8HL7TEFsYWG6kV4ASmjzT1l8ecCoNcB2mm1Z+b9zjqcnXa4eePOKzqDzoW3wVCKG6Sio0GvcaYE0FdCZ8pqg=="
     },
-    "Discord.Net.Rest/1.0.0-beta2-00440": {
+    "Discord.Net.Rest/1.0.0-beta2-00451": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-BwYQI06PNb/oVJ79Hcm45mtdh4AZXvKH17U2vdlz8FpcrQnRIstDMyhtCx6NaWCOXWTmjA6mtZPZUhZqZfkghg=="
+      "sha512": "sha512-AjpX/VdAOIKuzrYmNEyVWsPxvDGNwBkd1movkM8I6xHkwwWnRRMcutQ6rL41Ozi3Xxl/SL0Nilm9RGzHMdD0Ng=="
     },
-    "Discord.Net.Rpc/1.0.0-beta2-00440": {
+    "Discord.Net.Rpc/1.0.0-beta2-00451": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-FgyuRLGc8u3MXhGTSVTOB4IqXT2CdLOQJ04VkZ5wGdx6E4NHN+ykh+UwmuH43SbKMfLm5JN872HM4haAL7vCHw=="
+      "sha512": "sha512-TR0Aqh5Fa0FBY3Y1/iF61C5HmcOHnIi6IIGyw73aAdeIJP6G7CMZxTwEx1hANpFhvis4MKKSbS3a3OqUx1cyCA=="
     },
-    "Discord.Net.WebSocket/1.0.0-beta2-00440": {
+    "Discord.Net.WebSocket/1.0.0-beta2-00451": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-VAzSnvzCJ4w6IMtx1K/bNQmuDZk/KPaN30PiFZ+ISP5W+yAvtczsLAdITPFPlhc5OdFvQCd4qhModVq3o0F3eQ=="
+      "sha512": "sha512-9r7X0IGroo05pwsF2/bnrxOZnOGFwTMjGQOVTTtA+rd6Hg8+IQmZQWqwTMI8WqCsX6er1+dZeNzPFe/EOIBV3w=="
     },
     "Microsoft.AspNetCore.WebUtilities/1.0.0": {
       "type": "package",
