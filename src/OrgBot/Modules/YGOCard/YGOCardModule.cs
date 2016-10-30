@@ -16,6 +16,7 @@ namespace OrgBot.Modules.YGOCard {
 
     using System.Linq;
     using System.Text;
+    using System.Text.RegularExpressions;
     using System.Threading.Tasks;
     using Discord;
     using Discord.Commands;
@@ -28,6 +29,7 @@ namespace OrgBot.Modules.YGOCard {
 
         [Command("card"), Alias("c")]
         public async Task GetCardAsync([Remainder] string cardName) {
+            await Context.Channel.TriggerTypingAsync();
             if (cardName == "") {
                 await ReplyAsync("I need a card name!");
                 return;
@@ -65,6 +67,7 @@ namespace OrgBot.Modules.YGOCard {
 
         [Command("listcards")]
         public async Task GetCardsAsync([Remainder] string cardName) {
+            await Context.Channel.TriggerTypingAsync();
             if (cardName == "") {
                 await ReplyAsync("I need a card name!");
                 return;
@@ -73,9 +76,18 @@ namespace OrgBot.Modules.YGOCard {
                 await ReplyAsync("Command is disabled in this channel. Please use <#171483830845177857>");
                 return;
             }
-            // TODO: Multi-message for 2k+
             var cards = YGOCardAPIClient.Cards.FindCards(cardName.ToLower());
-            await ReplyAsync(string.Join(", ", cards.Select(x => x.Name)));
+            var listOfCards = string.Join(", ", cards.Select(x => x.Name));
+            if (listOfCards.Length > 2000) {
+                var splitList = Enumerable.Range(0, listOfCards.Length / 1900).
+                                           Select(i => listOfCards.Substring(i * 1900, 1900));
+                foreach (var list in splitList) {
+                    await ReplyAsync(list);
+                    await Task.Delay(1000);
+                }
+                return;
+            }
+            await ReplyAsync(listOfCards);
         }
 
 
