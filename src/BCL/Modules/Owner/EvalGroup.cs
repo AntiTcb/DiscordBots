@@ -14,10 +14,12 @@
 namespace BCL.Modules.Owner {
     #region Using
 
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
     using System.Threading.Tasks;
+    using Discord;
     using Discord.Commands;
     using Discord.WebSocket;
     using Interfaces;
@@ -33,9 +35,9 @@ namespace BCL.Modules.Owner {
         {
             #region Internal Fields + Properties
 
-            internal IBotConfig BotConfig { get; set; }
-            internal CommandContext CommandContext { get; set; }
-            internal IServerConfig ServerConfig { get; set; }
+            internal IBotConfig BC { get; set; }
+            internal CommandContext CC { get; set; }
+            internal IServerConfig SC { get; set; }
 
             #endregion Internal Fields + Properties
         }
@@ -77,8 +79,8 @@ namespace BCL.Modules.Owner {
                 var options =
                     ScriptOptions.Default.AddReferences
                                   (typeof(object).GetTypeInfo().Assembly.Location,
-                                   typeof(object).GetTypeInfo().Assembly.Location,
                                    typeof(Enumerable).GetTypeInfo().Assembly.Location,
+                                   typeof(IUser).GetTypeInfo().Assembly.Location,
                                    typeof(DiscordSocketClient).GetTypeInfo().Assembly.Location,
                                    typeof(CommandContext).GetTypeInfo().Assembly.Location,
                                    typeof(Assembly).GetTypeInfo().Assembly.Location).AddImports(Globals.EvalImports);
@@ -86,12 +88,12 @@ namespace BCL.Modules.Owner {
                 var guildID = Context.Guild?.Id;
                 var globalObjects = guildID != null
                                         ? new EvalGlobals {
-                                            CommandContext = Context,
-                                            BotConfig = Globals.BotConfig,
-                                            ServerConfig = Globals.ServerConfigs[guildID.Value]
+                                            CC = Context,
+                                            BC = Globals.BotConfig,
+                                            SC = Globals.ServerConfigs[guildID.Value]
                                         }
-                                        : new EvalGlobals { CommandContext = Context, BotConfig = Globals.BotConfig };
-                var result = await CSharpScript.EvaluateAsync(expression, options, globalObjects).ConfigureAwait(false);
+                                        : new EvalGlobals { CC = Context, BC = Globals.BotConfig };
+                var result = await CSharpScript.EvaluateAsync(expression, globals: globalObjects, globalsType: typeof(EvalGlobals)).ConfigureAwait(false);
                 await ReplyAsync($"Eval: {result}").ConfigureAwait(false);
             }
 

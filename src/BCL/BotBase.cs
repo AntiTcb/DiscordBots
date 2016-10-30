@@ -6,7 +6,7 @@
 // Project: BCL
 // 
 // Created: 09/26/2016 11:16 PM
-// Last Revised: 10/13/2016 7:53 PM
+// Last Revised: 10/30/2016 3:51 PM
 // Last Revised by: Alex Gravely
 
 #endregion
@@ -15,7 +15,6 @@ namespace BCL {
     #region Using
 
     using System;
-    using System.Collections.Generic;
     using System.Threading.Tasks;
     using Discord;
     using Discord.WebSocket;

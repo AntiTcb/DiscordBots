@@ -25,7 +25,7 @@ namespace OrgBot.Modules.YGOWikia.Entities {
 
         public string Attribute { get; set; }
 
-        public CardCategory Category
+        public CardCategory? Category
             =>
             PendulumScales != null
                 ? Rank != null ? CardCategory.PendulumXyzMonster : CardCategory.PendulumMonster
@@ -60,6 +60,9 @@ namespace OrgBot.Modules.YGOWikia.Entities {
 
         public string ToDiscordMessage() {
             string returnString = $"{Name} | {Types}";
+            if (Category == null) {
+                return "Invalid card";
+            }
             switch (Category) {
                 case CardCategory.Monster:
                     returnString += $"| {Attribute}\nLevel: {Level} | {Stats}";
