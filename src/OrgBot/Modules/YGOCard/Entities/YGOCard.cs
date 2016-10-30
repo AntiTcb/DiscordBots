@@ -94,7 +94,7 @@ namespace OrgBot.Modules.YGOCard.Entities {
         #region Public Methods
 
         public string ToDiscordMessage() {
-            var returnString = "";
+            string returnString;
             switch (CardType) {
                 case YGOCardType.Effect:
                 case YGOCardType.Fusion:
@@ -115,19 +115,19 @@ namespace OrgBot.Modules.YGOCard.Entities {
                 case YGOCardType.P_Effect:
                     returnString = $"{Name} | {Attribute.ToUpper()} | {Type}\n" +
                                    $"Level: {Level} | Scales: {LeftScale}/{RightScale} | ATK/DEF: {Attack}/{Defence}\n" +
-                                   $"Pendulum Effect:\n{PendulumEffect}\n\nMonster Effect:{Description}";
+                                   $"Pendulum Effect:\n{PendulumEffect}\n\nMonster Effect:\n{Description}";
                     break;
 
                 case YGOCardType.P_Synchro:
                     returnString = $"{Name} | {Attribute.ToUpper()} | {Type}\n" +
                                    $"Level: {Level} | Scales {LeftScale}/{RightScale} | ATK/DEF: {Attack}/{Defence}\n" +
-                                   $"Pendulum Effect:\n{PendulumEffect}\n\nMonster Effect:{Description}";
+                                   $"Pendulum Effect:\n{PendulumEffect}\n\nMonster Effect:\n{Description}";
                     break;
 
                 case YGOCardType.P_Xyz:
                     returnString = $"{Name} | {Attribute.ToUpper()} | {Type}\n" +
                                    $"Rank: {Level} | Scales {LeftScale}/{RightScale} | ATK/DEF: {Attack}/{Defence}\n" +
-                                   $"Pendulum Effect:\n{PendulumEffect}\n\nMonster Effect:{Description}";
+                                   $"Pendulum Effect:\n{PendulumEffect}\n\nMonster Effect:\n{Description}";
                     break;
 
                 case YGOCardType.Spell:
