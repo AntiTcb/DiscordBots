@@ -31,14 +31,14 @@ namespace OrgBot.Modules.YGOCard {
         public class CardEditGroup : ModuleBase {
             #region Public Methods
 
-            [Command("preview")]
+            [Command("preview"), Summary("Displays the output of your edits vs the current version.")]
             public async Task PreviewChangesAsync() {
                 var editedCard = YGOCardAPIClient.GetEditedCard(Context.User);
                 await ReplyAsync($"Current:\n{YGOCardAPIClient.Cards.GetCard(editedCard.Id).ToDiscordMessage()}\n" +
                                  $"Edited:\n{editedCard.ToDiscordMessage()}");
             }
 
-            [Command("properties")]
+            [Command("properties"), Alias("prop"), Summary("Lets you edit a card's attribute, card type, or type.")]
             public async Task EditPropertiesAsync(CardDataField datafield, string value) {
                 var card = YGOCardAPIClient.GetEditedCard(Context.User);
                 switch (datafield) {
@@ -50,9 +50,14 @@ namespace OrgBot.Modules.YGOCard {
                         var parsed = Enum.TryParse(value, out parsedCardType);
                         if (parsed) {
                             card.CardType = parsedCardType;
+                        }
+                        else {
+                            await ReplyAsync("Parsing of Card Type failed.");
+                            return;
                         } 
                         break;
                     case CardDataField.Type:
+                        card.Type = value;
                         break;
                     default:
                         await ReplyAsync("You may only edit properties with this command.");
@@ -81,7 +86,7 @@ namespace OrgBot.Modules.YGOCard {
                         card.RightScale = value;
                         break;
                     default:
-                        await ReplyAsync("You may only edit stats with this command.");
+                        await ReplyAsync("You may only edit numeric stats (ATK/DEF/Level/Rank/Pendulum Scales) with this command.");
                         return;
                 }
                 await ReplyAsync(":thumbsup:");
@@ -105,7 +110,7 @@ namespace OrgBot.Modules.YGOCard {
                         break;
 
                     default:
-                        await ReplyAsync("You can only edit the name/effect/flavor text/pendulum effect with this command.");
+                        await ReplyAsync("You may only edit the name/effect/flavor text/pendulum effect with this command.");
                         return;
                 }
                 await ReplyAsync(":thumbsup:");
@@ -124,10 +129,16 @@ namespace OrgBot.Modules.YGOCard {
                 await ReplyAsync(sb.ToString());
             }
 
-            [Command("start")]
+            [Command("start"), Alias("begin")]
             public async Task StartEditingCardAsync([Remainder] string cardName) {
+                if (YGOCardAPIClient.IsUserEditing(Context.User)) {
+                    await
+                        ReplyAsync
+                            ("You may only edit one card at a time! Save or discard your changes before editing another card.");
+                    return;
+                }
                 var card = YGOCardAPIClient.Cards.FindCards(cardName).FirstOrDefault();
-                if (card.IsBeingEdited() || YGOCardAPIClient.IsEditing(Context.User)) {
+                if (card.IsBeingEdited()) {
                     var editingUser = YGOCardAPIClient.GetEditor(card);
                     await ReplyAsync($"{card.Name} is currently being edited by {editingUser.Username}.");
                     return;
