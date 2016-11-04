@@ -22,15 +22,7 @@ namespace SelfBot.Modules {
     using Microsoft.CodeAnalysis.CSharp.Scripting;
     using Microsoft.CodeAnalysis.Scripting;
 
-    [Module, RequireOwner(89613772372574208)]
-    public class SelfModule {
-        DiscordSocketClient _client;
-        IConfig _config;
-
-        public SelfModule(DiscordSocketClient c, IConfig con) {
-            _client = c;
-            _config = con;
-        }
+    public class SelfModule : ModuleBase {
 
         public class RoslynGlobals {
             public DiscordSocketClient Client { get; set; }
@@ -41,54 +33,44 @@ namespace SelfBot.Modules {
         }
 
         [Group("import")]
-        public class ImportGroup {
+        public class ImportGroup : ModuleBase {
             [Command("add")]
-            public async Task AddImport(IUserMessage msg, [Remainder] string import) {
-                var _config = await ConfigHandler.LoadAsync<SelfConfig>(Program.CONFIG_PATH);
-                if (_config.EvalImports.Contains(import)) {
-                    return;
-                }
-                _config.EvalImports.Add(import);
-                await ConfigHandler.SaveAsync(Program.CONFIG_PATH, _config);
-                await msg.ModifyAsync(m => m.Content = $"Added import: {import}");
+            public async Task AddImport([Remainder] string import) {
+                (Globals.BotConfig as SelfConfig).EvalImports.Add(import);
+                await ConfigHandler.SaveAsync(Globals.CONFIG_PATH, Globals.BotConfig);
+                await Context.Message.ModifyAsync(m => m.Content = $"Added import: {import}");
             }
 
             [Command("remove"), Alias("del")]
-            public async Task RemoveImport(IUserMessage msg, [Remainder] string import) {
-                var _config = await ConfigHandler.LoadAsync<SelfConfig>(Program.CONFIG_PATH);
-                if (!_config.EvalImports.Contains(import)) {
-                    return;
-                }
-                _config.EvalImports.Remove(import);
-                await ConfigHandler.SaveAsync(Program.CONFIG_PATH, _config);
-                await msg.ModifyAsync(m => m.Content = $"Removed import: {import}");
+            public async Task RemoveImport([Remainder] string import) {
+                (Globals.BotConfig as SelfConfig).EvalImports.Remove(import);
+                await ConfigHandler.SaveAsync(Globals.CONFIG_PATH, Globals.BotConfig);
+                await Context.Message.ModifyAsync(m => m.Content = $"Removed import: {import}");
             }
 
             [Command("list")]
-            public async Task ListImports(IUserMessage msg) {
-                var _config = await ConfigHandler.LoadAsync<SelfConfig>(Program.CONFIG_PATH);
-                await msg.ModifyAsync(m => m.Content = string.Join("\n", _config.EvalImports.Select(x => x)));
+            public async Task ListImports() {
+                await Context.Message.ModifyAsync(m => m.Content = string.Join("\n", (Globals.BotConfig as SelfConfig).EvalImports.Select(x => x)));
             }
         }
 
         [Command("eval")]
-        public async Task Eval(IUserMessage msg, [Remainder] string script) {
-            _config = await ConfigHandler.LoadAsync<SelfConfig>(Program.CONFIG_PATH);
+        public async Task Eval([Remainder] string script) {
             try {
                 var opts = ScriptOptions.Default
                     .WithReferences(
                         typeof(object).GetTypeInfo().Assembly,
                         typeof(Enumerable).GetTypeInfo().Assembly,
                         typeof(DiscordSocketClient).GetTypeInfo().Assembly,
-                        typeof(Command).GetTypeInfo().Assembly,
+                        typeof(CommandContext).GetTypeInfo().Assembly,
                         typeof(IMessage).GetTypeInfo().Assembly)
-                    .WithImports((_config as SelfConfig).EvalImports);
-                var globals = new RoslynGlobals(_client);
+                    .WithImports((Globals.BotConfig as SelfConfig).EvalImports);
+                var globals = new RoslynGlobals(Context.Client as DiscordSocketClient);
                 var result = await CSharpScript.EvaluateAsync(script, opts, globals);
-                await msg.ModifyAsync(m => m.Content = $"{Format.Code(result?.ToString())}");
+                await Context.Message.ModifyAsync(m => m.Content = $"Eval: {Format.Code(result?.ToString())}");
             }
             catch (Exception ex) {
-                await msg.ModifyAsync(m => m.Content = $"Exception! -- {Format.Code($"{ex}", "cs")}");
+                await Context.Message.ModifyAsync(m => m.Content = $"Exception! -- {Format.Code($"{ex}", "cs")}");
             }
         }
     }
