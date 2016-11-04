@@ -12,6 +12,8 @@
 #endregion
 
 namespace WiseOldBot.Modules.OSRS {
+    using Discord;
+
     public struct Skill {
         #region Internal Fields + Properties
 
@@ -41,7 +43,7 @@ namespace WiseOldBot.Modules.OSRS {
 
         #region Public Methods
 
-        public string ToDiscordMessage() => "```xl" + $"{Level}\t\t" + $"{Rank:N0}\t\t\t" + $"{Experience}";
+        public string ToDiscordMessage() => Format.Code($"Level:{Level}\tExp: {Experience:N0}\tRank: {Rank:N0}");
 
         public override string ToString() => $"Exp: {Experience}, Level: {Level}, Rank: {Rank}";
 

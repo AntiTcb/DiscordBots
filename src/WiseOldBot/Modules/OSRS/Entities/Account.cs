@@ -6,7 +6,7 @@
 // Project: WiseOldBot
 // 
 // Created: 09/25/2016 6:48 AM
-// Last Revised: 10/19/2016 6:08 PM
+// Last Revised: 11/01/2016 9:03 PM
 // Last Revised by: Alex Gravely
 
 #endregion
@@ -15,6 +15,7 @@ namespace WiseOldBot.Modules.OSRS {
     #region Using
 
     using System;
+    using Discord;
 
     #endregion
 
@@ -117,9 +118,98 @@ namespace WiseOldBot.Modules.OSRS {
 
         #region Public Methods
 
+        public string SkillToDiscordMessage(SkillType skill) {
+            var returnString = $"{Format.Bold($"{Username}: {skill}")}\n";
+            switch (skill) {
+                case SkillType.Agility:
+                    return returnString + Agility.ToDiscordMessage();
+
+                case SkillType.Attack:
+                    return returnString + Attack.ToDiscordMessage();
+
+                case SkillType.Construction:
+                    return returnString + Construction.ToDiscordMessage();
+
+                case SkillType.Cooking:
+                    return returnString + Cooking.ToDiscordMessage();
+
+                case SkillType.Crafting:
+                    return returnString + Crafting.ToDiscordMessage();
+
+                case SkillType.Defense:
+                    return returnString + Defense.ToDiscordMessage();
+
+                case SkillType.Farming:
+                    return returnString + Farming.ToDiscordMessage();
+
+                case SkillType.Firemaking:
+                    return returnString + Firemaking.ToDiscordMessage();
+
+                case SkillType.Fishing:
+                    return returnString + Fishing.ToDiscordMessage();
+
+                case SkillType.Fletching:
+                    return returnString + Fletching.ToDiscordMessage();
+
+                case SkillType.Herblore:
+                    return returnString + Herblore.ToDiscordMessage();
+
+                case SkillType.Hitpoints:
+                    return returnString + Hitpoints.ToDiscordMessage();
+
+                case SkillType.Hunter:
+                    return returnString + Hunter.ToDiscordMessage();
+
+                case SkillType.Magic:
+                    return returnString + Magic.ToDiscordMessage();
+
+                case SkillType.Mining:
+                    return returnString + Mining.ToDiscordMessage();
+
+                case SkillType.Prayer:
+                    return returnString + Prayer.ToDiscordMessage();
+
+                case SkillType.Ranged:
+                    return returnString + Ranged.ToDiscordMessage();
+
+                case SkillType.Runecrafting:
+                    return returnString + Runecrafting.ToDiscordMessage();
+
+                case SkillType.Slayer:
+                    return returnString + Slayer.ToDiscordMessage();
+
+                case SkillType.Smithing:
+                    return returnString + Smithing.ToDiscordMessage();
+
+                case SkillType.Strength:
+                    return returnString + Strength.ToDiscordMessage();
+
+                case SkillType.Thieving:
+                    return returnString + Thieving.ToDiscordMessage();
+
+                case SkillType.Total:
+                    return returnString + Total.ToDiscordMessage();
+
+                case SkillType.All:
+                    return ToDiscordMessage();
+
+                case SkillType.Woodcutting:
+                    return returnString + Woodcutting.ToDiscordMessage();
+
+                case SkillType.Combat:
+                    return returnString + Format.Code($"{Combat}");
+
+                case SkillType.NonCombat:
+                    throw new NotImplementedException();
+
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(skill), skill, null);
+            }
+        }
+
         public string ToDiscordMessage()
             =>
-            $"```xl\n{Username} / {StatsSource} / CB: {Combat} \nSKILL / LEVEL / EXPERIENCE / RANK\n\n" +
+            $"```elm\n{Username} / {StatsSource} / CB: {Combat} \nSKILL / LEVEL / EXPERIENCE / RANK\n\n" +
             $"TOTAL / {Total.Level} / {Total.Experience:N0} / {Total.Rank:N0}\n" +
             $"AGILITY / {Agility.Level} / {Agility.Experience:N0} / {Agility.Rank:N0}\n" +
             $"ATTACK / {Attack.Level} / {Attack.Experience:N0} / {Attack.Rank:N0}\n" +
