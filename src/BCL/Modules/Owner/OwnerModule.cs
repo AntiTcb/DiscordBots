@@ -6,7 +6,7 @@
 // Project: BCL
 // 
 // Created: 10/16/2016 5:11 PM
-// Last Revised: 10/27/2016 11:13 PM
+// Last Revised: 11/04/2016 12:52 AM
 // Last Revised by: Alex Gravely
 
 #endregion
@@ -23,7 +23,6 @@ namespace BCL.Modules.Owner {
     using Discord.Commands;
     using Discord.WebSocket;
     using Extensions;
-    using Interfaces;
     using Preconditions;
 
     #endregion
@@ -32,17 +31,16 @@ namespace BCL.Modules.Owner {
     public partial class OwnerModule : ModuleBase {
         #region Public Methods
 
+        [Command("echo")]
+        public async Task EchoAsync([Remainder] string text) {
+            await ReplyAsync(text).ConfigureAwait(false);
+        }
+
         [Command("powerdown"), Alias("pd")]
         public async Task PowerdownAsync() {
             await ReplyAsync("Powering down!").ConfigureAwait(false);
             await Context.Client.DisconnectAsync().ConfigureAwait(false);
             await Task.Delay(1500).ConfigureAwait(false);
-            Environment.FailFast("");
-        }
-
-        [Command("echo")]
-        public async Task EchoAsync([Remainder] string text) {
-            await ReplyAsync(text).ConfigureAwait(false);
         }
 
         [Command("set"), RequireContext(ContextType.Guild)]
