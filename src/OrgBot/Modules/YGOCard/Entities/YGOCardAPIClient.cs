@@ -67,7 +67,7 @@ namespace OrgBot.Modules.YGOCard.Entities {
         public static IUser GetEditor(uint cardID) => EditingCollection.FirstOrDefault(x => x.Value == cardID).Key;
 
         public static bool IsBeingEdited(this YGOCard card) => EditedCards.Contains(card);
-        public static bool IsEditing(IUser user) => EditingCollection.ContainsKey(user);
+        public static bool IsUserEditing(IUser user) => EditingCollection.ContainsKey(user);
 
         public static void StartEditing(IUser callingUser, YGOCard card) {
             EditingCollection.Add(callingUser, card.Id);
