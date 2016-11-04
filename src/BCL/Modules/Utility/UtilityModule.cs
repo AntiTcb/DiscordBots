@@ -6,7 +6,7 @@
 // Project: BCL
 // 
 // Created: 10/30/2016 2:25 PM
-// Last Revised: 10/30/2016 2:27 PM
+// Last Revised: 11/04/2016 1:12 AM
 // Last Revised by: Alex Gravely
 
 #endregion
@@ -71,7 +71,7 @@ namespace BCL.Modules.Utility {
                              }
                              catch (Exception e) {
                                  await ReplyAsync($"Error! {e.Message}").ConfigureAwait(false);
-                            }
+                             }
                              return;
                          }
                          deleteMessages.Add(msg);
