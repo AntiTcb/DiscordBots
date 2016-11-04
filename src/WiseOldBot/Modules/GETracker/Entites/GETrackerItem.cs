@@ -11,7 +11,7 @@
 
 #endregion
 
-namespace WiseOldBot.GETracker {
+namespace WiseOldBot.Modules.GETracker {
     #region Using
 
     using System;
