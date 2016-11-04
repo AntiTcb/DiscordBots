@@ -168,7 +168,7 @@ namespace OrgBot.Modules.YGOCard.Entities {
 
         #region Overrides of Object
 
-        public override string ToString() => $"{Name}";
+        public override string ToString() => $"{Name}"; 
 
         #endregion Overrides of Object
     }
