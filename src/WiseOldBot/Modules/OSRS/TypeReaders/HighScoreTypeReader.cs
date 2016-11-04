@@ -11,25 +11,22 @@
 
 #endregion
 
-namespace WiseOldBot.TypeReaders {
+namespace WiseOldBot.OSRS.TypeReaders {
     #region Using
 
+    using System;
     using System.Threading.Tasks;
     using Discord.Commands;
     using Modules.OSRS;
 
     #endregion
 
+    [Obsolete("Built in enum type reader will be sufficient after PR is accepted.")]
     public class HighScoreTypeReader : TypeReader {
         #region Overrides of TypeReader
 
         public override Task<TypeReaderResult> Read(CommandContext context, string input) {
-            if (input.Split(' ').Length > 1) {
-                return Task.FromResult
-                    (TypeReaderResult.FromError(CommandError.BadArgCount, "Invalid highscore type argument count"));
-            }
             switch (input.ToLower()) {
-                case "":
                 case "r":
                 case "normal":
                 case "regular":

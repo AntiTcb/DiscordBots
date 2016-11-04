@@ -11,15 +11,17 @@
 
 #endregion
 
-namespace WiseOldBot.TypeReaders {
+namespace WiseOldBot.OSRS.TypeReaders {
     #region Using
 
+    using System;
     using System.Threading.Tasks;
     using Discord.Commands;
     using Modules.OSRS;
 
     #endregion
 
+    [Obsolete("Built in enum type reader will be sufficient after PR is accepted.")]
     public class SkillTypeReader : TypeReader {
         #region Overrides of TypeReader
 
@@ -31,6 +33,7 @@ namespace WiseOldBot.TypeReaders {
 
                 case "attack":
                 case "att":
+                case "atk":
                     return Task.FromResult(TypeReaderResult.FromSuccess(SkillType.Attack));
 
                 case "construction":
