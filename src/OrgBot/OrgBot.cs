@@ -18,7 +18,6 @@ namespace OrgBot
     using Discord.Commands;
     using Discord.WebSocket;
     using System.Threading.Tasks;
-    using Game = Discord.API.Game;
 
     public class OrgBot : BotBase
     {
@@ -39,6 +38,7 @@ namespace OrgBot
             Client = new DiscordSocketClient(new DiscordSocketConfig { LogLevel = LogSeverity.Debug });
             Client.Ready += ClientOnReadyAsync;
             Client.GuildAvailable += ClientOnGuildAvailableAsync;
+            Globals.EvalImports.Add("OrgBot");
             await HandleConfigsAsync<T>();
             await InstallCommandsAsync();
             await LoginAndConnectAsync(TokenType.Bot);
