@@ -29,11 +29,14 @@ namespace BCL {
             "System",
             "System.Collections",
             "System.Collections.Generic",
+            "System.Diagnostics",
+            "System.IO",
             "System.Linq",
             "System.Math",
             "System.Reflection",
             "System.Runtime",
-            "System.Threading.Tasks"
+            "System.Threading.Tasks",
+            "BCL"
         };
     }
 }
