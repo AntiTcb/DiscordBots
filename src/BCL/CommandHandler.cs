@@ -6,7 +6,7 @@
 // Project: BCL
 // 
 // Created: 09/26/2016 11:17 PM
-// Last Revised: 10/16/2016 4:37 PM
+// Last Revised: 11/04/2016 1:35 PM
 // Last Revised by: Alex Gravely
 
 #endregion
@@ -14,13 +14,11 @@
 namespace BCL {
     #region Using
 
-    using System;
     using System.Reflection;
     using System.Threading.Tasks;
     using Discord.Commands;
     using Discord.WebSocket;
     using Interfaces;
-    using Microsoft.Extensions.DependencyModel;
 
     #endregion
 
@@ -29,7 +27,7 @@ namespace BCL {
 
         public DiscordSocketClient Client { get; set; }
         public IDependencyMap Map { get; set; }
-        public CommandService Service { get; set; }
+        public CommandService Service { get; set; } = new CommandService();
 
         public async virtual Task HandleCommandAsync(SocketMessage msg) {
             var message = msg as SocketUserMessage;
@@ -42,7 +40,8 @@ namespace BCL {
             var prefix = guildChannel?.Guild == null
                              ? ServerConfig.DefaultPrefix : Globals.ServerConfigs[guildChannel.Guild.Id].CommandPrefix;
 
-            if (!(message.HasMentionPrefix(Client.CurrentUser, ref argPos) ||
+            if (
+                !(message.HasMentionPrefix(Client.CurrentUser, ref argPos) ||
                   message.HasStringPrefix(prefix, ref argPos))) {
                 return;
             }
@@ -53,16 +52,16 @@ namespace BCL {
                     return;
                 }
                 var loggingChannel = Client.GetChannel(Globals.BotConfig.LogChannel) as SocketTextChannel;
-                await loggingChannel.SendMessageAsync(
-                    $"**Command:** {ctx.Message}\n" +
-                    $"**Error:** {result.ErrorReason}\n" +
-                    $"**Caller:** {ctx.User} ({ctx.User.Id}) / {ctx.Guild.Name} | {ctx.Channel.Name}").ConfigureAwait(false);
+                await
+                    loggingChannel.SendMessageAsync
+                        ($"**Command:** {ctx.Message}\n" + $"**Error:** {result.ErrorReason}\n" +
+                         $"**Caller:** {ctx.User} ({ctx.User.Id}) / {ctx.Guild.Name} | {ctx.Channel.Name}").
+                        ConfigureAwait(false);
                 await ctx.Channel.SendMessageAsync($"**Error:** {result.ErrorReason}").ConfigureAwait(false);
             }
         }
 
-        public async Task InstallAsync(IDependencyMap map = null) {
-            Service = new CommandService();
+        public async virtual Task InstallAsync(IDependencyMap map = null) {
             Map = map ?? new DependencyMap();
             Client = Map.Get<DiscordSocketClient>();
             Map.Add(Service);
