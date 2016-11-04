@@ -36,7 +36,7 @@ namespace WiseOldBot.Modules.OSRS {
 
         #region Internal Methods
 
-        internal static async Task<Account> DownloadStatsAsync(string playerName, HighScoreType hsType) {
+        public static async Task<Account> DownloadStatsAsync(string playerName, HighScoreType hsType) {
             switch (hsType) {
                 case HighScoreType.Regular:
                     return await STATS_API.GetRegularHighScoresAsync(playerName);
