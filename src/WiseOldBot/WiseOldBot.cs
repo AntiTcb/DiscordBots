@@ -20,7 +20,7 @@ namespace WiseOldBot {
     using Discord.Commands;
     using Discord.WebSocket;
     using Modules.OSRS;
-    using TypeReaders;
+    using OSRS.TypeReaders;
 
     #endregion
 
@@ -34,14 +34,13 @@ namespace WiseOldBot {
             var map = new DependencyMap();
             map.Add(Client);
             await Commands.InstallAsync(map);
-            Commands.Service.AddTypeReader<HighScoreType>(new HighScoreTypeReader());
-            Commands.Service.AddTypeReader<SkillType>(new SkillTypeReader());
         }
 
         public async override Task StartAsync<T>() {
             Client = new DiscordSocketClient(new DiscordSocketConfig { LogLevel = LogSeverity.Debug });
             Client.Ready += ClientOnReadyAsync;
             Client.GuildAvailable += ClientOnGuildAvailableAsync;
+            Globals.EvalImports.AddRange(new[] {"WiseOldBot", "WiseOldBot.Modules.GETracker"});
             await HandleConfigsAsync<T>();
             await InstallCommandsAsync();
             await LoginAndConnectAsync(TokenType.Bot);
