@@ -46,7 +46,7 @@ namespace OrgBot.Modules.YGOWikia.Entities {
 
         public static YGOWikiaCard Parse(ILookup<string, string> things, string effect) {
             var newCard = new YGOWikiaCard {
-                Name = things["English"].ElementAtOrDefault(0),
+                Name = things["English"].ElementAtOrDefault(0) ?? "Parse failed",
                 Types = things["Types"].ElementAtOrDefault(0) ?? things["Type"].ElementAtOrDefault(0),
                 Attribute = things["Attribute"].ElementAtOrDefault(0),
                 Stats = things["ATK / DEF"].ElementAtOrDefault(0) ?? things["ATK/DEF"].ElementAtOrDefault(0),

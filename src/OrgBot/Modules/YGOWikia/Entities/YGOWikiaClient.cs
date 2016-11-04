@@ -1,28 +1,30 @@
 ﻿#region Header
 
 // Description:
-//
+// 
 // Solution: DiscordBots
 // Project: OrgBot
-//
-// Created: 10/29/2016 1:24 PM
-// Last Revised: 10/29/2016 1:24 PM
+// 
+// Created: 10/30/2016 1:07 PM
+// Last Revised: 11/04/2016 12:47 AM
 // Last Revised by: Alex Gravely
 
-#endregion Header
+#endregion
 
-namespace OrgBot.Modules.YGOCard.Entities
-{
-    using AngleSharp;
-    using AngleSharp.Parser.Html;
-    using RestEase;
+namespace OrgBot.Modules.YGOCard.Entities {
+    #region Using
+
     using System;
     using System.Linq;
     using System.Threading.Tasks;
+    using AngleSharp;
+    using AngleSharp.Parser.Html;
+    using RestEase;
     using YGOWikia.Entities;
 
-    public static class YGOWikiaClient
-    {
+    #endregion
+
+    public static class YGOWikiaClient {
         #region Private Fields + Properties
 
         const string BASE_URI = "http://yugioh.wikia.com/api/v1";
@@ -33,9 +35,11 @@ namespace OrgBot.Modules.YGOCard.Entities
         #region Public Methods
 
         public static async Task<YGOWikiaCard> GetCardAsync(string cardName) {
-            //var result = await API.GetUrlsAsync(cardName);
-            var results = (await API.GetUrlsAsync(cardName)).Items.Where(x => !x.URL.Contains("(anime)") || !x.URL.Contains("(ANIME)"));
-            return await ParsePageHTMLAsync(results.ElementAtOrDefault(0)?.URL);
+            var results = (await API.GetUrlsAsync(cardName))?.Items.Where
+                                                              (x =>
+                                                                   !x.URL.Contains("(anime)") ||
+                                                                   !x.URL.Contains("(ANIME)"));
+            return await ParsePageHTMLAsync(results?.ElementAtOrDefault(0)?.URL);
         }
 
         #endregion Public Methods
@@ -46,9 +50,13 @@ namespace OrgBot.Modules.YGOCard.Entities
             if (url == null) {
                 return null;
             }
-            var parser = new HtmlParser();
             var doc = await BrowsingContext.New(Configuration.Default.WithDefaultLoader()).OpenAsync(url);
-            var cardAttrs = doc.QuerySelectorAll("tr.cardtablerow").ToLookup(x => x.TextContent.Split('\n')[0], x => x.TextContent.Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries).ElementAtOrDefault(1));
+            var cardAttrs = doc.QuerySelectorAll("tr.cardtablerow").
+                                ToLookup
+                                (x => x.TextContent.Split('\n')[0],
+                                 x =>
+                                     x.TextContent.Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries).
+                                       ElementAtOrDefault(1));
             var cardEffects = doc.QuerySelectorAll(".navbox-list").Select(x => x.TextContent);
             return YGOWikiaCard.Parse(cardAttrs, cardEffects.ElementAtOrDefault(0));
         }
