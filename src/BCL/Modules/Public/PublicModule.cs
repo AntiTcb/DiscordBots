@@ -21,6 +21,7 @@ namespace BCL.Modules {
     public class PublicModule : ModuleBase {
         [Command("info")]
         public async virtual Task InfoAsync() {
+            // TODO: Async Sum
             var app = await Context.Client.GetApplicationInfoAsync().ConfigureAwait(false);
             await
                 ReplyAsync
@@ -30,7 +31,7 @@ namespace BCL.Modules {
                      $"- Runtime: {RuntimeInformation.FrameworkDescription} {RuntimeInformation.OSArchitecture}\n" +
                      $"- Uptime: {GetUptime()}\n\n" + $"{Format.Bold("Stats")}\n" + $"- Heap Size: {GetHeapSize()} MB\n" +
                      $"- Guilds: {(await Context.Client.GetGuildsAsync().ConfigureAwait(false)).Count}\n" +
-                     $"- Channels: {(await Context.Client.GetGuildsAsync()).Select(async g => await g.GetChannelsAsync().ConfigureAwait(false)).Count()} " +
+                     $"- Channels: {(await Context.Client.GetGuildsAsync()).Select(async g => await g.GetChannelsAsync().ConfigureAwait(false))} " +
                      $"- Users: {(await Context.Client.GetGuildsAsync()).Select(async g => await g.GetUsersAsync().ConfigureAwait(false)).Count()}").ConfigureAwait(false);
         }
 
