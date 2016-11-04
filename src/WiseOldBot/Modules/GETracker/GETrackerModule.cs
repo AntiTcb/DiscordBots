@@ -11,7 +11,7 @@
 
 #endregion
 
-namespace WiseOldBot.GETracker {
+namespace WiseOldBot.Modules.GETracker {
     #region Using
 
     using System;
@@ -42,8 +42,8 @@ namespace WiseOldBot.GETracker {
         [Command("price"), Alias("p"), Remarks("Gets the GE-Tracker Price Info for an item")]
         public async Task GetPriceAsync([Remainder, Summary("The item name")] string itemName = "cabbage") {
             await Context.Channel.TriggerTypingAsync();
-            var returnItems = GETrackerAPIClient.Items.ContainsKey(itemName)
-                                  ? GETrackerAPIClient.Items[itemName] : GETrackerAPIClient.Items.PartialMatch(itemName);
+            var returnItems = GETrackerAPIClient.Items.ContainsKey(itemName.ToLower())
+                                  ? GETrackerAPIClient.Items[itemName.ToLower()] : GETrackerAPIClient.Items.PartialMatch(itemName);
             var sb = new StringBuilder();
 
             foreach (var item in returnItems.Take(5)) {

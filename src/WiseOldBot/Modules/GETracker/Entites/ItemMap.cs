@@ -11,7 +11,7 @@
 
 #endregion
 
-namespace WiseOldBot.GETracker {
+namespace WiseOldBot.Modules.GETracker {
     #region Using
 
     using System.Collections.Generic;
@@ -23,7 +23,7 @@ namespace WiseOldBot.GETracker {
         #region Public Methods
 
         public static IEnumerable<GETrackerItem> PartialMatch(this ItemMap map, string partialKey)
-            => map.Where(x => x.Key.Contains(partialKey)).SelectMany(kvp => kvp.Value);
+            => map.Where(x => x.Key.Contains(partialKey.ToLower())).SelectMany(kvp => kvp.Value);
 
         #endregion Public Methods
     }
