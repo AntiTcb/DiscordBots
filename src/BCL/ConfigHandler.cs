@@ -6,7 +6,7 @@
 // Project: BCL
 // 
 // Created: 09/27/2016 1:44 AM
-// Last Revised: 10/13/2016 7:53 PM
+// Last Revised: 11/04/2016 1:41 PM
 // Last Revised by: Alex Gravely
 
 #endregion
@@ -17,37 +17,13 @@ namespace BCL {
     using System;
     using System.Collections.Generic;
     using System.IO;
-    using System.Reflection;
     using System.Threading.Tasks;
     using Interfaces;
     using Newtonsoft.Json;
 
     #endregion
 
-    public static class ConfigHandler {
-        #region Internal Structs + Classes
-
-        internal static class ConfigBuilder {
-            #region Internal Methods
-
-            internal static T CreateBotConfig<T>() where T : IBotConfig, new() {
-                object boxedConfig = new T();
-                foreach (var prop in typeof(T).GetRuntimeProperties()) {
-                    if (prop.PropertyType != typeof(string) || prop.PropertyType != typeof(ulong)) {
-                        continue;
-                    }
-                    Console.WriteLine($"Input the value for property {prop.Name}:");
-                    var propValue = Console.ReadLine();
-                    prop.SetValue(boxedConfig, Convert.ChangeType(propValue, prop.PropertyType));
-                }
-                return (T) boxedConfig;
-            }
-
-            #endregion Internal Methods
-        }
-
-        #endregion Internal Structs + Classes
-
+    public static partial class ConfigHandler {
         #region Public Methods
 
         public static async Task<T> LoadBotConfigAsync<T>(string path = Globals.CONFIG_PATH) where T : IBotConfig, new() {
@@ -62,14 +38,13 @@ namespace BCL {
             return newConfig;
         }
 
-        public static async Task<Dictionary<ulong, T>> LoadServerConfigsAsync<T>(string path = Globals.SERVER_CONFIG_PATH) where T : IServerConfig, new() {
+        public static async Task<Dictionary<ulong, T>> LoadServerConfigsAsync<T>
+            (string path = Globals.SERVER_CONFIG_PATH) where T : IServerConfig, new() {
             if (File.Exists(path)) {
                 return
                     await
-                        Task.Run
-                            (() =>
-                                 JsonConvert.DeserializeObject<Dictionary<ulong, T>>
-                                     (File.ReadAllText(path))).ConfigureAwait(false);
+                        Task.Run(() => JsonConvert.DeserializeObject<Dictionary<ulong, T>>(File.ReadAllText(path))).
+                             ConfigureAwait(false);
             }
             var newConfig = new Dictionary<ulong, T>();
             await SaveAsync(path, newConfig).ConfigureAwait(false);
@@ -77,7 +52,7 @@ namespace BCL {
         }
 
         public static async Task SaveAsync<T>(string path, Dictionary<ulong, T> configs) where T : IServerConfig
-            => File.WriteAllText(path, await Task.Run(() => JsonConvert.SerializeObject(configs)).ConfigureAwait(false));
+        => File.WriteAllText(path, await Task.Run(() => JsonConvert.SerializeObject(configs)).ConfigureAwait(false));
 
         public static async Task SaveAsync(string path, IBotConfig botConfig)
             =>
