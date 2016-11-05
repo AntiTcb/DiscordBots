@@ -58,7 +58,7 @@ namespace OrgBot.Modules.YGOCard.Entities {
                                      x.TextContent.Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries).
                                        ElementAtOrDefault(1));
             var cardEffects = doc.QuerySelectorAll(".navbox-list").Select(x => x.TextContent);
-            return YGOWikiaCard.Parse(cardAttrs, cardEffects.ElementAtOrDefault(0));
+            return YGOWikiaCard.Parse(cardAttrs, cardEffects.ElementAtOrDefault(0), url);
         }
 
         #endregion Private Methods

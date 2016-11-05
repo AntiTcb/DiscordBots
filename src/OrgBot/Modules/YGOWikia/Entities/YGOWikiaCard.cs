@@ -41,12 +41,13 @@ namespace OrgBot.Modules.YGOWikia.Entities {
         public string Stats { get; set; }
         public string Types { get; set; }
         public string Property { get; set; }
+        public string Url { get; set; }
 
         #endregion Public Fields + Properties
 
         #region Public Methods
 
-        public static YGOWikiaCard Parse(ILookup<string, string> things, string effect) {
+        public static YGOWikiaCard Parse(ILookup<string, string> things, string effect, string url) {
             var newCard = new YGOWikiaCard {
                 Name = things["English"].ElementAtOrDefault(0) ?? "Parse failed.",
                 Types = things["Types"].ElementAtOrDefault(0) ?? things["Type"].ElementAtOrDefault(0),
@@ -56,7 +57,8 @@ namespace OrgBot.Modules.YGOWikia.Entities {
                 Rank = things["Rank"].ElementAtOrDefault(0),
                 PendulumScales = things["Pendulum Scale"].ElementAtOrDefault(0),
                 Property = things["Property"].ElementAtOrDefault(0),
-                Effect = effect.Trim('\n')
+                Effect = effect.Trim('\n'),
+                Url = url
             };
             return newCard;
         }
