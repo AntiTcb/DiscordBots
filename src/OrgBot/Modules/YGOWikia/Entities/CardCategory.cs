@@ -11,6 +11,7 @@
 namespace OrgBot.Modules.YGOWikia.Entities {
     public enum CardCategory
     {
+        None,
         Monster,
         PendulumMonster,
         XyzMonster,

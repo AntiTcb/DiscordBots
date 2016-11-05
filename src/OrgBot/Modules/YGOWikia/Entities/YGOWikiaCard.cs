@@ -25,8 +25,9 @@ namespace OrgBot.Modules.YGOWikia.Entities {
 
         public string Attribute { get; set; }
 
-        public CardCategory? Category
+        public CardCategory Category
             =>
+            string.IsNullOrEmpty(Types) ? CardCategory.None :
             PendulumScales != null
                 ? Rank != null ? CardCategory.PendulumXyzMonster : CardCategory.PendulumMonster
                 : Types.Contains("Spell")
@@ -39,6 +40,7 @@ namespace OrgBot.Modules.YGOWikia.Entities {
         public string Rank { get; set; }
         public string Stats { get; set; }
         public string Types { get; set; }
+        public string Property { get; set; }
 
         #endregion Public Fields + Properties
 
@@ -46,13 +48,14 @@ namespace OrgBot.Modules.YGOWikia.Entities {
 
         public static YGOWikiaCard Parse(ILookup<string, string> things, string effect) {
             var newCard = new YGOWikiaCard {
-                Name = things["English"].ElementAtOrDefault(0) ?? "Parse failed",
+                Name = things["English"].ElementAtOrDefault(0) ?? "Parse failed.",
                 Types = things["Types"].ElementAtOrDefault(0) ?? things["Type"].ElementAtOrDefault(0),
                 Attribute = things["Attribute"].ElementAtOrDefault(0),
                 Stats = things["ATK / DEF"].ElementAtOrDefault(0) ?? things["ATK/DEF"].ElementAtOrDefault(0),
                 Level = things["Level"].ElementAtOrDefault(0),
                 Rank = things["Rank"].ElementAtOrDefault(0),
                 PendulumScales = things["Pendulum Scale"].ElementAtOrDefault(0),
+                Property = things["Property"].ElementAtOrDefault(0),
                 Effect = effect.Trim('\n')
             };
             return newCard;
@@ -81,9 +84,8 @@ namespace OrgBot.Modules.YGOWikia.Entities {
                     break;
 
                 case CardCategory.Spell:
-                    break;
-
                 case CardCategory.Trap:
+                    var stReturnString = Format.Code($"{Name} | {Property} {Types}\n{Effect}", "elm");
                     break;
 
                 default:
