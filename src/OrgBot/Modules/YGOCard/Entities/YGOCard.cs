@@ -6,7 +6,7 @@
 // Project: OrgBot
 // 
 // Created: 10/18/2016 7:22 PM
-// Last Revised: 10/21/2016 4:22 AM
+// Last Revised: 11/05/2016 2:26 PM
 // Last Revised by: Alex Gravely
 
 #endregion
@@ -22,6 +22,27 @@ namespace OrgBot.Modules.YGOCard.Entities {
     #endregion
 
     public class YGOCard {
+        #region Public Constructors
+
+        public YGOCard() { }
+
+        public YGOCard(YGOCard card) {
+            Attack = card.Attack;
+            Attribute = card.Attribute;
+            CardType = card.CardType;
+            Defence = card.Defence;
+            Description = card.Description;
+            Id = card.Id;
+            LeftScale = card.LeftScale;
+            RightScale = card.RightScale;
+            Level = card.Level;
+            Name = card.Name;
+            PendulumEffect = card.PendulumEffect;
+            Type = card.Type;
+        }
+
+        #endregion Public Constructors
+
         #region Public Fields + Properties
 
         [JsonProperty("atk")]
@@ -168,7 +189,7 @@ namespace OrgBot.Modules.YGOCard.Entities {
 
         #region Overrides of Object
 
-        public override string ToString() => $"{Name}"; 
+        public override string ToString() => $"{Name}";
 
         #endregion Overrides of Object
     }

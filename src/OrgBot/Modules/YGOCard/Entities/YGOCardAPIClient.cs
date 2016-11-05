@@ -6,7 +6,7 @@
 // Project: OrgBot
 // 
 // Created: 10/18/2016 10:57 PM
-// Last Revised: 10/20/2016 5:29 PM
+// Last Revised: 11/05/2016 3:20 PM
 // Last Revised by: Alex Gravely
 
 #endregion
@@ -28,9 +28,9 @@ namespace OrgBot.Modules.YGOCard.Entities {
 
         public static CardMap Cards { get; set; }
         public static bool IsEditingAny => EditingCollection.Count != 0;
-        static CardMap EditedCards { get; set; } = new CardMap();
-        static Dictionary<IUser, uint> EditingCollection { get; } = new Dictionary<IUser, uint>();
-        static readonly IYGOCardAPI API = RestClient.For<IYGOCardAPI>(BASE_URI);
+        public static CardMap EditedCards { get; } = new CardMap();
+        public static Dictionary<IUser, uint> EditingCollection { get; } = new Dictionary<IUser, uint>();
+        public static readonly IYGOCardAPI API = RestClient.For<IYGOCardAPI>(BASE_URI);
 
         #endregion Public Fields + Properties
 
@@ -47,12 +47,12 @@ namespace OrgBot.Modules.YGOCard.Entities {
             Cards = new CardMap(items);
         }
 
+        public static async Task EditCardAsync(YGOCard card)
+            => await API.UpdateCardAsync(((OrgBotConfig) Globals.BotConfig).DatabaseToken, card.Id, card);
+
         public static async Task<YGOCard> GetCardAsync(uint id) => await API.GetCardAsync(id);
 
         public static async Task<List<YGOCard>> GetCardsAsync() => await API.GetCardsAsync();
-
-        public static async Task EditCardAsync(YGOCard card)
-            => await API.UpdateCardAsync(((OrgBotConfig) Globals.BotConfig).DatabaseToken, card.Id, card);
 
         public static YGOCard GetEditedCard(IUser editingUser) => EditedCards.GetCard(EditingCollection[editingUser]);
 
@@ -66,12 +66,13 @@ namespace OrgBot.Modules.YGOCard.Entities {
 
         public static IUser GetEditor(uint cardID) => EditingCollection.FirstOrDefault(x => x.Value == cardID).Key;
 
-        public static bool IsBeingEdited(this YGOCard card) => EditedCards.Contains(card);
-        public static bool IsUserEditing(IUser user) => EditingCollection.ContainsKey(user);
+        public static bool IsBeingEdited(this YGOCard card) => EditedCards.Any(x => x.Id == card.Id);
+
+        public static bool IsUserEditing(IUser user) => EditingCollection.Keys.Any(x => x.Id == user.Id);
 
         public static void StartEditing(IUser callingUser, YGOCard card) {
             EditingCollection.Add(callingUser, card.Id);
-            EditedCards.Add(card);
+            EditedCards.Add(new YGOCard(card));
         }
 
         public static async Task StopEditingAsync(IUser editor, bool postChanges) {
