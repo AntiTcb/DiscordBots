@@ -84,7 +84,7 @@ namespace OrgBot.Modules.YGOWikia.Entities {
 
                 case CardCategory.Spell:
                 case CardCategory.Trap:
-                    var stReturnString = Format.Code($"{Name} | {Property} {Types}\n{Effect}", "elm");
+                    var stReturnString = Format.Code($"{Name} | {Property.TrimEnd()} {Types}\n{Effect}", "elm");
                     return stReturnString;
 
                 default:
