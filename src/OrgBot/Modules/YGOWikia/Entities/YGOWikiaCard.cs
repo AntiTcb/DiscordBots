@@ -59,7 +59,7 @@ namespace OrgBot.Modules.YGOWikia.Entities {
         }
 
         public string ToDiscordMessage() {
-            string returnString = $"{Name} | {Types}";
+            string returnString = $"{Name} | {Types} ";
             if (Category == null) {
                 return "Invalid card";
             }
