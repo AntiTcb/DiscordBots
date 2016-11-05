@@ -90,7 +90,7 @@ namespace OrgBot.Modules.YGOWikia.Entities {
                 default:
                     throw new ArgumentOutOfRangeException();
             }
-            return Format.Code($"{returnString}\n{Effect}", "elm");
+            return Format.Code($"{returnString}\n{Effect}\n\n", "elm") + $"<{Url}>";
         }
 
         #endregion Public Methods
