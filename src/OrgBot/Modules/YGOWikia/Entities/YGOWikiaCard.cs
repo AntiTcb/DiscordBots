@@ -63,9 +63,6 @@ namespace OrgBot.Modules.YGOWikia.Entities {
 
         public string ToDiscordMessage() {
             string returnString = $"{Name} | {Types} ";
-            if (Category == null) {
-                return "Invalid card";
-            }
             switch (Category) {
                 case CardCategory.Monster:
                     returnString += $"| {Attribute}\nLevel: {Level} | {Stats}";
@@ -86,7 +83,7 @@ namespace OrgBot.Modules.YGOWikia.Entities {
                 case CardCategory.Spell:
                 case CardCategory.Trap:
                     var stReturnString = Format.Code($"{Name} | {Property} {Types}\n{Effect}", "elm");
-                    break;
+                    return stReturnString;
 
                 default:
                     throw new ArgumentOutOfRangeException();

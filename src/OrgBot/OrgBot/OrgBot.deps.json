@@ -6,10 +6,10 @@
   "compilationOptions": {},
   "targets": {
     ".NETCoreApp,Version=v1.0": {
-      "OrgBot/1.4.1": {
+      "OrgBot/1.4.2": {
         "dependencies": {
           "AngleSharp": "0.9.9",
-          "BCL": "1.0.0",
+          "BCL": "1.1.0",
           "RestEase": "1.2.2"
         },
         "runtime": {
@@ -250,7 +250,7 @@
           "lib/netstandard1.3/System.Xml.XPath.XDocument.dll": {}
         }
       },
-      "BCL/1.0.0": {
+      "BCL/1.1.0": {
         "dependencies": {
           "Discord.Net": "1.0.0-beta2-00451",
           "Discord.Net.Commands": "1.0.0-beta2-00451",
@@ -265,7 +265,7 @@
     }
   },
   "libraries": {
-    "OrgBot/1.4.1": {
+    "OrgBot/1.4.2": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
@@ -420,7 +420,7 @@
       "serviceable": true,
       "sha512": "sha512-FLhdYJx4331oGovQypQ8JIw2kEmNzCsjVOVYY/16kZTUoquZG85oVn7yUhBE2OZt1yGPSXAL0HTEfzjlbNpM7Q=="
     },
-    "BCL/1.0.0": {
+    "BCL/1.1.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
