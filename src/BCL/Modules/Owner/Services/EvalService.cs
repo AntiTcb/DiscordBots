@@ -11,7 +11,7 @@
 
 #endregion
 
-namespace BCL.Modules.Owner {
+namespace BCL.Modules.Owner.Services {
     #region Using
 
     using System;

@@ -19,7 +19,7 @@ namespace BCL.Modules {
     using Discord;
     using Discord.Commands;
 
-    public class PublicModule : ModuleBase {
+    public partial class PublicModule : ModuleBase {
         [Command("info")]
         public async virtual Task InfoAsync() {
             // TODO: Async Sum
