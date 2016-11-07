@@ -1,12 +1,12 @@
 {
-    "version": "1.4.3-*",
+    "version": "1.4.4-*",
   "buildOptions": {
     "emitEntryPoint": true
   },
 
   "dependencies": {
     "AngleSharp": "0.9.9",
-    "BCL": "1.0.0-*",
+    "BCL": "1.*",
     "Microsoft.NETCore.App": {
         "type": "platform",
         "version": "1.0.1"

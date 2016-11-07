@@ -5,7 +5,7 @@
   },
 
     "dependencies": {
-        "BCL": "1.0.0-*",
+        "BCL": "1.*",
         "Microsoft.NETCore.App": {
             "type": "platform",
             "version": "1.0.1"  

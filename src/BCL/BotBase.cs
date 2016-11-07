@@ -15,6 +15,7 @@ namespace BCL {
     #region Using
 
     using System;
+    using System.Collections.Generic;
     using System.Threading.Tasks;
     using Discord;
     using Discord.WebSocket;
@@ -31,7 +32,7 @@ namespace BCL {
         public async virtual Task ClientOnJoinedGuildAsync(IGuild guild) {
             var defaultChannel = await guild.GetDefaultChannelAsync().ConfigureAwait(false);
             await defaultChannel.SendMessageAsync("Thank you for adding me to the server!").ConfigureAwait(false);
-            var newServerConfig = new ServerConfig(Globals.DEFAULT_PREFIX);
+            var newServerConfig = new ServerConfig(Globals.DEFAULT_PREFIX, new Dictionary<string, string>());
             Globals.ServerConfigs.Add(guild.Id, newServerConfig);
             await ConfigHandler.SaveAsync(Globals.SERVER_CONFIG_PATH, Globals.ServerConfigs).ConfigureAwait(false);
         }
