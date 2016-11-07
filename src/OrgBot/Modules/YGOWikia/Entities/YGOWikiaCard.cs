@@ -30,8 +30,8 @@ namespace OrgBot.Modules.YGOWikia.Entities {
             string.IsNullOrEmpty(Types) ? CardCategory.None :
             PendulumScales != null
                 ? Rank != null ? CardCategory.PendulumXyzMonster : CardCategory.PendulumMonster
-                : Types.Contains("Spell")
-                    ? CardCategory.Spell : Types.Contains("Trap") ? CardCategory.Trap : CardCategory.Monster;
+                : Types.Contains("Spell Card")
+                    ? CardCategory.Spell : Types.Contains("Trap Card") ? CardCategory.Trap : CardCategory.Monster;
 
         public string Effect { get; set; }
         public string Level { get; set; }
