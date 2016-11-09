@@ -29,27 +29,21 @@ namespace BCL.Modules.Owner.Services {
     public static class EvalService {
         #region Private Fields + Properties
 
-        static readonly ScriptOptions _options;
+        public static IEnumerable<Assembly> Assemblies => GetAssemblies();
+        public static IEnumerable<string> Imports => Globals.EvalImports;
 
-        #endregion Private Fields + Properties
-
-        #region Public Constructors
-
-        static EvalService() {
-            _options = ScriptOptions.Default.AddReferences(GetAssemblies().ToArray()).AddImports(Globals.EvalImports);
-        }
-
-        #endregion Public Constructors
+        #endregion Private Fields + Properties   
 
         #region Public Methods
 
         public static async Task EvaluateAsync(CommandContext context, string script) {
             using (context.Channel.EnterTypingState()) {
+                var options = ScriptOptions.Default.AddReferences(Assemblies).AddImports(Imports);
                 var working = await context.Channel.SendMessageAsync("**Evaluating**, just a sec...");
                 var _globals = new ScriptGlobals { client = context.Client as DiscordSocketClient, context = context };
                 script = script.Trim('`');
                 try {
-                    var eval = await CSharpScript.EvaluateAsync(script, _options, _globals, typeof(ScriptGlobals));
+                    var eval = await CSharpScript.EvaluateAsync(script, options, _globals, typeof(ScriptGlobals));
                     await context.Channel.SendMessageAsync(eval.ToString());
                 }
                 catch (Exception e) {
