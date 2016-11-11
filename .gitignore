@@ -240,6 +240,7 @@ ModelManifest.xml
 
 # FAKE - F# Make
 .fake/
+
 /src/OrgBot/config.json
 /src/OrgBot/server_configs.json
 /src/WiseOldBot/config.json
