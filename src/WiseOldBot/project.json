@@ -10,8 +10,7 @@
             "type": "platform",
             "version": "1.0.1"  
         },
-        "RestEase": "1.2.2",
-        "System.Diagnostics.Process": "4.1.0"
+        "RestEase": "1.2.2"
         },
 
     "frameworks": {

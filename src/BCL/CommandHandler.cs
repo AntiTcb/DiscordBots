@@ -46,7 +46,7 @@ namespace BCL {
                 return;
             }
             var ctx = new CommandContext(Client, message);
-            var result = await Service.Execute(ctx, argPos, Map, MultiMatchHandling.Best).ConfigureAwait(false);
+            var result = await Service.ExecuteAsync(ctx, argPos, Map, MultiMatchHandling.Best).ConfigureAwait(false);
             if (!result.IsSuccess) {
                 if (result.Error.GetValueOrDefault() == CommandError.UnknownCommand) {
                     return;
@@ -65,8 +65,8 @@ namespace BCL {
             Map = map ?? new DependencyMap();
             Client = Map.Get<DiscordSocketClient>();
             Map.Add(Service);
-            await Service.AddModules(typeof(BotBase).GetTypeInfo().Assembly).ConfigureAwait(false);
-            await Service.AddModules(Assembly.GetEntryAssembly()).ConfigureAwait(false);
+            await Service.AddModulesAsync(typeof(BotBase).GetTypeInfo().Assembly).ConfigureAwait(false);
+            await Service.AddModulesAsync(Assembly.GetEntryAssembly()).ConfigureAwait(false);
             Client.MessageReceived += HandleCommandAsync;
         }
 

@@ -13,15 +13,12 @@
     },
 
     "dependencies": {
-        "Discord.Net": "1.0.0-beta2-00451",
-        "Discord.Net.Commands": "1.0.0-beta2-00451",
-        "NETStandard.Library": "1.6.0",
-        "System.Diagnostics.Process": "4.1.0",
-        "System.Net.WebSockets.Client": "4.0.1-*",
-        "System.Runtime": "4.1.0",
-        "Microsoft.CodeAnalysis.CSharp.Scripting": "1.3.2",
+        "Discord.Net": "1.0.0-beta2-00478",
+        "NETStandard.Library": "1.6.1",
+        "System.Net.WebSockets.Client": "4.3.0",
         "Microsoft.Extensions.DependencyModel": "1.0.1-beta-003206",
-        "System.Net.Http": "4.1.0"
+        "System.Diagnostics.Process": "4.3.0",
+        "Microsoft.CodeAnalysis.CSharp.Scripting": "1.3.2"
     },
 
   "frameworks": {
