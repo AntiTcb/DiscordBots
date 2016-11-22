@@ -30,11 +30,15 @@ namespace OrgBot.Modules.YGOWikia {
         public async Task GetCardAsync([Remainder] string cardName) {
             using (Context.Channel.EnterTypingState()) {
                 var card = await YGOWikiaClient.GetCardAsync(cardName);
-                if (card?.Name == "Parse failed.") {
+                if (card == null) {
+                    await ReplyAsync("Couldn't find card information to parse.");
+                    return;
+                }
+                if (card.Name == "Parse failed.") {
                     await ReplyAsync($"Parsing of card failed. Card name needs more precision, or page HTML is invalid. <{card.Url}>");
                     return;
                 }
-                await ReplyAsync(card?.ToDiscordMessage() ?? "Invalid card name/Card not found.");
+                await ReplyAsync("", embed: card?.ToDiscordEmbed());
             }
         }
 

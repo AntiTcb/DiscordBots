@@ -56,13 +56,10 @@ namespace OrgBot.Modules.YGOCard {
             if (card.Name == "Spirit Elimination") {
                 var msg = await ReplyAsync("NO! NO, NO, NO, NO, NO! NO! STOP ASKING QUESTIONS ABOUT THIS CARD!");
                 await Task.Delay(4000);
-                await msg.ModifyAsync(x => x.Content = card.ToDiscordMessage());
+                await ReplyAsync("", embed: card.ToDiscordEmbed());
                 return;
             }
-            if (card.Name.Contains("Bujin")) {
-                await ReplyAsync("Bujin master race!");
-            }
-            await ReplyAsync(card.ToDiscordMessage());
+            await ReplyAsync("", embed: card.ToDiscordEmbed());
         }
 
         [Command("listcards"), Summary("Lists all cards that match a substring, ordered by name length."), Remarks("listcards kuriboh")]
