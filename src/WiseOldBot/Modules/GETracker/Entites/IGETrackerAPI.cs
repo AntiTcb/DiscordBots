@@ -11,7 +11,7 @@
 
 #endregion
 
-namespace WiseOldBot.Modules.GETracker {
+namespace WiseOldBot.Modules.GETracker.Entities {
     #region Using
 
     using System.Collections.Generic;
@@ -24,10 +24,10 @@ namespace WiseOldBot.Modules.GETracker {
         #region Public Methods
 
         [Get("items/{itemId}")]
-        Task<GETrackerItem.Wrapper> GetItemAsync([Path("itemId")] int itemId);
+        Task<GETrackerItem.Wrapper> DownloadItemAsync([Path("itemId")] int itemId);
 
         [Get("items")]
-        Task<Dictionary<string, List<GETrackerItem>>> GetItemsAsync();
+        Task<Dictionary<string, List<GETrackerItem>>> DownloadItemsAsync();
 
         #endregion Public Methods
     }

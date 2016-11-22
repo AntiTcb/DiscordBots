@@ -12,9 +12,8 @@
 #endregion
 
 namespace BotTests {
-    #region Using
-
-    using WiseOldBot.Modules.OSRS;
+    #region Using                 
+    using WiseOldBot.Modules.OSRS.Entities;
     using Xunit;
 
     #endregion
@@ -24,7 +23,7 @@ namespace BotTests {
 
         [Fact]
         public void PullStatsFromRegular() {
-            var player = OSRSAPIClient.DownloadStatsAsync("anti-tcb", HighScoreType.Regular);
+            var player = OSRSAPIClient.DownloadStatsAsync("anti-tcb", GameMode.Regular);
             Assert.NotNull(player);
         }
 

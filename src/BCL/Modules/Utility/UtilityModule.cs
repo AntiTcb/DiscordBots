@@ -20,6 +20,7 @@ namespace BCL.Modules.Utility {
     using System.Threading.Tasks;
     using Discord;
     using Discord.Commands;
+    using Discord.WebSocket;
 
     #endregion
 
@@ -34,16 +35,17 @@ namespace BCL.Modules.Utility {
         All = 2
     }
 
+    [Name("Utility")]
     public class UtilityModule : ModuleBase {
         #region Public Methods
 
-        [Command("purge"), Alias("clean", "cleanup", "prune"), Summary("Cleans the bot's messages"),
-         RequirePermission(ChannelPermission.ManageMessages)]
+        [Command("purge"), Alias("clean", "cleanup", "prune"), Summary("Cleans the bot's messages")]
         public async Task CleanAsync
         ([Summary("The optional number of messages to delete; defaults to 10")] int count = 10,
          [Summary("The type of messages to delete - Self, Bot, or All")] DeleteType deleteType = DeleteType.Self,
          [Summary("The strategy to delete messages - BulkDelete or Manual")] DeleteStrategy deleteStrategy =
              DeleteStrategy.BulkDelete) {
+            if (Context.User.Id != Globals.OWNER_ID || !(Context.User as SocketGuildUser).GetPermissions((Context.Channel as SocketGuildChannel)).ManageMessages) { return; }
             var index = 0;
             var deleteMessages = new List<IMessage>(count);
             var messages = Context.Channel.GetMessagesAsync();

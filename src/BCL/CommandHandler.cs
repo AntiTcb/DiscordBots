@@ -31,7 +31,7 @@ namespace BCL {
 
         public async virtual Task HandleCommandAsync(SocketMessage msg) {
             var message = msg as SocketUserMessage;
-            if (message == null) {
+            if (message == null || msg.Author.Id == Client.CurrentUser.Id) {
                 return;
             }
 

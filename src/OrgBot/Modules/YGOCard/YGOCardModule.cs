@@ -22,11 +22,12 @@ namespace OrgBot.Modules.YGOCard {
 
     #endregion
 
+    [Name("YGOrg")]
     public partial class YGOCardModule : ModuleBase {
         #region Public Methods
 
-        [Command("cardupdate"), Alias("cu")]
-        public async Task ForceCardUpdateAsync([Remainder] string cardName) {
+        [Command("cardupdate"), Alias("cu"), Summary("Forces a card to update its data from the YGOrg Database."), Remarks("cardupdate sangan")]
+        public async Task ForceCardUpdateAsync([Summary("Card name, case insensitive"), Remainder] string cardName) {
             if (cardName == "") {
                 await ReplyAsync("I need a card name!");
                 return;
@@ -40,8 +41,8 @@ namespace OrgBot.Modules.YGOCard {
             await ReplyAsync(":thumbsup:");
         }
 
-        [Command("card"), Alias("c")]
-        public async Task GetCardAsync([Remainder] string cardName) {
+        [Command("card"), Alias("c"), Summary("Pulls card info from the YGOrg Database."), Remarks("card Sangan")]
+        public async Task GetCardAsync([Summary("Card name, case insensitive"), Remainder] string cardName) {
             await Context.Channel.TriggerTypingAsync();
             if (cardName == "") {
                 await ReplyAsync("I need a card name!");
@@ -64,8 +65,8 @@ namespace OrgBot.Modules.YGOCard {
             await ReplyAsync(card.ToDiscordMessage());
         }
 
-        [Command("listcards")]
-        public async Task GetCardsAsync([Remainder] string cardName) {
+        [Command("listcards"), Summary("Lists all cards that match a substring, ordered by name length."), Remarks("listcards kuriboh")]
+        public async Task GetCardsAsync([Summary("Card name, case insensitive.")Remainder] string cardName) {
             await Context.Channel.TriggerTypingAsync();
             if (cardName == "") {
                 await ReplyAsync("I need a card name!");

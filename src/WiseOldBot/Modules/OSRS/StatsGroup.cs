@@ -14,10 +14,10 @@
 namespace WiseOldBot.Modules.OSRS {
     #region Using
 
-    using System;
     using System.Threading.Tasks;
     using BCL;
     using Discord.Commands;
+    using Entities;
 
     #endregion
 
@@ -26,24 +26,27 @@ namespace WiseOldBot.Modules.OSRS {
 
         [Name("stats")]
         public class StatsGroup : ModuleBase {
-            #region Public Methods
-
-            [Command("lookup"), Alias("l")]
-            public async Task GetStatsAsync(HighScoreType hsType = HighScoreType.Regular, SkillType skillType = SkillType.All, [Remainder] string playerName = "") {
+            #region Public Methods  
+            [Command("lookup"), Alias("l"), 
+                Summary("Looks up an account from the high scores, with various skill and mode options."),
+                Remarks("lookup regular all anti-tcb")]
+            public async Task GetStatsAsync([Summary("Game mode")]GameMode hsType = GameMode.Regular, 
+                [Summary("Skill")]SkillType skillType = SkillType.All, [Summary("Account to search"), Remainder] string playerName = "") {
                 if (string.IsNullOrEmpty(playerName)) {
-                    if (((WiseOldBotConfig) Globals.BotConfig).UsernameMap.ContainsKey(Context.User.Id)) {
-                        playerName = ((WiseOldBotConfig) Globals.BotConfig).UsernameMap[Context.User.Id];
-                    }
-                    else {
+                    if (!((WiseOldBotConfig)Globals.BotConfig).UsernameMap.TryGetValue(Context.User.Id, out playerName)) {
                         await ReplyAsync("You must specify a username, or set a default username using `defname`.");
                         return;
                     }
                 }
                 var player = await OSRSAPIClient.DownloadStatsAsync(playerName, hsType);
-                await ReplyAsync(player.SkillToDiscordMessage(skillType));
+                if (player != null) {
+                    await ReplyAsync("", embed: player.SkillToDiscordEmbed(skillType));
+                    return;
+                }
+                await ReplyAsync("Player's highscores could not be found.");
             }
 
-            #endregion Public Methods
+            #endregion Public Methods 
         }
 
         #endregion Public Structs + Classes

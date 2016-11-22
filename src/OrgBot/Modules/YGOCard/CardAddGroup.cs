@@ -14,6 +14,8 @@ namespace OrgBot.Modules.YGOCard {
     using Entities;
 
     public partial class YGOCardModule {
+
+        [DontAutoLoad]
         public class CardAddGroup : ModuleBase {
             //static Dictionary<IUser, YGOCard> NewCards { get; set; } -- Collection TBD
             //public async Task StartCreateCardAsync() { }

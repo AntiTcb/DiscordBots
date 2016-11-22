@@ -20,12 +20,12 @@ namespace BCL.Modules.Admin {
 
     #endregion
 
-    [RequirePermission(GuildPermission.ManageGuild), RequireContext(ContextType.Guild)]
+    [Name("Admin"), RequirePermission(GuildPermission.ManageGuild), RequireContext(ContextType.Guild)]
     public class AdminModule : ModuleBase {
         #region Public Methods
 
         [Command("setprefix"), Alias("prefix")]
-        public async Task ChangePrefixAsync(string prefix) {
+        public async Task ChangePrefixAsync([Summary("Prefix to change to.")]string prefix = "") {
             if (string.IsNullOrEmpty(prefix)) {
                 await
                     ReplyAsync

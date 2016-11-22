@@ -1,30 +1,31 @@
 ﻿#region Header
 
 // Description:
-// 
+//
 // Solution: DiscordBots
 // Project: OrgBot
-// 
+//
 // Created: 10/30/2016 1:07 PM
 // Last Revised: 11/04/2016 12:47 AM
 // Last Revised by: Alex Gravely
 
-#endregion
+#endregion Header
 
-namespace OrgBot.Modules.YGOCard.Entities {
+namespace OrgBot.Modules.YGOWikia.Entities {
+
     #region Using
 
+    using AngleSharp;
+    using RestEase;
     using System;
+    using System.Net;
     using System.Linq;
     using System.Threading.Tasks;
-    using AngleSharp;
-    using AngleSharp.Parser.Html;
-    using RestEase;
-    using YGOWikia.Entities;
 
-    #endregion
+    #endregion Using
 
     public static class YGOWikiaClient {
+
         #region Private Fields + Properties
 
         const string BASE_URI = "http://yugioh.wikia.com/api/v1";
@@ -35,11 +36,16 @@ namespace OrgBot.Modules.YGOCard.Entities {
         #region Public Methods
 
         public static async Task<YGOWikiaCard> GetCardAsync(string cardName) {
-            var results = (await API.GetUrlsAsync(cardName))?.Items.Where
-                                                              (x =>
-                                                                   !x.URL.Contains("(anime)") ||
-                                                                   !x.URL.Contains("(ANIME)"));
-            return await ParsePageHTMLAsync(results?.ElementAtOrDefault(0)?.URL);
+            try {
+                var results = (await API.GetUrlsAsync(cardName))?.Items.Where
+                                                                  (x =>
+                                                                       !x.URL.Contains("(anime)") ||
+                                                                       !x.URL.Contains("(ANIME)"));
+                return await ParsePageHTMLAsync(results?.ElementAtOrDefault(0)?.URL);
+            }
+            catch (ApiException e) when (e.StatusCode == HttpStatusCode.NotFound) {
+                return null;
+            }
         }
 
         #endregion Public Methods

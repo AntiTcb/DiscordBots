@@ -29,15 +29,16 @@ namespace BCL {
         public DiscordSocketClient Client { get; set; }
         public ICommandHandler Commands { get; set; }
 
-        public async virtual Task ClientOnJoinedGuildAsync(IGuild guild) {
+        public async virtual Task ClientOnJoinedGuildAsync(SocketGuild guild) {
             var defaultChannel = await guild.GetDefaultChannelAsync().ConfigureAwait(false);
-            await defaultChannel.SendMessageAsync("Thank you for adding me to the server!").ConfigureAwait(false);
+            await defaultChannel.SendMessageAsync($"Thank you for adding me to the server! The default prefix is currently set to `{Globals.DEFAULT_PREFIX}`." +
+                $"Any user with the Manage Server permission may change this with the `setprefix` command. Use `{Globals.DEFAULT_PREFIX}help` to see all my commands").ConfigureAwait(false);
             var newServerConfig = new ServerConfig(Globals.DEFAULT_PREFIX, new Dictionary<string, string>());
             Globals.ServerConfigs.Add(guild.Id, newServerConfig);
             await ConfigHandler.SaveAsync(Globals.SERVER_CONFIG_PATH, Globals.ServerConfigs).ConfigureAwait(false);
         }
 
-        public async virtual Task ClientOnLeftGuildAsync(IGuild guild) {
+        public async virtual Task ClientOnLeftGuildAsync(SocketGuild guild) {
             if (Globals.ServerConfigs.ContainsKey(guild.Id)) {
                 Globals.ServerConfigs.Remove(guild.Id);
             }

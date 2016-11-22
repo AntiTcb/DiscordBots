@@ -13,13 +13,14 @@
 
 namespace WiseOldBot.Modules.OSRS {
     using Discord;
+    using System;
 
     public struct Skill {
         #region Internal Fields + Properties
 
-        internal ulong Experience { get; set; }
-        internal uint Level { get; set; }
-        internal uint Rank { get; set; }
+        public long Experience { get; set; }
+        public uint Level { get; set; }
+        public string Rank { get; set; }
 
         #endregion Internal Fields + Properties
 
@@ -27,16 +28,16 @@ namespace WiseOldBot.Modules.OSRS {
 
         public Skill(string skill) : this(skill.Split(',')) { }
 
-        public Skill(ulong experience, uint level, uint rank) {
+        public Skill(long experience, uint level, string rank, SkillType skillName) {
             Experience = experience;
             Level = level;
             Rank = rank;
         }
 
         public Skill(string[] skillArray) {
-            Experience = ulong.Parse(skillArray[0]);
+            Experience = long.Parse(skillArray[2]);
             Level = uint.Parse(skillArray[1]);
-            Rank = uint.Parse(skillArray[2]);
+            Rank = (skillArray[0] == "-1") ? "Unranked" : skillArray[0];
         }
 
         #endregion Public Constructors
@@ -45,7 +46,34 @@ namespace WiseOldBot.Modules.OSRS {
 
         public string ToDiscordMessage() => Format.Code($"Level:{Level}\tExp: {Experience:N0}\tRank: {Rank:N0}");
 
-        public override string ToString() => $"Exp: {Experience}, Level: {Level}, Rank: {Rank}";
+        //public EmbedFieldBuilder ToDiscordFieldEmbed() {
+        //    return new EmbedFieldBuilder()
+        //        .WithName(nameof(this))
+        //        .WithValue($"{Level} / {Experience:N0} / {Rank:N0}");
+        //}
+
+        public EmbedBuilder ToDiscordEmbed() {
+            var level = Level.ToString();
+            var exp = $"{Experience:N0}";
+            var rank = $"{Rank:N0}";
+
+            var em = new EmbedBuilder()
+                .AddField((f) =>
+                    f.WithName("Level:")
+                     .WithValue(level)
+                     .WithIsInline(true))
+                .AddField((f) =>
+                    f.WithName("Experience:")
+                     .WithValue(exp)
+                     .WithIsInline(true))
+                .AddField((f) =>
+                    f.WithName("Rank:")
+                     .WithValue(rank)
+                     .WithIsInline(true));
+            return em;
+        }
+
+        public override string ToString() => $"Level: {Level} \nExp: {Experience:N0} \nRank: {Rank:N0}";
 
         #endregion Public Methods
 

@@ -11,7 +11,7 @@
 
 #endregion
 
-namespace WiseOldBot.Modules.GETracker {
+namespace WiseOldBot.Modules.GETracker.Entities {
     #region Using
 
     using System.Collections.Generic;
@@ -38,14 +38,26 @@ namespace WiseOldBot.Modules.GETracker {
         #region Public Constructors
 
         static GETrackerAPIClient() {
-            var items = API.GetItemsAsync().Result["data"].GroupBy(x => x.Name.ToLower()).
+            var items = API.DownloadItemsAsync().Result["data"].GroupBy(x => x.Name.ToLower()).
                             ToDictionary(g => g.Key, g => g.OrderBy(x => x.ItemID).ToList());
             Items = new ItemMap(items);
         }
 
-        public static async Task<GETrackerItem.Wrapper> GetItemAsync(int id) => await API.GetItemAsync(id);
+        public static async Task<GETrackerItem.Wrapper> DownloadItemAsync(int id) => await API.DownloadItemAsync(id);
 
-        public static async Task<Dictionary<string, List<GETrackerItem>>> GetItemsAsync() => await API.GetItemsAsync();
+        public static async Task<Dictionary<string, List<GETrackerItem>>> DownloadItemsAsync() => await API.DownloadItemsAsync();
+
+        public static IEnumerable<GETrackerItem> FindItems(string itemName) => Items.FindItems(itemName);
+
+        public static IEnumerable<GETrackerItem> FindItemOrItems(string itemName) => Items.FindItemOrItems(itemName);
+
+        public static GETrackerItem GetItemOrDefault(string itemName) {
+            List<GETrackerItem> item;
+            if (Items.TryGetValue(itemName.ToLower(), out item)) {
+                return item.FirstOrDefault();
+            }
+            return Items.FindItems(itemName).FirstOrDefault();
+        }
 
         #endregion Public Constructors
     }

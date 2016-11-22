@@ -11,7 +11,7 @@
 
 #endregion
 
-namespace WiseOldBot.Modules.GETracker {
+namespace WiseOldBot.Modules.GETracker.Entities {
     #region Using
 
     using System;
@@ -82,9 +82,45 @@ namespace WiseOldBot.Modules.GETracker {
         [JsonProperty("url")]
         public Uri URL { get; set; }
 
+        [JsonProperty("updatedAt")]
+        public DateTime UpdatedAt { get; set; }
+
         #endregion Public Fields + Properties
 
         #region Public Methods
+
+        public EmbedBuilder ToDiscordEmbed() {
+            return new EmbedBuilder()
+                .WithTitle($"{Name} - {URL}")
+                .WithDescription($"Item ID: {ItemID}")
+                .WithUrl($"{URL}")
+                .WithAuthor((a) => 
+                    a.WithIconUrl($"{Icon?.ToString() ?? ""}")
+                     .WithName("GE-Tracker")
+                     .WithUrl($"{URL}"))
+                .WithFooter((f) => 
+                    f.WithText($"Updated at: {UpdatedAt:r} || Cached Until: {CachedUntil:r}\nCurrent time: {DateTime.UtcNow:r}"))
+                .AddField((f) =>
+                    f.WithName("Buying")
+                     .WithValue($"Price: {Format.Code($"{BuyingPrice:N0}")}<:gold:249879488190480384>" + 
+                                $"\nQuantity: {Format.Code($"{BuyingQuantity:N0}")}")
+                     .WithIsInline(true))
+                .AddField((f) =>
+                    f.WithName("Average")
+                     .WithValue($"Price: {Format.Code($"{AveragePrice:N0}")}<:gold:249879488190480384>")
+                     .WithIsInline(true))
+                .AddField((f) =>
+                    f.WithName("Selling")
+                     .WithValue($"Price: {Format.Code($"{SellingPrice:N0}")}<:gold:249879488190480384>" +
+                                $"\nQuantity: {Format.Code($"{SellingQuantity:N0}")}")
+                     .WithIsInline(true))
+                .AddField((f) =>
+                    f.WithName("Misc")
+                     .WithValue($"Low Alch: {Format.Code($"{LowAlchemy:N0}")}<:gold:249879488190480384>\t" + 
+                                $"High Alch: {Format.Code($"{HighAlchemy:N0}")}<:gold:249879488190480384>\t" + 
+                                $"Buy Limit: {Format.Code($"{BuyingLimit}")}"));
+
+        }
 
         public string ToDiscordMessage()
             =>
@@ -97,13 +133,13 @@ namespace WiseOldBot.Modules.GETracker {
             $"Buy Limit: {Format.Code($"{BuyingLimit:N0}")}\n";
 
         public async Task UpdateAsync() {
-            if (CachedUntil > DateTime.UtcNow) {
-                return;
-            }
-            Update((await GETrackerAPIClient.GetItemAsync(ItemID)).Item);
+            //if (CachedUntil > DateTime.UtcNow) {
+            //    return;
+            //}
+            Update((await GETrackerAPIClient.DownloadItemAsync(ItemID)).Item);
         }
 
-        internal void Update(GETrackerItem updatedItem) {
+        public void Update(GETrackerItem updatedItem) {
             if (updatedItem.ItemID != ItemID) {
                 return;
             }
@@ -114,6 +150,7 @@ namespace WiseOldBot.Modules.GETracker {
             CachedUntil = updatedItem.CachedUntil;
             SellingPrice = updatedItem.SellingPrice;
             SellingQuantity = updatedItem.SellingQuantity;
+            Icon = updatedItem.Icon;
         }
 
         #endregion Public Methods

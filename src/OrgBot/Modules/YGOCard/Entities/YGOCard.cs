@@ -1,30 +1,89 @@
 ﻿#region Header
 
 // Description:
-// 
+//
 // Solution: DiscordBots
 // Project: OrgBot
-// 
+//
 // Created: 10/18/2016 7:22 PM
 // Last Revised: 11/05/2016 2:26 PM
 // Last Revised by: Alex Gravely
 
-#endregion
+#endregion Header
 
 namespace OrgBot.Modules.YGOCard.Entities {
+
     #region Using
 
-    using System.Threading.Tasks;
     using Discord;
-    using Extensions;
+    using BCL.Extensions;
     using Newtonsoft.Json;
+    using System.Threading.Tasks;
 
-    #endregion
+    #endregion Using
 
     public class YGOCard {
+
         #region Public Constructors
 
-        public YGOCard() { }
+        internal struct CardColor {
+
+            #region Private Fields + Properties
+
+            static Color _effect = new Color(255, 139, 33);
+            static Color _fusion = new Color(160, 134, 183);
+            static Color _normal = new Color(253, 230, 138);
+            static Color _ritual = new Color(157, 181, 204);
+            static Color _spell = new Color(29, 158, 116);
+            static Color _synchro = new Color(204, 204, 204);
+            static Color _trap = new Color(188, 90, 132);
+            static Color _xyz = new Color(0, 0, 0);
+
+            #endregion Private Fields + Properties
+
+            #region Internal Methods
+
+            internal static Color GetColor(YGOCardType type) {
+                switch (type) {
+                    case YGOCardType.Monster:
+                    case YGOCardType.Normal:
+                    case YGOCardType.P_Normal:
+                        return _normal;
+
+                    case YGOCardType.Effect:
+                    case YGOCardType.P_Effect:
+                        return _effect;
+
+                    case YGOCardType.Fusion:
+                        return _fusion;
+
+                    case YGOCardType.Ritual:
+                        return _ritual;
+
+                    case YGOCardType.Spell:
+                        return _spell;
+
+                    case YGOCardType.Trap:
+                        return _trap;
+
+                    case YGOCardType.Synchro:
+                    case YGOCardType.P_Synchro:
+                        return _synchro;
+
+                    case YGOCardType.Xyz:
+                    case YGOCardType.P_Xyz:
+                        return _xyz;
+
+                    default:
+                        return Color.Default;
+                }
+            }
+
+            #endregion Internal Methods
+        }
+
+        public YGOCard() {
+        }
 
         public YGOCard(YGOCard card) {
             Attack = card.Attack;
@@ -70,6 +129,9 @@ namespace OrgBot.Modules.YGOCard.Entities {
         [JsonProperty("id")]
         public uint Id { get; set; }
 
+        [JsonProperty("picture")]
+        public string ImageUrl { get; set; }
+
         [JsonProperty("scale_left")]
         public uint LeftScale { get; set; }
 
@@ -113,6 +175,50 @@ namespace OrgBot.Modules.YGOCard.Entities {
         #endregion Private Fields + Properties
 
         #region Public Methods
+
+        public EmbedBuilder ToDiscordEmbed() {
+            var em = new EmbedBuilder()
+                .WithTitle(Format.Bold(Name))
+                .WithColor(CardColor.GetColor(CardType));
+
+            if (CardType == YGOCardType.Spell || CardType == YGOCardType.Trap) {
+                em.WithDescription($"{Type} {CardType}")
+                        .AddField((f) =>
+                            f.WithName("Effect:")
+                             .WithValue(Format.Code(Description, "elm"))
+                             .WithIsInline(false));
+            }
+            else {
+                em.WithDescription($"{Type} | {Attribute.ToUpper()}");
+                var isPend = (int)CardType >= 9;
+                if (isPend) {
+                    em.AddField((f) =>
+                        f.WithName("Pendulum Effect:")
+                         .WithValue(Format.Code(PendulumEffect, "elm"))
+                         .WithIsInline(false));
+                }
+                em.AddField((f) =>
+                        f.WithName(CardType == YGOCardType.Normal ? "Flavor Text:" : "Effect:")
+                            .WithValue(CardType == YGOCardType.Normal ? Description : Format.Code(Description, "elm"))
+                            .WithIsInline(false));
+                if (isPend) {
+                    em.AddField((f) =>
+                        f.WithName("Scales")
+                         .WithValue($"{LeftScale} / {RightScale}")
+                         .WithIsInline(true));
+                }
+                em.AddField((f) =>
+                    f.WithName(CardType == YGOCardType.Xyz || CardType == YGOCardType.P_Xyz ? "Rank:" : "Level:")
+                     .WithValue($"{Level}")
+                     .WithIsInline(true))
+                .AddField((f) =>
+                    f.WithName("ATK/DEF:")
+                     .WithValue($"{Attack}/{Defence}")
+                     .WithIsInline(true));
+            }
+
+            return em;
+        }
 
         public string ToDiscordMessage() {
             string returnString;

@@ -19,20 +19,24 @@ namespace WiseOldBot.Modules.OSRS {
     using BCL;
     using Discord;
     using Discord.Commands;
+    using System.Collections.Generic;
 
     #endregion
-    [DontAutoLoad]
+    
     public partial class OSRSModule : ModuleBase {
         #region Public Structs + Classes
 
-        [Command("exp2lvl"), Alias("e2l")]
-        public async Task CalculateExperienceAsync(uint exp)
+        [Command("exp2lvl"), Alias("e2l"), 
+            Summary("Gets the Level the input experience amount would equate to."),
+            Remarks("exp2lvl 100000")]
+        public async Task CalculateLevelAsync([Summary("Experience amount")]uint exp)
             => await Context.Channel.SendMessageAsync($"Level: {ExperienceToLevel(exp)}");
 
-        [Command("lvl2exp"), Alias("l2e")]
-        public async Task CalculateLevelAsync(uint level) {
-            var exp = LevelToExperience(level);
-
+        [Command("lvl2exp"), Alias("l2e"), 
+            Summary("Gets the minimum experience required for the input level."),
+            Remarks("lvl2exp 95")]
+        public async Task CalculateExperienceAsync([Summary("Level")]uint level) {
+            var exp = LevelToExperience(level); 
             if (level > 99) {
                 await Context.Channel.SendMessageAsync($"Minimum exp: {exp}.");
             }
@@ -44,8 +48,10 @@ namespace WiseOldBot.Modules.OSRS {
             }
         }
 
-        [Command("defname"), Alias("account")]
-        public async Task ManageUsernameMapAsync([Remainder] string username) {
+        [Command("defname"), Alias("account"), 
+            Summary("Sets or unsets a default runescape username. Pass the --unset flag before your username to unset.")
+            Remarks("defname anti-tcb")]
+        public async Task ManageUsernameMapAsync([Remainder, Summary("RuneScape username")] string username) {
             var userID = Context.User.Id;
             if (!((WiseOldBotConfig) Globals.BotConfig).UsernameMap.ContainsKey(userID)) {
                 ((WiseOldBotConfig) Globals.BotConfig).UsernameMap.Add(userID, null);

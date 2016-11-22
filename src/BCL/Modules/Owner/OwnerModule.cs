@@ -27,24 +27,25 @@ namespace BCL.Modules.Owner {
 
     #endregion
 
-    [RequireOwner]
+    [Name("Owner"), RequireOwner]
     public partial class OwnerModule : ModuleBase {
-        #region Public Methods
+        #region Public Methods    
 
-        [Command("echo")]
-        public async Task EchoAsync([Remainder] string text) {
+        [Command("echo"), Summary("echos the user input"), Remarks("echo potato")]
+        public async Task EchoAsync([Remainder, Summary("Text to echo")] string text) {
             await ReplyAsync(text).ConfigureAwait(false);
         }
 
-        [Command("powerdown"), Alias("pd")]
+        [Command("powerdown"), Alias("pd"), Summary("Terminates the bot application"), Remarks("powerdown")]
         public async Task PowerdownAsync() {
             await ReplyAsync("Powering down!").ConfigureAwait(false);
             await Context.Client.DisconnectAsync().ConfigureAwait(false);
             await Task.Delay(1500).ConfigureAwait(false);
         }
 
-        [Command("set"), RequireContext(ContextType.Guild)]
-        public async Task SetAsync(UserProperty prop, [Remainder] string value) {
+        [Command("set"), RequireContext(ContextType.Guild), Summary("sets various bot properties"), Remarks("set nick FooBar")]
+        public async Task SetAsync([Summary("Property to change")]UserProperty prop, 
+            [Summary("Value to change the property to"), Remainder] string value) {
             switch (prop) {
                 case UserProperty.User:
                     await Context.Client.CurrentUser.ModifyAsync(x => x.Username = value).ConfigureAwait(false);

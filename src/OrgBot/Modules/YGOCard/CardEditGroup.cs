@@ -1,99 +1,48 @@
 ﻿#region Header
 
 // Description:
-// 
+//
 // Solution: DiscordBots
 // Project: OrgBot
-// 
+//
 // Created: 10/19/2016 10:34 PM
 // Last Revised: 10/19/2016 11:31 PM
 // Last Revised by: Alex Gravely
 
-#endregion
+#endregion Header
 
 namespace OrgBot.Modules.YGOCard {
+
     #region Using
 
-    using System;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
     using Discord.Commands;
     using Entities;
     using Preconditions;
+    using System;
+    using System.Linq;
+    using System.Threading.Tasks;
 
-    #endregion
+    #endregion Using
 
     public partial class YGOCardModule {
+
         #region Public Structs + Classes
 
-        [Group("edit"), RequireContext(ContextType.Guild), RequireRole(OrgBotGlobals.NUMBERS_ROLE_ID)]
+        [Name("Card-Editing"), Group("edit"), RequireContext(ContextType.Guild), RequireRole(OrgBotGlobals.NUMBERS_ROLE_ID)]
         public class CardEditGroup : ModuleBase {
+
             #region Public Methods
 
-            [Command("preview"), Summary("Displays the output of your edits vs the current version.")]
-            public async Task PreviewChangesAsync() {
-                var editedCard = YGOCardAPIClient.GetEditedCard(Context.User);
-                await ReplyAsync($"Current:\n{YGOCardAPIClient.Cards.GetCard(editedCard.Id).ToDiscordMessage()}\n" +
-                                 $"Edited:\n{editedCard.ToDiscordMessage()}");
+            [Command("discard"), Alias("dontsave", "revert"), Remarks("edit discard")]
+            public async Task DiscardChangesAsync() {
+                await ReplyAsync("Changes not saved.");
+                await YGOCardAPIClient.StopEditingAsync(Context.User, false);
             }
 
-            [Command("properties"), Alias("prop"), Summary("Lets you edit a card's attribute, card type, or type.")]
-            public async Task EditPropertiesAsync(CardDataField datafield, string value) {
-                var card = YGOCardAPIClient.GetEditedCard(Context.User);
-                switch (datafield) {
-                    case CardDataField.Attribute:
-                        card.Attribute = value.ToUpper();
-                        break;
-                    case CardDataField.CardType:
-                        YGOCardType parsedCardType;
-                        var parsed = Enum.TryParse(value, out parsedCardType);
-                        if (parsed) {
-                            card.CardType = parsedCardType;
-                        }
-                        else {
-                            await ReplyAsync("Parsing of Card Type failed.");
-                            return;
-                        } 
-                        break;
-                    case CardDataField.Type:
-                        card.Type = value;
-                        break;
-                    default:
-                        await ReplyAsync("You may only edit properties with this command.");
-                        return;
-                }
-                await ReplyAsync(":thumbsup:");
-            }
-
-            [Command("stats")]
-            public async Task EditStatsAsync(CardDataField dataField, uint value) {
-                var card = YGOCardAPIClient.GetEditedCard(Context.User);
-                switch (dataField) {
-                    case CardDataField.Attack:
-                        card.Attack = value;
-                        break;
-                    case CardDataField.Rank:
-                    case CardDataField.Level:
-                        card.Level = value;
-                        break;
-                    case CardDataField.Defense:
-                        card.Defence = value;
-                        break;
-                    case CardDataField.LeftScale:
-                    case CardDataField.RightScale:
-                        card.LeftScale = value;
-                        card.RightScale = value;
-                        break;
-                    default:
-                        await ReplyAsync("You may only edit numeric stats (ATK/DEF/Level/Rank/Pendulum Scales) with this command.");
-                        return;
-                }
-                await ReplyAsync(":thumbsup:");
-            }
-
-            [Command("text")]
-            public async Task EditEffectAsync(CardDataField datafield, [Remainder] string text) {
+            [Command("text"), Summary("Edits the Name/Flavor Text/Effect/Pendulum Effect of a card"), 
+                Remarks("edit text name Kuriboh")]
+            public async Task EditEffectAsync([Summary("Data field to change")]CardDataField datafield, 
+                [Summary("Value to change data field to"), Remainder] string text) {
                 var card = YGOCardAPIClient.GetEditedCard(Context.User);
                 switch (datafield) {
                     case CardDataField.Effect:
@@ -116,21 +65,89 @@ namespace OrgBot.Modules.YGOCard {
                 await ReplyAsync(":thumbsup:");
             }
 
-            [Command("editing"), Alias("list")]
+            [Command("properties"), Alias("prop"), 
+                Summary("Edits Attribute/Card Type/Monster Type of a card"), Remarks("edit prop attribute dark")]
+            public async Task EditPropertiesAsync([Summary("Data field to change")]CardDataField datafield, 
+                [Summary("Value to change data field to")]string value) {
+                var card = YGOCardAPIClient.GetEditedCard(Context.User);
+                switch (datafield) {
+                    case CardDataField.Attribute:
+                        card.Attribute = value.ToUpper();
+                        break;
+
+                    case CardDataField.CardType:
+                        YGOCardType parsedCardType;
+                        var parsed = Enum.TryParse(value, out parsedCardType);
+                        if (parsed) {
+                            card.CardType = parsedCardType;
+                        }
+                        else {
+                            await ReplyAsync("Parsing of Card Type failed.");
+                            return;
+                        }
+                        break;
+
+                    case CardDataField.Type:
+                        card.Type = value;
+                        break;
+
+                    default:
+                        await ReplyAsync("You may only edit properties with this command.");
+                        return;
+                }
+                await ReplyAsync(":thumbsup:");
+            }
+
+            [Command("stats"), Summary("Edits the Attack/Defense/Level/Rank/Pendulum Scales of a card"), Remarks("edit stats atk 15000")]
+            public async Task EditStatsAsync([Summary("Data field to change")]CardDataField dataField, 
+                [Summary("Value to change data field to")]uint value) {
+                var card = YGOCardAPIClient.GetEditedCard(Context.User);
+                switch (dataField) {
+                    case CardDataField.Attack:
+                        card.Attack = value;
+                        break;
+
+                    case CardDataField.Rank:
+                    case CardDataField.Level:
+                        card.Level = value;
+                        break;
+
+                    case CardDataField.Defense:
+                        card.Defence = value;
+                        break;
+
+                    case CardDataField.Scales:
+                        card.LeftScale = value;
+                        card.RightScale = value;
+                        break;
+
+                    default:
+                        await ReplyAsync("You may only edit numeric stats (ATK/DEF/Level/Rank/Pendulum Scales) with this command.");
+                        return;
+                }
+                await ReplyAsync(":thumbsup:");
+            }
+
+            [Command("editing"), Alias("list"), Summary("Lists all the cards being edited and their editors"), Remarks("edit list")]
             public async Task GetCurrentlyBeingEditingAsync() {
                 if (!YGOCardAPIClient.IsEditingAny) {
                     await ReplyAsync("No cards are currently being edited.");
                     return;
                 }
-                var sb = new StringBuilder();
-                foreach (var edit in YGOCardAPIClient.GetEditedCards()) {
-                    sb.AppendLine($"{edit.Value.Name} is being edited by {edit.Key.Username}.");
-                }
-                await ReplyAsync(sb.ToString());
+                await ReplyAsync(string.Join("\n", YGOCardAPIClient.GetEditedCards().Select(x => $"{x.Value.Name} is being edited by {x.Key.Username}")));
             }
 
-            [Command("start"), Alias("begin")]
-            public async Task StartEditingCardAsync([Remainder] string cardName) {
+            [Command("preview"), 
+                Summary("Displays the output of your edits vs the current version."), 
+                Remarks("edit preview")]
+            public async Task PreviewChangesAsync() {
+                var editedCard = YGOCardAPIClient.GetEditedCard(Context.User);
+                await ReplyAsync($"Current:\n{YGOCardAPIClient.Cards.GetCard(editedCard.Id).ToDiscordMessage()}\n" +
+                                 $"Edited:\n{editedCard.ToDiscordMessage()}");
+            }
+
+            [Command("start"), Alias("begin"), Summary("Starts editing a card"), Remarks("edit start Sangan")]
+            public async Task StartEditingCardAsync([Summary("Name of card to start editing"), Remainder] string cardName) {
                 if (YGOCardAPIClient.IsUserEditing(Context.User)) {
                     await
                         ReplyAsync
@@ -147,17 +164,10 @@ namespace OrgBot.Modules.YGOCard {
                 await ReplyAsync($"{Context.User.Username} has started editing {card.Name}.");
             }
 
-            [Command("discard"), Alias("dontsave")]
-            public async Task DiscardChangesAsync() {
-                await ReplyAsync("Changes not saved.");
-                await YGOCardAPIClient.StopEditingAsync(Context.User, false);
-            }
-
-            [Command("save"), Alias("finished", "compete", "done")]
+            [Command("save"), Alias("finished", "compete", "done", "commit", "push"), Remarks("edit save")]
             public async Task StopEditingCardAsync() {
                 await ReplyAsync("Saving changes to the database!");
                 await YGOCardAPIClient.StopEditingAsync(Context.User, true);
-
             }
 
             #endregion Public Methods

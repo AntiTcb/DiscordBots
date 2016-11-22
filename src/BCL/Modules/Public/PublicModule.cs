@@ -1,32 +1,92 @@
 ﻿#region Header
+
 // Description:
-// 
+//
 // Solution: DiscordBots
 // Project: BCL
-// 
+//
 // Created: 10/15/2016 11:36 PM
 // Last Revised: 10/15/2016 11:36 PM
 // Last Revised by: Alex Gravely
-#endregion
-namespace BCL.Modules {
+
+#endregion Header
+
+namespace BCL.Modules.Public {
+
+    using BCL.Modules.Public.Services;
+    using Discord;
+    using Discord.Commands;
+    using Discord.WebSocket;
+    using BCL.Extensions;
     using System;
     using System.Diagnostics;
     using System.Globalization;
     using System.Linq;
     using System.Reflection;
     using System.Runtime.InteropServices;
+    using System.Text;
     using System.Threading.Tasks;
-    using Discord;
-    using Discord.Commands;
 
+    [Name("Public")]
     public partial class PublicModule : ModuleBase {
-        [Command("info")]
+
+        #region Private Fields + Properties
+
+        CommandService _service;
+
+        #endregion Private Fields + Properties
+
+        #region Public Constructors
+
+        public PublicModule(IDependencyMap map) {
+            _service = map.Get<CommandService>();
+        }
+
+        #endregion Public Constructors
+
+        #region Public Methods
+
+        [Command("help"), 
+            Alias("commands", "command", "cmds", "cmd"), 
+            Summary("Information about the bot's commands."),
+            RequireContext(ContextType.Guild)]
+        public async Task HelpAsync([Remainder, Summary("Command/Module name to search for")]string name = "") { 
+            var modules = _service.Modules.Concat(_service.Modules.SelectMany(m => m.Submodules)).OrderBy(x => x.Name);
+            var commands = modules.SelectMany(m => m.Commands).Concat(modules.SelectMany(m => m.Submodules).SelectMany(sm => sm.Commands));   
+
+            var cmd = commands.FirstOrDefault(x => x.Aliases.Contains(name.ToLower()));
+            var module = modules.FirstOrDefault(x => x.Name.ToLower().Contains(name.ToLower()));
+            var helpMode = name == "" ? HelpMode.All : cmd != null ? HelpMode.Command : module != null ? HelpMode.Module : HelpMode.All;
+
+            switch (helpMode) {
+                case HelpMode.All:
+                    await ReplyAsync("", embed: HelpService.GetGenericHelpEmbed(modules, Context).WithAuthor((a) => a.AsUser(((Context.Guild as SocketGuild).CurrentUser))));
+                    break;
+
+                case HelpMode.Module:
+                    if (!module.CanExecute(Context)) {
+                        await ReplyAsync("You do not have permission to see information for this module.");
+                        return;
+                    }
+                    await ReplyAsync("", embed: HelpService.GetModuleHelpEmbed(module, Context).WithAuthor((a) => a.AsUser(((Context.Guild as SocketGuild).CurrentUser))));
+                    break;
+
+                case HelpMode.Command: 
+                    if (!cmd.CanExecute(Context)) {
+                        await ReplyAsync("You do not have permission to see information for this command.");
+                        return;
+                    } 
+                    await ReplyAsync("", embed: HelpService.GetCommandHelpEmbed(cmd, Context).WithAuthor((a) => a.AsUser(((Context.Guild as SocketGuild).CurrentUser))));
+                    break;
+            }
+        }
+
+        [Command("info"), Summary("Information about the bot.")]
         public async virtual Task InfoAsync() {
             // TODO: Async Sum
             var app = await Context.Client.GetApplicationInfoAsync().ConfigureAwait(false);
             var completedChannelCount =
-                await
-                    Task.WhenAll((await Context.Client.GetGuildsAsync()).Select(async g => await g.GetChannelsAsync()));
+                await Task.WhenAll((await Context.Client.GetGuildsAsync()).Select(async g => await g.GetChannelsAsync()));
             var completedUserCount =
                 await Task.WhenAll((await Context.Client.GetGuildsAsync()).Select(async g => await g.GetUsersAsync()));
             await
@@ -42,13 +102,20 @@ namespace BCL.Modules {
                      $"- Users: {completedUserCount.Sum(u => u.Count)}").ConfigureAwait(false);
         }
 
-        [Command("join"), Alias("invite"), Remarks("Returns the Invite URL of the bot")]
+        [Command("join"), Alias("invite"), Summary("Returns the Invite URL of the bot.")]
         public async virtual Task JoinAsync() {
             var app = await Context.Client.GetApplicationInfoAsync().ConfigureAwait(false);
             await ReplyAsync($"<https://discordapp.com/oauth2/authorize?permissions=67496960&client_id={app.Id}&scope=bot>").ConfigureAwait(false);
         }
 
+        #endregion Public Methods
+
+        #region Private Methods
+
         static string GetHeapSize() => Math.Round(GC.GetTotalMemory(true) / (1024.0 * 1024.0), 2).ToString(CultureInfo.InvariantCulture);
+
         static string GetUptime() => (DateTime.Now - Process.GetCurrentProcess().StartTime).ToString(@"dd\.hh\:mm\:ss");
+
+        #endregion Private Methods
     }
 }

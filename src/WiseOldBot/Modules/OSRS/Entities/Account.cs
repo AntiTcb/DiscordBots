@@ -15,35 +15,40 @@ namespace WiseOldBot.Modules.OSRS {
     #region Using
 
     using System;
+    using System.Text.RegularExpressions;
     using Discord;
+    using Entities;
 
     #endregion
 
     public class Account {
         #region Public Structs + Classes
 
-        public Account(string username, string hsType, string[] skills) {
+        public Account(string username, string uri, string[] skills) {
             Username = username;
-
-            switch (hsType) {
+            _hsType = Regex.Match(uri, "(hiscore_oldschool.*?)/").Groups[1].Value; 
+            switch (_hsType) {
                 case "hiscore_oldschool":
-                    StatsSource = HighScoreType.Regular;
+                    StatsSource = GameMode.Regular;
                     break;
 
                 case "hiscore_oldschool_ironman":
-                    StatsSource = HighScoreType.Ironman;
+                    StatsSource = GameMode.Ironman;
                     break;
 
                 case "hiscore_oldschool_deadman":
-                    StatsSource = HighScoreType.Deadman;
+                    StatsSource = GameMode.Deadman;
                     break;
 
                 case "hiscore_oldschool_seasonal":
-                    StatsSource = HighScoreType.Seasonal;
+                    StatsSource = GameMode.DeadmanSeasonal;
                     break;
 
                 case "hiscore_oldschool_ultimate":
-                    StatsSource = HighScoreType.Ultimate;
+                    StatsSource = GameMode.Ultimate;
+                    break;
+                case "hiscore_oldschool_hardcore_ironman":
+                    StatsSource = GameMode.HardcoreIronman;
                     break;
             }
 
@@ -107,105 +112,137 @@ namespace WiseOldBot.Modules.OSRS {
         public Skill Runecrafting { get; set; }
         public Skill Slayer { get; set; }
         public Skill Smithing { get; set; }
-        public HighScoreType StatsSource { get; set; }
+        public GameMode StatsSource { get; set; }
         public Skill Strength { get; set; }
         public Skill Thieving { get; set; }
         public Skill Total { get; set; }
         public string Username { get; set; }
         public Skill Woodcutting { get; set; }
+        string _hsType;
+        public string Url => Uri.EscapeUriString($"http://services.runescape.com/m={_hsType}/hiscorepersonal.ws?user1={Username}");
 
         #endregion Public Fields + Properties
 
         #region Public Methods
 
-        public string SkillToDiscordMessage(SkillType skill) {
-            var returnString = $"{Format.Bold($"{Username}: {skill}")}\n";
+        Skill GetSkillBySkillType(SkillType skill) {
             switch (skill) {
                 case SkillType.Agility:
-                    return returnString + Agility.ToDiscordMessage();
-
+                    return Agility;
                 case SkillType.Attack:
-                    return returnString + Attack.ToDiscordMessage();
-
+                    return Attack;
                 case SkillType.Construction:
-                    return returnString + Construction.ToDiscordMessage();
-
+                    return Construction;
                 case SkillType.Cooking:
-                    return returnString + Cooking.ToDiscordMessage();
-
+                    return Cooking;
                 case SkillType.Crafting:
-                    return returnString + Crafting.ToDiscordMessage();
-
+                    return Crafting;
                 case SkillType.Defense:
-                    return returnString + Defense.ToDiscordMessage();
-
+                    return Defense;
                 case SkillType.Farming:
-                    return returnString + Farming.ToDiscordMessage();
-
+                    return Farming;
                 case SkillType.Firemaking:
-                    return returnString + Firemaking.ToDiscordMessage();
-
+                    return Firemaking;
                 case SkillType.Fishing:
-                    return returnString + Fishing.ToDiscordMessage();
-
+                    return Fishing;
                 case SkillType.Fletching:
-                    return returnString + Fletching.ToDiscordMessage();
-
+                    return Fletching;
                 case SkillType.Herblore:
-                    return returnString + Herblore.ToDiscordMessage();
-
+                    return Herblore;
                 case SkillType.Hitpoints:
-                    return returnString + Hitpoints.ToDiscordMessage();
-
+                    return Hitpoints;
                 case SkillType.Hunter:
-                    return returnString + Hunter.ToDiscordMessage();
-
+                    return Hunter;
                 case SkillType.Magic:
-                    return returnString + Magic.ToDiscordMessage();
-
+                    return Magic;
                 case SkillType.Mining:
-                    return returnString + Mining.ToDiscordMessage();
-
+                    return Mining;
                 case SkillType.Prayer:
-                    return returnString + Prayer.ToDiscordMessage();
-
+                    return Prayer;
                 case SkillType.Ranged:
-                    return returnString + Ranged.ToDiscordMessage();
-
+                    return Ranged;
                 case SkillType.Runecrafting:
-                    return returnString + Runecrafting.ToDiscordMessage();
-
+                    return Runecrafting;
                 case SkillType.Slayer:
-                    return returnString + Slayer.ToDiscordMessage();
-
+                    return Slayer;
                 case SkillType.Smithing:
-                    return returnString + Smithing.ToDiscordMessage();
-
+                    return Smithing;
                 case SkillType.Strength:
-                    return returnString + Strength.ToDiscordMessage();
-
+                    return Strength;
                 case SkillType.Thieving:
-                    return returnString + Thieving.ToDiscordMessage();
-
+                    return Thieving;
                 case SkillType.Total:
-                    return returnString + Total.ToDiscordMessage();
-
-                case SkillType.All:
-                    return ToDiscordMessage();
-
+                    return Total;
                 case SkillType.Woodcutting:
-                    return returnString + Woodcutting.ToDiscordMessage();
-
-                case SkillType.Combat:
-                    return returnString + Format.Code($"{Combat}");
-
-                case SkillType.NonCombat:
-                    throw new NotImplementedException();
-
+                    return Woodcutting;
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(skill), skill, null);
+                    throw new ArgumentOutOfRangeException(nameof(skill), skill, null);  
             }
         }
+
+        public EmbedBuilder SkillToDiscordEmbed(SkillType skill) {
+            if (skill == SkillType.All) {
+                return ToDiscordEmbed();
+            }
+            else if(skill == SkillType.Combat) {
+
+            }
+            return GetSkillBySkillType(skill).ToDiscordEmbed().WithTitle(Username).WithDescription($"{skill.GetFullSkillName()} - {StatsSource}");
+        }
+
+        public string SkillToDiscordMessage(SkillType skill) {
+            var returnString = $"{Format.Bold($"{Username}: {skill}")}\n";
+            if (skill == SkillType.All) {
+                return ToDiscordMessage();
+            } else if (skill == SkillType.Combat) {
+                return returnString + Format.Code($"{Combat}");
+            } else {
+                return returnString + GetSkillBySkillType(skill).ToDiscordMessage(); 
+            }
+        }
+
+        public EmbedBuilder ToDiscordCombatEmbed() {
+            return new EmbedBuilder()
+                .WithTitle(Username)
+                .WithDescription($"{StatsSource}")
+                .AddField((f) =>
+                    f.WithName(nameof(Combat))
+                     .WithValue($"{Combat}"));
+        }
+
+        public EmbedBuilder ToDiscordEmbed() {
+            return new EmbedBuilder()
+                .WithTitle(Username)
+                .WithDescription($"{StatsSource.GetGameModeName()}")
+                .WithUrl(Url)
+                .AddField((f) =>
+                    f.WithName("Combat")
+                     .WithValue($"{Combat}"))
+                .AddField((f) => f.WithName(nameof(Attack)).WithValue(Attack.ToString()).WithIsInline(true))
+                .AddField((f) => f.WithName(nameof(Hitpoints)).WithValue(Hitpoints.ToString()).WithIsInline(true))
+                .AddField((f) => f.WithName(nameof(Mining)).WithValue(Mining.ToString()).WithIsInline(true))
+                .AddField((f) => f.WithName(nameof(Strength)).WithValue(Strength.ToString()).WithIsInline(true))
+                .AddField((f) => f.WithName(nameof(Agility)).WithValue(Agility.ToString()).WithIsInline(true))
+                .AddField((f) => f.WithName(nameof(Smithing)).WithValue(Smithing.ToString()).WithIsInline(true))
+                .AddField((f) => f.WithName(nameof(Defense)).WithValue(Defense.ToString()).WithIsInline(true))
+                .AddField((f) => f.WithName(nameof(Herblore)).WithValue(Herblore.ToString()).WithIsInline(true))
+                .AddField((f) => f.WithName(nameof(Fishing)).WithValue(Fishing.ToString()).WithIsInline(true))
+                .AddField((f) => f.WithName(nameof(Ranged)).WithValue(Ranged.ToString()).WithIsInline(true))
+                .AddField((f) => f.WithName(nameof(Thieving)).WithValue(Thieving.ToString()).WithIsInline(true))
+                .AddField((f) => f.WithName(nameof(Cooking)).WithValue(Cooking.ToString()).WithIsInline(true))
+                .AddField((f) => f.WithName(nameof(Prayer)).WithValue(Prayer.ToString()).WithIsInline(true))
+                .AddField((f) => f.WithName(nameof(Crafting)).WithValue(Crafting.ToString()).WithIsInline(true))
+                .AddField((f) => f.WithName(nameof(Firemaking)).WithValue(Firemaking.ToString()).WithIsInline(true))
+                .AddField((f) => f.WithName(nameof(Magic)).WithValue(Magic.ToString()).WithIsInline(true))
+                .AddField((f) => f.WithName(nameof(Fletching)).WithValue(Fletching.ToString()).WithIsInline(true))
+                .AddField((f) => f.WithName(nameof(Woodcutting)).WithValue(Woodcutting.ToString()).WithIsInline(true))
+                .AddField((f) => f.WithName(nameof(Runecrafting)).WithValue(Runecrafting.ToString()).WithIsInline(true))
+                .AddField((f) => f.WithName(nameof(Slayer)).WithValue(Slayer.ToString()).WithIsInline(true))
+                .AddField((f) => f.WithName(nameof(Farming)).WithValue(Farming.ToString()).WithIsInline(true))
+                .AddField((f) => f.WithName(nameof(Construction)).WithValue(Construction.ToString()).WithIsInline(true))
+                .AddField((f) => f.WithName(nameof(Hunter)).WithValue(Hunter.ToString()).WithIsInline(true))
+                .AddField((f) => f.WithName(nameof(Total)).WithValue(Total.ToString()).WithIsInline(true));
+            }
 
         public string ToDiscordMessage()
             =>

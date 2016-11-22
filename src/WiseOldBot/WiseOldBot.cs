@@ -19,8 +19,6 @@ namespace WiseOldBot {
     using Discord;
     using Discord.Commands;
     using Discord.WebSocket;
-    using Modules.OSRS;
-    using OSRS.TypeReaders;
 
     #endregion
 
@@ -40,7 +38,11 @@ namespace WiseOldBot {
             Client = new DiscordSocketClient(new DiscordSocketConfig { LogLevel = LogSeverity.Debug });
             Client.Ready += ClientOnReadyAsync;
             Client.GuildAvailable += ClientOnGuildAvailableAsync;
-            Globals.EvalImports.AddRange(new[] {"WiseOldBot", "WiseOldBot.Modules.GETracker"});
+            Client.JoinedGuild += ClientOnJoinedGuildAsync;
+            Client.LeftGuild += ClientOnLeftGuildAsync;
+            Globals.EvalImports.AddRange(new[] {"WiseOldBot",
+                "WiseOldBot.Modules.GETracker", "WiseOldBot.Modules.GETracker.Entities",
+                "WiseOldBot.Modules.OSRS", "WiseOldBot.Modules.OSRS.Entities"});
             await HandleConfigsAsync<T>();
             await InstallCommandsAsync();
             await LoginAndConnectAsync(TokenType.Bot);
@@ -50,7 +52,9 @@ namespace WiseOldBot {
             ServerConfig outValue;
             if (!Globals.ServerConfigs.TryGetValue(socketGuild.Id, out outValue)) {
                 var defChannel = await socketGuild.GetDefaultChannelAsync();
+#if !DEBUG
                 await defChannel.SendMessageAsync("Server config file not found! Generating one now!");
+#endif
                 Globals.ServerConfigs.Add(socketGuild.Id, new ServerConfig { CommandPrefix = Globals.DEFAULT_PREFIX });
                 await ConfigHandler.SaveAsync(Globals.SERVER_CONFIG_PATH, Globals.ServerConfigs);
             }

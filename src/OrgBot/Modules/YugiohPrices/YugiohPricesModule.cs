@@ -12,7 +12,8 @@ namespace OrgBot.Modules.YugiohPrices {
     using System;
     using System.Threading.Tasks;
     using Discord.Commands;
-    [Group("price")]
+
+    [Name("YGO Prices"), Group("price"), DontAutoLoad]
     public class YugiohPricesModule : ModuleBase {
         [Command("card"), Alias("c")]
         public async Task GetCardPriceAsync([Remainder] string cardName ) {

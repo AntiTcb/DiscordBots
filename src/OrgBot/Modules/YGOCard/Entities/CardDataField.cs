@@ -15,12 +15,11 @@ namespace OrgBot.Modules.YGOCard.Entities {
         CardType,
         Defense,
         Description,
-        LeftScale,
+        Scales,
         Level,
         Name,
         PendulumEffect,
         Rank,
-        RightScale,
         Type,
         Effect
     }

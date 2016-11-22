@@ -11,8 +11,8 @@
 
 #endregion Header
 
-namespace OrgBot
-{
+namespace OrgBot {
+
     #region Using
 
     using BCL;
@@ -40,7 +40,11 @@ namespace OrgBot
             Client = new DiscordSocketClient(new DiscordSocketConfig { LogLevel = LogSeverity.Debug });
             Client.Ready += ClientOnReadyAsync;
             Client.GuildAvailable += ClientOnGuildAvailableAsync;
-            Globals.EvalImports.Add("OrgBot");
+            Client.JoinedGuild += ClientOnJoinedGuildAsync;
+            Client.LeftGuild += ClientOnLeftGuildAsync;
+            Globals.EvalImports.AddRange(new[] { "OrgBot",
+                "OrgBot.Modules", "OrgBot.Modules.YGOCard", "OrgBot.Modules.YGOCard.Entities",
+                "OrgBot.Modules.YGOWikia", "OrgBot.Modules.YGOWikia.Entities" });
             await HandleConfigsAsync<T>();
             await InstallCommandsAsync();
             await LoginAndConnectAsync(TokenType.Bot);
@@ -50,7 +54,9 @@ namespace OrgBot
             ServerConfig outValue;
             if (!Globals.ServerConfigs.TryGetValue(socketGuild.Id, out outValue)) {
                 var defChannel = await socketGuild.GetDefaultChannelAsync();
+#if !DEBUG
                 await defChannel.SendMessageAsync("Server config file not found! Generating one now!");
+#endif
                 Globals.ServerConfigs.Add(socketGuild.Id, new ServerConfig { CommandPrefix = Globals.DEFAULT_PREFIX });
                 await ConfigHandler.SaveAsync(Globals.SERVER_CONFIG_PATH, Globals.ServerConfigs);
             }

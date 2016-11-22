@@ -11,22 +11,13 @@
 
 #endregion
 
-namespace WiseOldBot.Modules.GETracker {
+namespace WiseOldBot.Modules.GETracker.Entities {
     #region Using
 
     using System.Collections.Generic;
     using System.Linq;
 
-    #endregion
-
-    public static class ItemMapExtensions {
-        #region Public Methods
-
-        public static IEnumerable<GETrackerItem> PartialMatch(this ItemMap map, string partialKey)
-            => map.Where(x => x.Key.Contains(partialKey.ToLower())).SelectMany(kvp => kvp.Value);
-
-        #endregion Public Methods
-    }
+    #endregion 
 
     public class ItemMap : Dictionary<string, List<GETrackerItem>> {
         #region Public Constructors
@@ -34,6 +25,17 @@ namespace WiseOldBot.Modules.GETracker {
         public ItemMap() { }
 
         public ItemMap(IDictionary<string, List<GETrackerItem>> dict) : base(dict) { }
+
+        internal IEnumerable<GETrackerItem> FindItems(string partialKey)
+            => this.Where(x => x.Key.Contains(partialKey.ToLower())).SelectMany(kvp => kvp.Value);
+
+        internal IEnumerable<GETrackerItem> FindItemOrItems(string itemName) {
+            itemName = itemName.ToLower();
+            if (ContainsKey(itemName)) {
+                return this[itemName];
+            }
+            return FindItems(itemName);
+        }
 
         #endregion Public Constructors
     }

@@ -11,7 +11,7 @@
 
 #endregion
 
-namespace OrgBot.Extensions {
+namespace BCL.Extensions {
     #region Using
 
     using System;

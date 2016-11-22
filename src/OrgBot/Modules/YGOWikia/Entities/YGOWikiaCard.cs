@@ -63,6 +63,39 @@ namespace OrgBot.Modules.YGOWikia.Entities {
             return newCard;
         }
 
+        public EmbedBuilder ToDiscordEmbed() {
+            var isPend = Category == CardCategory.PendulumMonster || Category == CardCategory.PendulumXyzMonster;
+            var isXyz = Category == CardCategory.XyzMonster || Category == CardCategory.PendulumXyzMonster;
+            var isSpellOrTrap = Category == CardCategory.Spell || Category == CardCategory.Trap;
+            var em = new EmbedBuilder()
+                .WithTitle($"{Name} - {Url}")
+                .WithUrl(Url)
+                .WithDescription(isSpellOrTrap ? $"{Property.TrimEnd()} {Types}" : $"{Attribute.Trim()} | {Types}");
+
+            em.AddField((f) =>
+                f.WithName("Effects:")
+                 .WithValue(Effect));
+
+            if (isPend) {
+                em.AddField((f) =>
+                    f.WithName("Scales:")
+                     .WithValue(PendulumScales)
+                     .WithIsInline(true));
+            }
+
+            if (isSpellOrTrap) { return em; }
+
+            em.AddField((f) =>
+                f.WithName(isXyz ? "Rank:" : "Level")
+                 .WithValue(isXyz ? Rank : Level)
+                 .WithIsInline(true))
+              .AddField((f) =>
+                f.WithName("ATK / DEF")
+                 .WithValue(Stats)
+                 .WithIsInline(true));    
+            return em;
+        }
+
         public string ToDiscordMessage() {
             string returnString = $"{Name} | {Types} ";
             switch (Category) {
