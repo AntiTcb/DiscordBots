@@ -185,9 +185,9 @@ namespace WiseOldBot.Modules.OSRS {
                 return ToDiscordEmbed();
             }
             else if(skill == SkillType.Combat) {
-
+                return new EmbedBuilder().WithTitle(Username).WithDescription($"Combat - {StatsSource.GetGameModeName()}").AddField((f) => f.WithName("Combat").WithValue($"{Combat}"));
             }
-            return GetSkillBySkillType(skill).ToDiscordEmbed().WithTitle(Username).WithDescription($"{skill.GetFullSkillName()} - {StatsSource}");
+            return GetSkillBySkillType(skill).ToDiscordEmbed().WithTitle(Username).WithDescription($"{skill.GetFullSkillName()} - {StatsSource.GetGameModeName()}");
         }
 
         public string SkillToDiscordMessage(SkillType skill) {

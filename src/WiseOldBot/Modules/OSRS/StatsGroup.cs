@@ -26,11 +26,12 @@ namespace WiseOldBot.Modules.OSRS {
 
         [Name("stats")]
         public class StatsGroup : ModuleBase {
+
             #region Public Methods  
             [Command("lookup"), Alias("l"), 
                 Summary("Looks up an account from the high scores, with various skill and mode options."),
                 Remarks("lookup regular all anti-tcb")]
-            public async Task GetStatsAsync([Summary("Game mode")]GameMode hsType = GameMode.Regular, 
+            public async Task GetStatsAsync([Summary("Game mode")]GameMode gameMode = GameMode.Regular, 
                 [Summary("Skill")]SkillType skillType = SkillType.All, [Summary("Account to search"), Remainder] string playerName = "") {
                 if (string.IsNullOrEmpty(playerName)) {
                     if (!((WiseOldBotConfig)Globals.BotConfig).UsernameMap.TryGetValue(Context.User.Id, out playerName)) {
@@ -38,12 +39,26 @@ namespace WiseOldBot.Modules.OSRS {
                         return;
                     }
                 }
-                var player = await OSRSAPIClient.DownloadStatsAsync(playerName, hsType);
+                var player = await OSRSAPIClient.DownloadStatsAsync(playerName, gameMode);
                 if (player != null) {
                     await ReplyAsync("", embed: player.SkillToDiscordEmbed(skillType));
                     return;
                 }
                 await ReplyAsync("Player's highscores could not be found.");
+            }
+
+            [Command("lookup"), Alias("l"),
+                Summary("Looks up an account from the high scores, with various skill and mode options")]
+            public async Task GetStatsAsync([Summary("Game mode")]GameMode gameMode = GameMode.Regular, [Summary("Account to search"), Remainder]string playerName = "")
+            {
+                await GetStatsAsync(gameMode, SkillType.All, playerName);
+            }
+
+            [Command("lookup"), Alias("l"),
+                Summary("Looks up an account from the high scores, with various skill and mode options")]
+            public async Task GetStatsAsync([Summary("Skill")]SkillType skillType = SkillType.All, [Summary("Account to search"), Remainder]string playerName = "")
+            {
+                await GetStatsAsync(GameMode.Regular, skillType, playerName);
             }
 
             #endregion Public Methods 

@@ -24,7 +24,7 @@ namespace BCL.Modules.Admin {
     public class AdminModule : ModuleBase {
         #region Public Methods
 
-        [Command("setprefix"), Alias("prefix")]
+        [Command("setprefix"), Alias("prefix"), Summary("Changes the command prefix for the bot.")]
         public async Task ChangePrefixAsync([Summary("Prefix to change to.")]string prefix = "") {
             if (string.IsNullOrEmpty(prefix)) {
                 await

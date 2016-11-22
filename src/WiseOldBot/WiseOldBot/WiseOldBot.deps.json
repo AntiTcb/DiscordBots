@@ -6,7 +6,7 @@
   "compilationOptions": {},
   "targets": {
     ".NETCoreApp,Version=v1.0": {
-      "WiseOldBot/1.5.0": {
+      "WiseOldBot/1.5.1": {
         "dependencies": {
           "BCL": "1.1.0",
           "RestEase": "1.3.0"
@@ -1605,7 +1605,7 @@
     }
   },
   "libraries": {
-    "WiseOldBot/1.5.0": {
+    "WiseOldBot/1.5.1": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

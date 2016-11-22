@@ -20,7 +20,7 @@ namespace WiseOldBot.Modules.OSRS {
 
         public long Experience { get; set; }
         public uint Level { get; set; }
-        public string Rank { get; set; }
+        public int Rank { get; set; }
 
         #endregion Internal Fields + Properties
 
@@ -28,7 +28,7 @@ namespace WiseOldBot.Modules.OSRS {
 
         public Skill(string skill) : this(skill.Split(',')) { }
 
-        public Skill(long experience, uint level, string rank, SkillType skillName) {
+        public Skill(long experience, uint level, int rank, SkillType skillName) {
             Experience = experience;
             Level = level;
             Rank = rank;
@@ -37,14 +37,14 @@ namespace WiseOldBot.Modules.OSRS {
         public Skill(string[] skillArray) {
             Experience = long.Parse(skillArray[2]);
             Level = uint.Parse(skillArray[1]);
-            Rank = (skillArray[0] == "-1") ? "Unranked" : skillArray[0];
+            Rank = int.Parse(skillArray[0]);
         }
 
         #endregion Public Constructors
 
         #region Public Methods
 
-        public string ToDiscordMessage() => Format.Code($"Level:{Level}\tExp: {Experience:N0}\tRank: {Rank:N0}");
+        public string ToDiscordMessage() => Format.Code($"Level:{Level}\tExp: {Experience:N0}\tRank: {(Rank == -1 ? "Unranked" : $"{Rank:N0}")}");
 
         //public EmbedFieldBuilder ToDiscordFieldEmbed() {
         //    return new EmbedFieldBuilder()
@@ -55,7 +55,7 @@ namespace WiseOldBot.Modules.OSRS {
         public EmbedBuilder ToDiscordEmbed() {
             var level = Level.ToString();
             var exp = $"{Experience:N0}";
-            var rank = $"{Rank:N0}";
+            var rank = $"{(Rank == -1 ? "Unranked" : $"{Rank:N0}")}";
 
             var em = new EmbedBuilder()
                 .AddField((f) =>
@@ -73,7 +73,7 @@ namespace WiseOldBot.Modules.OSRS {
             return em;
         }
 
-        public override string ToString() => $"Level: {Level} \nExp: {Experience:N0} \nRank: {Rank:N0}";
+        public override string ToString() => $"Level: {Level} \nExp: {Experience:N0} \nRank: {(Rank == -1 ? "Unranked" : $"{Rank:N0}")}";
 
         #endregion Public Methods
 
