@@ -31,7 +31,7 @@ namespace OrgBot.Modules.YGOWikia.Entities {
             PendulumScales != null
                 ? Rank != null ? CardCategory.PendulumXyzMonster : CardCategory.PendulumMonster
                 : Types.Contains("Spell Card")
-                    ? CardCategory.Spell : Types.Contains("Trap Card") ? CardCategory.Trap : CardCategory.Monster;
+                    ? CardCategory.Spell : Types.Contains("Trap Card") ? CardCategory.Trap : Rank != null ? CardCategory.XyzMonster : CardCategory.Monster;
 
         public string Effect { get; set; }
         public string Level { get; set; }
@@ -86,7 +86,7 @@ namespace OrgBot.Modules.YGOWikia.Entities {
             if (isSpellOrTrap) { return em; }
 
             em.AddField((f) =>
-                f.WithName(isXyz ? "Rank:" : "Level")
+                f.WithName(isXyz ? "Rank:" : "Level:")
                  .WithValue(isXyz ? Rank : Level)
                  .WithIsInline(true))
               .AddField((f) =>
