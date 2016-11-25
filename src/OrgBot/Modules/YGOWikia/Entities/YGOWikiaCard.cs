@@ -17,6 +17,7 @@ namespace OrgBot.Modules.YGOWikia.Entities {
     using System;
     using System.Linq;
     using Discord;
+    using YGOCard.Entities;
 
     #endregion
 
@@ -38,7 +39,8 @@ namespace OrgBot.Modules.YGOWikia.Entities {
         public string Name { get; set; }
         public string PendulumScales { get; set; }
         public string Rank { get; set; }
-        public string Stats { get; set; }
+        public string ATK { get; set; }
+        public string DEF { get; set; }
         public string Types { get; set; }
         public string Property { get; set; }
         public string Url { get; set; }
@@ -49,50 +51,35 @@ namespace OrgBot.Modules.YGOWikia.Entities {
 
         public static YGOWikiaCard Parse(ILookup<string, string> things, string effect, string url) {
             var newCard = new YGOWikiaCard {
-                Name = things["English"].ElementAtOrDefault(0) ?? "Parse failed.",
+                Name = things["English"].ElementAtOrDefault(0) ?? "Parse failed",
                 Types = things["Types"].ElementAtOrDefault(0) ?? things["Type"].ElementAtOrDefault(0),
                 Attribute = things["Attribute"].ElementAtOrDefault(0),
-                Stats = things["ATK / DEF"].ElementAtOrDefault(0) ?? things["ATK/DEF"].ElementAtOrDefault(0),
+                ATK = things["ATK / DEF"].ElementAtOrDefault(0)?.Split('/')?.ElementAtOrDefault(0)?.Trim() ?? things["ATK/DEF"].ElementAtOrDefault(0)?.Split('/')?.ElementAtOrDefault(0)?.Trim(),
+                DEF = things["ATK / DEF"].ElementAtOrDefault(0)?.Split('/')?.ElementAtOrDefault(1)?.Trim() ?? things["ATK/DEF"].ElementAtOrDefault(0)?.Split('/')?.ElementAtOrDefault(1)?.Trim(),
                 Level = things["Level"].ElementAtOrDefault(0),
                 Rank = things["Rank"].ElementAtOrDefault(0),
-                PendulumScales = things["Pendulum Scale"].ElementAtOrDefault(0),
+                PendulumScales = things["Pendulum Scale"].ElementAtOrDefault(0)?.Trim(),
                 Property = things["Property"].ElementAtOrDefault(0),
-                Effect = effect.Trim('\n'),
+                Effect = effect.Trim(),
                 Url = url
             };
-            return newCard;
+            return (newCard.Name == "Parse failed" ? null : newCard);
         }
 
         public EmbedBuilder ToDiscordEmbed() {
             var isPend = Category == CardCategory.PendulumMonster || Category == CardCategory.PendulumXyzMonster;
             var isXyz = Category == CardCategory.XyzMonster || Category == CardCategory.PendulumXyzMonster;
             var isSpellOrTrap = Category == CardCategory.Spell || Category == CardCategory.Trap;
+            var description = isSpellOrTrap ? $"{Property?.TrimEnd()} {Types}" : $"{(isXyz ? $"Rank {Rank}" : $"Level {Level}")} | {Attribute?.Trim()} | {Types}";
+            var atkDefLine = $"ATK / {ATK} \tDEF / {DEF}";
+            var scaleLine = $"<:leftscale:251264662572761089>{PendulumScales} / {PendulumScales}<:rightscale:251264701730652161>";
             var em = new EmbedBuilder()
                 .WithTitle($"{Name} - {Url}")
                 .WithUrl(Url)
-                .WithDescription(isSpellOrTrap ? $"{Property.TrimEnd()} {Types}" : $"{Attribute.Trim()} | {Types}");
-
-            em.AddField((f) =>
-                f.WithName("Effects:")
-                 .WithValue(Effect));
-
-            if (isPend) {
-                em.AddField((f) =>
-                    f.WithName("Scales:")
-                     .WithValue(PendulumScales)
-                     .WithIsInline(true));
-            }
-
-            if (isSpellOrTrap) { return em; }
-
-            em.AddField((f) =>
-                f.WithName(isXyz ? "Rank:" : "Level:")
-                 .WithValue(isXyz ? Rank : Level)
-                 .WithIsInline(true))
-              .AddField((f) =>
-                f.WithName("ATK / DEF")
-                 .WithValue(Stats)
-                 .WithIsInline(true));    
+                .WithDescription(isSpellOrTrap ? $"{Property.TrimEnd()} {Types}" : $"{Attribute.Trim()} | {Types}\n{atkDefLine}{(isPend ? $"\n{scaleLine}" : "")}")
+                .AddField((f) =>
+                    f.WithName("Effects:")
+                    .WithValue(Effect));
             return em;
         }
 
@@ -100,19 +87,19 @@ namespace OrgBot.Modules.YGOWikia.Entities {
             string returnString = $"{Name} | {Types} ";
             switch (Category) {
                 case CardCategory.Monster:
-                    returnString += $"| {Attribute}\nLevel: {Level} | {Stats}";
+                    returnString += $"| {Attribute}\nLevel: {Level} | ATK / {ATK} DEF /{DEF}";
                     break;
 
                 case CardCategory.PendulumMonster:
-                    returnString += $"| {Attribute}\nLevel: {Level} | Scales: {PendulumScales} | {Stats}";
+                    returnString += $"| {Attribute}\nLevel: {Level} | Scales: {PendulumScales} | ATK / {ATK}  DEF / {DEF}";
                     break;
 
                 case CardCategory.XyzMonster:
-                    returnString += $"| {Attribute}\nRank: {Rank} | {Stats}";
+                    returnString += $"| {Attribute}\nRank: {Rank} | ATK / {ATK} DEF / {DEF}";
                     break;
 
                 case CardCategory.PendulumXyzMonster:
-                    returnString += $"| {Attribute}\nRank: {Rank} | Scales: {PendulumScales} | {Stats}";
+                    returnString += $"| {Attribute}\nRank: {Rank} | Scales: {PendulumScales} | ATK / {ATK } DEF / {DEF}";
                     break;
 
                 case CardCategory.Spell:
