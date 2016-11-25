@@ -1,6 +1,6 @@
 {
     "title": "OrgBot",
-    "version": "1.5.2-*",
+    "version": "1.5.3-*",
   "buildOptions": {
     "emitEntryPoint": true
   },
