@@ -76,7 +76,7 @@ namespace OrgBot.Modules.YGOWikia.Entities {
             var em = new EmbedBuilder()
                 .WithTitle($"{Name} - {Url}")
                 .WithUrl(Url)
-                .WithDescription($"{description}\n{atkDefLine}{(isPend ? $"\n{scaleLine}" : "")}")
+                .WithDescription($"{description}{(isSpellOrTrap ? "" : $"\n{atkDefLine}")}{(isPend ? $"\n{scaleLine}" : "")}")
                 .AddField((f) =>
                     f.WithName("Effects:")
                     .WithValue(Effect));
