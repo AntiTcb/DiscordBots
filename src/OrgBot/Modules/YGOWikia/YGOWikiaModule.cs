@@ -34,8 +34,8 @@ namespace OrgBot.Modules.YGOWikia {
                     await ReplyAsync("Couldn't find card information to parse.");
                     return;
                 }
-                if (card.Name == "Parse failed.") {
-                    await ReplyAsync($"Parsing of card failed. Card name needs more precision, or page HTML is invalid. <{card.Url}>");
+                if (card.Name == "Parse failed") {
+                    await ReplyAsync($"Could not parse card information. Card name needs more precision, or page HTML is invalid. Attempted to parse information from: <{card.Url}>");
                     return;
                 }
                 await ReplyAsync("", embed: card?.ToDiscordEmbed());

@@ -50,6 +50,7 @@ namespace OrgBot.Modules.YGOWikia.Entities {
         #region Public Methods
 
         public static YGOWikiaCard Parse(ILookup<string, string> things, string effect, string url) {
+            if (things == null) { return null; }
             var newCard = new YGOWikiaCard {
                 Name = things["English"].ElementAtOrDefault(0) ?? "Parse failed",
                 Types = things["Types"].ElementAtOrDefault(0) ?? things["Type"].ElementAtOrDefault(0),
@@ -63,7 +64,7 @@ namespace OrgBot.Modules.YGOWikia.Entities {
                 Effect = effect.Trim(),
                 Url = url
             };
-            return (newCard.Name == "Parse failed" ? null : newCard);
+            return newCard;
         }
 
         public EmbedBuilder ToDiscordEmbed() {
