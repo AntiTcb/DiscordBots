@@ -11,13 +11,13 @@
 
 #endregion
 
-namespace OrgBot.Modules.YGOWikia.Entities {
+namespace OrgBot.Modules.YGOWikia.Entities
+{
     #region Using
 
     using System;
     using System.Linq;
     using Discord;
-    using YGOCard.Entities;
 
     #endregion
 
@@ -44,12 +44,13 @@ namespace OrgBot.Modules.YGOWikia.Entities {
         public string Types { get; set; }
         public string Property { get; set; }
         public string Url { get; set; }
+        public string ImageUrl { get; set; }
 
         #endregion Public Fields + Properties
 
         #region Public Methods
 
-        public static YGOWikiaCard Parse(ILookup<string, string> things, string effect, string url) {
+        public static YGOWikiaCard Parse(ILookup<string, string> things, string effect, string url, string imgUrl) {
             if (things == null) { return null; }
             var newCard = new YGOWikiaCard {
                 Name = things["English"].ElementAtOrDefault(0) ?? "Parse failed",
@@ -62,7 +63,8 @@ namespace OrgBot.Modules.YGOWikia.Entities {
                 PendulumScales = things["Pendulum Scale"].ElementAtOrDefault(0)?.Trim(),
                 Property = things["Property"].ElementAtOrDefault(0),
                 Effect = effect.Trim(),
-                Url = url
+                Url = url,
+                ImageUrl = imgUrl 
             };
             return newCard;
         }
@@ -78,6 +80,12 @@ namespace OrgBot.Modules.YGOWikia.Entities {
                 .WithTitle($"{Name} - {Url}")
                 .WithUrl(Url)
                 .WithDescription($"{description}{(isSpellOrTrap ? "" : $"\n{atkDefLine}")}{(isPend ? $"\n{scaleLine}" : "")}")
+                .WithThumbnailUrl(ImageUrl)
+                .WithAuthor((a) =>
+                    a.WithName("Yu-Gi-Oh! Wikia")
+                     .WithIconUrl("http://img3.wikia.nocookie.net/__cb15/yugioh/images/8/89/Wiki-wordmark.png")
+                     .WithUrl("http://yugioh.wikia.com/wiki/Yu-Gi-Oh!_Wikia")
+                )
                 .AddField((f) =>
                     f.WithName("Effects:")
                     .WithValue(Effect));
