@@ -1,6 +1,4 @@
-﻿#region Header
-
-// Description:
+﻿// Description:
 //
 // Solution: DiscordBots
 // Project: BCL
@@ -9,60 +7,41 @@
 // Last Revised: 11/03/2016 9:19 PM
 // Last Revised by: Alex Gravely
 
-#endregion Header
-
-namespace BCL.Modules.Owner
-{
-    #region Using
+namespace BCL.Modules.Owner {
 
     using Discord.Commands;
     using Interfaces;
-    using Preconditions;
     using Services;
     using System.Linq;
     using System.Threading.Tasks;
 
-    #endregion Using
+    public partial class OwnerModule {
 
-    public partial class OwnerModule
-    {
-        #region Public Structs + Classes
-
-        public sealed class EvalGlobals
-        {
-            #region Internal Fields + Properties
-
+        public sealed class EvalGlobals {
             internal IBotConfig BC { get; set; }
             internal CommandContext CC { get; set; }
             internal IServerConfig SC { get; set; }
-
-            #endregion Internal Fields + Properties
         }
 
         [Name("Eval"), Group("eval"), RequireOwner]
-        public class EvalGroup : ModuleBase
-        {
-            #region Public Methods
+        public class EvalGroup : ModuleBase {
 
             [Command("add"),
                 Summary("Adds a namespace import to the eval namespace imports list."),
                 Remarks("eval add System.Math")]
-            public async Task AddImportAsync([Summary("Namespace name")]string import)
-            {
+            public async Task AddImportAsync([Summary("Namespace name")]string import) {
                 Globals.EvalImports.Add(import);
                 await ReplyAsync($"Added {import}").ConfigureAwait(false);
             }
 
             [Command("execute"),
                 Alias("run", "exec", "=>"), Summary("Executes a valid C# expression"), Remarks("eval execute 1+1")]
-            public async Task EvaluateAsync([Remainder, Summary("C# expression to evaluate")] string expression)
-            {
+            public async Task EvaluateAsync([Remainder, Summary("C# expression to evaluate")] string expression) {
                 await EvalService.EvaluateAsync(Context, expression).ConfigureAwait(false);
             }
 
             [Command("list"), Alias("l"), Summary("Lists all the current namespace imports."), Remarks("eval list")]
-            public async Task ListImportsAsync()
-            {
+            public async Task ListImportsAsync() {
                 await ReplyAsync(string.Join(", ", Globals.EvalImports.Select(x => x))).ConfigureAwait(false);
             }
 
@@ -70,15 +49,10 @@ namespace BCL.Modules.Owner
                 Alias("delete"),
                 Summary("Removes a namespace import from the eval namespace imports list."),
                 Remarks("eval remove System.Math")]
-            public async Task RemoveImportAsync([Summary("Namespace name")]string import)
-            {
+            public async Task RemoveImportAsync([Summary("Namespace name")]string import) {
                 Globals.EvalImports.Remove(import);
                 await ReplyAsync($"Removed {import}").ConfigureAwait(false);
             }
-
-            #endregion Public Methods
         }
-
-        #endregion Public Structs + Classes
     }
 }
