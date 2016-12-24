@@ -1,6 +1,4 @@
-﻿#region Header
-
-// Description:
+﻿// Description:
 //
 // Solution: DiscordBots
 // Project: OrgBot
@@ -9,29 +7,19 @@
 // Last Revised: 10/19/2016 11:31 PM
 // Last Revised by: Alex Gravely
 
-#endregion Header
-
 namespace OrgBot.Modules.YGOCard {
 
-    #region Using
-
+    using BCL.Preconditions;
     using Discord.Commands;
     using Entities;
-    using Preconditions;
     using System;
     using System.Linq;
     using System.Threading.Tasks;
 
-    #endregion Using
-
     public partial class YGOCardModule {
-
-        #region Public Structs + Classes
 
         [Name("Card-Editing"), Group("edit"), RequireContext(ContextType.Guild), RequireRole(OrgBotGlobals.NUMBERS_ROLE_ID)]
         public class CardEditGroup : ModuleBase {
-
-            #region Public Methods
 
             [Command("discard"), Alias("dontsave", "revert"), Remarks("edit discard")]
             public async Task DiscardChangesAsync() {
@@ -39,9 +27,9 @@ namespace OrgBot.Modules.YGOCard {
                 await YGOCardAPIClient.StopEditingAsync(Context.User, false);
             }
 
-            [Command("text"), Summary("Edits the Name/Flavor Text/Effect/Pendulum Effect of a card"), 
+            [Command("text"), Summary("Edits the Name/Flavor Text/Effect/Pendulum Effect of a card"),
                 Remarks("edit text name Kuriboh")]
-            public async Task EditEffectAsync([Summary("Data field to change")]CardDataField datafield, 
+            public async Task EditEffectAsync([Summary("Data field to change")]CardDataField datafield,
                 [Summary("Value to change data field to"), Remainder] string text) {
                 var card = YGOCardAPIClient.GetEditedCard(Context.User);
                 switch (datafield) {
@@ -65,9 +53,9 @@ namespace OrgBot.Modules.YGOCard {
                 await ReplyAsync(":thumbsup:");
             }
 
-            [Command("properties"), Alias("prop"), 
+            [Command("properties"), Alias("prop"),
                 Summary("Edits Attribute/Card Type/Monster Type of a card"), Remarks("edit prop attribute dark")]
-            public async Task EditPropertiesAsync([Summary("Data field to change")]CardDataField datafield, 
+            public async Task EditPropertiesAsync([Summary("Data field to change")]CardDataField datafield,
                 [Summary("Value to change data field to")]string value) {
                 var card = YGOCardAPIClient.GetEditedCard(Context.User);
                 switch (datafield) {
@@ -99,7 +87,7 @@ namespace OrgBot.Modules.YGOCard {
             }
 
             [Command("stats"), Summary("Edits the Attack/Defense/Level/Rank/Pendulum Scales of a card"), Remarks("edit stats atk 15000")]
-            public async Task EditStatsAsync([Summary("Data field to change")]CardDataField dataField, 
+            public async Task EditStatsAsync([Summary("Data field to change")]CardDataField dataField,
                 [Summary("Value to change data field to")]uint value) {
                 var card = YGOCardAPIClient.GetEditedCard(Context.User);
                 switch (dataField) {
@@ -137,8 +125,8 @@ namespace OrgBot.Modules.YGOCard {
                 await ReplyAsync(string.Join("\n", YGOCardAPIClient.GetEditedCards().Select(x => $"{x.Value.Name} is being edited by {x.Key.Username}")));
             }
 
-            [Command("preview"), 
-                Summary("Displays the output of your edits vs the current version."), 
+            [Command("preview"),
+                Summary("Displays the output of your edits vs the current version."),
                 Remarks("edit preview")]
             public async Task PreviewChangesAsync() {
                 var editedCard = YGOCardAPIClient.GetEditedCard(Context.User);
@@ -169,10 +157,6 @@ namespace OrgBot.Modules.YGOCard {
                 await ReplyAsync("Saving changes to the database!");
                 await YGOCardAPIClient.StopEditingAsync(Context.User, true);
             }
-
-            #endregion Public Methods
         }
-
-        #endregion Public Structs + Classes
     }
 }
