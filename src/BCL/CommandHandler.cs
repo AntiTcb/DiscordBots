@@ -27,7 +27,12 @@ namespace BCL {
 
         public DiscordSocketClient Client { get; set; }
         public IDependencyMap Map { get; set; }
-        public CommandService Service { get; set; } = new CommandService();
+        public CommandService Service { get; set; }
+
+        public CommandHandler()
+        {
+            Service = new CommandService(new CommandServiceConfig { CaseSensitiveCommands = false });
+        }
 
         public async virtual Task HandleCommandAsync(SocketMessage msg) {
             var message = msg as SocketUserMessage;
