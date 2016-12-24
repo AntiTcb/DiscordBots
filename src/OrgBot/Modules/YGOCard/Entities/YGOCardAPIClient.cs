@@ -43,7 +43,7 @@ namespace OrgBot.Modules.YGOCard.Entities {
         #region Public Constructors
 
         static YGOCardAPIClient() {
-            var items = API.GetCardsAsync().Result;
+            var items = API.GetCardsAsync().GetAwaiter().GetResult();
             Cards = new CardMap(items);
         }
 
