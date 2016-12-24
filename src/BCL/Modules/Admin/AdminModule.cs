@@ -20,7 +20,7 @@ namespace BCL.Modules.Admin {
 
     #endregion
 
-    [Name("Admin"), RequirePermission(GuildPermission.ManageGuild), RequireContext(ContextType.Guild)]
+    [Name("Admin"), RequireUserPermission(GuildPermission.ManageGuild), RequireContext(ContextType.Guild)]
     public class AdminModule : ModuleBase {
         #region Public Methods
 
