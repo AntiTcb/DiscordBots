@@ -1,48 +1,39 @@
-﻿#region Header
-
-// Description:
-// 
+﻿// Description:
+//
 // Solution: DiscordBots
 // Project: WiseOldBot
-// 
+//
 // Created: 09/25/2016 6:53 AM
 // Last Revised: 10/19/2016 6:17 PM
 // Last Revised by: Alex Gravely
 
-#endregion
-
 namespace WiseOldBot.Modules.GETracker {
-    #region Using
 
-    using System;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
     using Discord;
     using Discord.Commands;
     using Entities;
+    using System;
+    using System.Linq;
+    using System.Threading.Tasks;
 
-    #endregion
-
+    [Name("GE-Tracker")]
     public class GETrackerModule : ModuleBase {
-        #region Public Methods
 
         [Command("alch"), Summary("Gets the alchemy values for an item"), Remarks("alch rune platebody")]
         public async Task GetAlchPriceAsync([Remainder, Summary("Item name")] string itemName = "cabbage") {
-            await Context.Channel.TriggerTypingAsync();
-            var returnItems = GETrackerAPIClient.FindItemOrItems(itemName);
-            var sb = new StringBuilder();
-
-            foreach (var item in returnItems.Take(5)) {
-                sb.AppendLine($"`{item.Name} / Low Alch: {item.LowAlchemy} / {item.HighAlchemy}`");
+            using (Context.Channel.EnterTypingState()) {
+                var returnItem = GETrackerAPIClient.FindItemOrItems(itemName).FirstOrDefault();
+                if (returnItem == null) {
+                    await ReplyAsync($"Item not found");
+                    return;
+                }
+                await ReplyAsync($"`{returnItem.Name} / Low Alch: {returnItem.LowAlchemy} / {returnItem.HighAlchemy}`");
             }
-            await Context.Channel.SendMessageAsync(sb.ToString());
         }
 
         [Command("price"), Alias("p"), Summary("Gets the GE-Tracker info for an item"), Remarks("price rune platebody")]
         public async Task GetPriceAsync([Remainder, Summary("Item name")] string itemName = "cabbage") {
             using (Context.Channel.EnterTypingState()) {
-
                 var returnItems = GETrackerAPIClient.FindItemOrItems(itemName);
 
                 foreach (var item in returnItems.Take(5)) {
@@ -51,7 +42,11 @@ namespace WiseOldBot.Modules.GETracker {
                     }
                 }
 
-                if (returnItems.Count() == 1) {
+                if (!returnItems.Any()) {
+                    await ReplyAsync("Item not found!");
+                    return;
+                }
+                else if (returnItems.Count() == 1) {
                     await ReplyAsync("", embed: returnItems.FirstOrDefault().ToDiscordEmbed());
                     return;
                 }
@@ -74,7 +69,5 @@ namespace WiseOldBot.Modules.GETracker {
                              $"{Format.Code($"{newItems.Select(x => x.Key.ToString()).Aggregate((x, y) => $"{x}, {y}")}")}");
             }
         }
-
-        #endregion Public Methods
     }
 }
