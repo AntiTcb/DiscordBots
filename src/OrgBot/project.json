@@ -2,7 +2,8 @@
     "title": "OrgBot",
     "version": "1.5.5-*",
   "buildOptions": {
-    "emitEntryPoint": true
+    "emitEntryPoint": true,
+    "nowarn": ["AD0001"]
   },
 
   "dependencies": {
