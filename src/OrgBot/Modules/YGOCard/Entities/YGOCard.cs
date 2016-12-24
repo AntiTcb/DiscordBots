@@ -1,6 +1,4 @@
-﻿#region Header
-
-// Description:
+﻿// Description:
 //
 // Solution: DiscordBots
 // Project: OrgBot
@@ -9,33 +7,16 @@
 // Last Revised: 11/05/2016 2:26 PM
 // Last Revised by: Alex Gravely
 
-#endregion Header
-
-namespace OrgBot.Modules.YGOCard.Entities
-{
-    #region Using
+namespace OrgBot.Modules.YGOCard.Entities {
 
     using BCL.Extensions;
     using Discord;
     using Newtonsoft.Json;
     using System.Threading.Tasks;
 
-    #endregion Using
+    public class YGOCard {
 
-    public class YGOCard
-    {
-        #region Private Fields + Properties
-
-        const string YGORG_PIC_BASE_URI = "";
-
-        #endregion Private Fields + Properties
-
-        #region Public Constructors
-
-        public struct CardColor
-        {
-            #region Private Fields + Properties
-
+        public struct CardColor {
             public static Color Effect = new Color(255, 139, 33);
             public static Color Fusion = new Color(160, 134, 183);
             public static Color Normal = new Color(253, 230, 138);
@@ -45,14 +26,8 @@ namespace OrgBot.Modules.YGOCard.Entities
             public static Color Trap = new Color(188, 90, 132);
             public static Color Xyz = new Color(0, 0, 0);
 
-            #endregion Private Fields + Properties
-
-            #region Internal Methods
-
-            internal static Color GetColor(YGOCardType type)
-            {
-                switch (type)
-                {
+            internal static Color GetColor(YGOCardType type) {
+                switch (type) {
                     case YGOCardType.Monster:
                     case YGOCardType.Normal:
                     case YGOCardType.P_Normal:
@@ -86,33 +61,7 @@ namespace OrgBot.Modules.YGOCard.Entities
                         return Color.Default;
                 }
             }
-
-            #endregion Internal Methods
         }
-
-        public YGOCard()
-        {
-        }
-
-        public YGOCard(YGOCard card)
-        {
-            Attack = card.Attack;
-            Attribute = card.Attribute;
-            CardType = card.CardType;
-            Defence = card.Defence;
-            Description = card.Description;
-            Id = card.Id;
-            LeftScale = card.LeftScale;
-            RightScale = card.RightScale;
-            Level = card.Level;
-            Name = card.Name;
-            PendulumEffect = card.PendulumEffect;
-            Type = card.Type;
-        }
-
-        #endregion Public Constructors
-
-        #region Public Fields + Properties
 
         [JsonProperty("atk")]
         public uint Attack { get; set; }
@@ -140,7 +89,7 @@ namespace OrgBot.Modules.YGOCard.Entities
         public uint Id { get; set; }
 
         [JsonProperty("picture")]
-        public string ImageUrl { get { return YGORG_PIC_BASE_URI + picurl; } set { picurl = value; } }
+        public string ImageUrl { get; set; }
 
         [JsonProperty("scale_left")]
         public uint LeftScale { get; set; }
@@ -157,7 +106,7 @@ namespace OrgBot.Modules.YGOCard.Entities
                 return pendulumEffect;
             }
             set {
-                pendulumEffect = value ?? string.Empty;
+                pendulumEffect = value ?? "\u200B";
             }
         }
 
@@ -170,48 +119,54 @@ namespace OrgBot.Modules.YGOCard.Entities
                 return type;
             }
             set {
-                type = value?.ToTitleCase() ?? string.Empty;
+                type = value?.ToTitleCase() ?? "\u200B";
             }
         }
 
-        #endregion Public Fields + Properties
+        public YGOCard() {
+        }
 
-        #region Private Fields + Properties
+        public YGOCard(YGOCard card) {
+            Attack = card.Attack;
+            Attribute = card.Attribute;
+            CardType = card.CardType;
+            Defence = card.Defence;
+            Description = card.Description;
+            Id = card.Id;
+            LeftScale = card.LeftScale;
+            RightScale = card.RightScale;
+            Level = card.Level;
+            Name = card.Name;
+            PendulumEffect = card.PendulumEffect;
+            Type = card.Type;
+        }
 
-        string attribute;
-        string pendulumEffect;
-        string picurl;
-        string type;
-
-        #endregion Private Fields + Properties
-
-        #region Public Methods
-
-        public EmbedBuilder ToDiscordEmbed()
-        {
+        public EmbedBuilder ToDiscordEmbed() {
             var em = new EmbedBuilder()
                 .WithTitle(Format.Bold(Name))
-                .WithColor(CardColor.GetColor(CardType));
+                .WithColor(CardColor.GetColor(CardType))
+                .WithAuthor((a) =>
+                    a.WithName("YGOrganization.com")
+                     .WithIconUrl("https://ygorganization.com/wp-content/uploads/2014/09/cropped-TheOrgLogo.png")
+                     .WithUrl("https://ygorganization.com"))
+                .WithThumbnailUrl((string.IsNullOrEmpty(ImageUrl) ? "" : $"{YGORG_PIC_BASE_URI}{ImageUrl}"));
 
-            if (CardType == YGOCardType.Spell || CardType == YGOCardType.Trap)
-            {
+            if (CardType == YGOCardType.Spell || CardType == YGOCardType.Trap) {
                 em.WithDescription($"{Type} {CardType}")
                         .AddField((f) =>
                             f.WithName("Effect:")
                              .WithValue(Format.Code(Description, "elm"))
                              .WithIsInline(false));
             }
-            else
-            {
+            else {
                 var isXyz = CardType == YGOCardType.Xyz || CardType == YGOCardType.P_Xyz;
                 var isPend = (int)CardType >= 9;
                 var descriptionFirstLine = $"{(isXyz ? "Rank:" : "Level:")} {Level} | {Attribute.ToUpper()} | {Type}";
                 var descriptionSecondLine = $"\nATK / {Attack} \tDEF / {Defence}";
-                var descriptionThirdLine = $"\n<:leftscale:251264662572761089>{LeftScale} / {RightScale}<:rightscale:251264701730652161>";
+                var descriptionThirdLine = $"\n{CustomEmoji.LeftScale}{LeftScale} / {RightScale}{CustomEmoji.RightScale}";
                 em.WithDescription(descriptionFirstLine + descriptionSecondLine + (isPend ? descriptionThirdLine : ""));
 
-                if (isPend)
-                {
+                if (isPend) {
                     em.AddField((f) =>
                         f.WithName("Pendulum Effect:")
                          .WithValue(PendulumEffect)
@@ -226,11 +181,9 @@ namespace OrgBot.Modules.YGOCard.Entities
             return em;
         }
 
-        public string ToDiscordMessage()
-        {
+        public string ToDiscordMessage() {
             string returnString;
-            switch (CardType)
-            {
+            switch (CardType) {
                 case YGOCardType.Effect:
                 case YGOCardType.Fusion:
                 case YGOCardType.Normal:
@@ -276,16 +229,22 @@ namespace OrgBot.Modules.YGOCard.Entities
             return Format.Code(returnString, "elm");
         }
 
+        public override string ToString() => $"{Name}";
+
         public async Task UpdateAsync() => Update(await YGOCardAPIClient.GetCardAsync(Id));
 
-        #endregion Public Methods
+        const string YGORG_PIC_BASE_URI = "https://ygorganization.com/cardart/";
 
-        #region Private Methods
+        #region Private Fields + Properties
 
-        void Update(YGOCard updatedCard)
-        {
-            if (updatedCard.Id != Id)
-            {
+        string attribute;
+        string pendulumEffect;
+        string type;
+
+        #endregion Private Fields + Properties
+
+        void Update(YGOCard updatedCard) {
+            if (updatedCard.Id != Id) {
                 return;
             }
             Attack = updatedCard.Attack;
@@ -300,13 +259,5 @@ namespace OrgBot.Modules.YGOCard.Entities
             RightScale = updatedCard.RightScale;
             Type = updatedCard.Type;
         }
-
-        #endregion Private Methods
-
-        #region Overrides of Object
-
-        public override string ToString() => $"{Name}";
-
-        #endregion Overrides of Object
     }
 }
