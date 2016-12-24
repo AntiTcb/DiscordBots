@@ -1,6 +1,4 @@
-﻿#region Header
-
-// Description:
+﻿// Description:
 //
 // Solution: DiscordBots
 // Project: OrgBot
@@ -9,11 +7,7 @@
 // Last Revised: 11/08/2016 11:11 PM
 // Last Revised by: Alex Gravely
 
-#endregion Header
-
 namespace OrgBot {
-
-    #region Using
 
     using BCL;
     using Discord;
@@ -21,11 +15,7 @@ namespace OrgBot {
     using Discord.WebSocket;
     using System.Threading.Tasks;
 
-    #endregion Using
-
     public class OrgBot : BotBase {
-
-        #region Overrides of BotBase
 
         public async override Task InstallCommandsAsync() {
             Commands = new CommandHandler();
@@ -38,7 +28,7 @@ namespace OrgBot {
 
         public async override Task StartAsync<T>() {
             Client = new DiscordSocketClient(new DiscordSocketConfig { LogLevel = LogSeverity.Debug });
-            Client.Ready += ClientOnReadyAsync;
+            //Client.Ready += ClientOnReadyAsync;
             Client.GuildAvailable += ClientOnGuildAvailableAsync;
             Client.JoinedGuild += ClientOnJoinedGuildAsync;
             Client.LeftGuild += ClientOnLeftGuildAsync;
@@ -62,8 +52,6 @@ namespace OrgBot {
             }
         }
 
-        async Task ClientOnReadyAsync() => await Client.SetGame("Ending Misinformation");
-
-        #endregion Overrides of BotBase
+        //async Task ClientOnReadyAsync() => await Client.SetGame("Ending Misinformation");
     }
 }
