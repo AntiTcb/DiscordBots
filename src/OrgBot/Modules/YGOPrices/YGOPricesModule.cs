@@ -8,16 +8,27 @@
 // Last Revised: 10/30/2016 2:08 PM
 // Last Revised by: Alex Gravely
 #endregion
-namespace OrgBot.Modules.YugiohPrices {
+namespace OrgBot.Modules.YGOPrices {
     using System;
+    using System.Net.Http;
     using System.Threading.Tasks;
     using Discord.Commands;
+    using Entities;
 
-    [Name("YGO Prices"), Group("price"), DontAutoLoad]
-    public class YugiohPricesModule : ModuleBase {
+    [Name("Yu-Gi-Oh Prices"), Group("price")]
+    public class YGOPricesModule : ModuleBase {
         [Command("card"), Alias("c")]
-        public async Task GetCardPriceAsync([Remainder] string cardName ) {
-            throw new NotImplementedException();
+        public async Task GetCardPriceAsync([Remainder] string cardName) {             
+            var card = await YGOPricesClient.GetCardAndPriceResponseAsync(cardName);
+
+            if (card == null)
+            {
+                await ReplyAsync("Card was null. Data could not be found.");
+                return;
+            }
+            var em = card?.ToDiscordEmbed();
+            em.WithUrl(Uri.EscapeUriString("http://yugiohprices.com/card_price?name={cardName}"));
+            await ReplyAsync("", embed: em);
         }
 
         [Command("topX"), Alias("top")]

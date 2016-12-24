@@ -11,7 +11,7 @@
 
 #endregion Header
 
-namespace OrgBot.Modules.YugiohPrices.Entities
+namespace OrgBot.Modules.YGOPrices.Entities
 {
     #region Using
 
@@ -24,7 +24,7 @@ namespace OrgBot.Modules.YugiohPrices.Entities
 
         #region Public Structs + Classes
 
-        public class CardData {
+        public class RiseFallCardData {
 
             #region Public Fields + Properties
 
@@ -43,7 +43,6 @@ namespace OrgBot.Modules.YugiohPrices.Entities
             [JsonProperty("price_shift")]
             public double PriceShift { get; set; }
 
-            // TODO: Enum
             [JsonProperty("rarity")]
             public string Rarity { get; set; }
 
@@ -55,10 +54,10 @@ namespace OrgBot.Modules.YugiohPrices.Entities
             #region Public Fields + Properties
 
             [JsonProperty("falling")]
-            public List<CardData> Falling { get; set; }
+            public List<RiseFallCardData> Falling { get; set; }
 
             [JsonProperty("rising")]
-            public List<CardData> Rising { get; set; }
+            public List<RiseFallCardData> Rising { get; set; }
 
             #endregion Public Fields + Properties
         }
