@@ -74,7 +74,7 @@ namespace OrgBot.Modules.YGOCard {
                     await ReplyAsync($"No cards that contain the substring {cardName} were found.");
                     return;
                 }
-                var listOfCards = string.Join(", ", cards.Select(x => x.Name));
+                var listOfCards = string.Join(", ", cards.Select(x => x.Name).Distinct());
                 if (listOfCards.Length > 2000) {
                     var splitList = Enumerable.Range(0, listOfCards.Length / 1900).
                                                Select(i => listOfCards.Substring(i * 1900, 1900));

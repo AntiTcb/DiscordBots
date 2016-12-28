@@ -29,7 +29,7 @@ namespace BCL {
         public DiscordSocketClient Client { get; set; }
         public ICommandHandler Commands { get; set; }
 
-        public async virtual Task ClientOnJoinedGuildAsync(SocketGuild guild) {
+        public async virtual Task CreateGuildConfigAsync(SocketGuild guild) {
             var defaultChannel = await guild.GetDefaultChannelAsync().ConfigureAwait(false);
             await defaultChannel.SendMessageAsync($"Thank you for adding me to the server! The default prefix is currently set to `{Globals.DEFAULT_PREFIX}`." +
                 $"Any user with the Manage Server permission may change this with the `setprefix` command. Use `{Globals.DEFAULT_PREFIX}help` to see all my commands").ConfigureAwait(false);
@@ -38,7 +38,7 @@ namespace BCL {
             await ConfigHandler.SaveAsync(Globals.SERVER_CONFIG_PATH, Globals.ServerConfigs).ConfigureAwait(false);
         }
 
-        public async virtual Task ClientOnLeftGuildAsync(SocketGuild guild) {
+        public async virtual Task DeleteGuildConfigAsync(SocketGuild guild) {
             if (Globals.ServerConfigs.ContainsKey(guild.Id)) {
                 Globals.ServerConfigs.Remove(guild.Id);
             }
@@ -65,8 +65,8 @@ namespace BCL {
 
         public async virtual Task StartAsync<T>() where T : IBotConfig, new() {
             Client = new DiscordSocketClient(new DiscordSocketConfig { LogLevel = LogSeverity.Info });
-            Client.JoinedGuild += ClientOnJoinedGuildAsync;
-            Client.LeftGuild += ClientOnLeftGuildAsync;
+            Client.JoinedGuild += CreateGuildConfigAsync;
+            Client.LeftGuild += DeleteGuildConfigAsync;
             await HandleConfigsAsync<T>().ConfigureAwait(false);
             await InstallCommandsAsync().ConfigureAwait(false);
             await LoginAndConnectAsync(TokenType.Bot).ConfigureAwait(false);

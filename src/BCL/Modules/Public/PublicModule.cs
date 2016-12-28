@@ -35,8 +35,8 @@ namespace BCL.Modules.Public {
             Summary("Information about the bot's commands."),
             RequireContext(ContextType.Guild)]
         public async Task HelpAsync([Remainder, Summary("Command/Module name to search for")]string name = "") {
-            var modules = _service.Modules.OrderBy(x => x.Name);//.Concat(_service.Modules.SelectMany(m => m.Submodules)).OrderBy(x => x.Name);
-            var commands = modules.SelectMany(m => m.Commands).Concat(modules.SelectMany(m => m.Submodules).SelectMany(sm => sm.Commands)).Distinct(new CommandNameComparer());
+            var modules = _service.Modules.OrderBy(x => x.Name);
+            var commands = modules.SelectMany(m => m.Commands.Select(x => x).Distinct(new CommandNameComparer()));
 
             var cmd = commands.FirstOrDefault(x => x.Aliases.Contains(name.ToLower()));
             var module = modules.FirstOrDefault(x => x.Name.ToLower().Contains(name.ToLower()));
@@ -44,8 +44,8 @@ namespace BCL.Modules.Public {
 
             switch (helpMode) {
                 case HelpMode.All:
-                    var errMsg = module == null ? "Module not found, showing generic help instead."
-                        : cmd == null ? "Command not found, showing generic help instead." : "";
+                    var errMsg = name == "" ? "" :
+                        module == null && cmd == null ? "Module/Command not found, showing generic help instead." : "";
                     await ReplyAsync(errMsg, embed: HelpService.GetGenericHelpEmbed(modules, Context).WithAuthor((a) => a.AsUser(((Context.Guild as SocketGuild).CurrentUser))));
                     break;
 
@@ -69,7 +69,6 @@ namespace BCL.Modules.Public {
 
         [Command("info"), Summary("Information about the bot.")]
         public async virtual Task InfoAsync() {
-            // TODO: Async Sum
             var app = await Context.Client.GetApplicationInfoAsync().ConfigureAwait(false);
             var completedChannelCount =
                 await Task.WhenAll((await Context.Client.GetGuildsAsync()).Select(async g => await g.GetChannelsAsync()));

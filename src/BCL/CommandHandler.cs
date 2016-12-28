@@ -16,9 +16,11 @@ namespace BCL {
 
     using System.Reflection;
     using System.Threading.Tasks;
+    using Discord;
     using Discord.Commands;
     using Discord.WebSocket;
     using Interfaces;
+    using Extensions;
 
     #endregion
 
@@ -60,11 +62,7 @@ namespace BCL {
                     return;
                 }
                 var loggingChannel = Client.GetChannel(Globals.BotConfig.LogChannel) as SocketTextChannel;
-                await
-                    loggingChannel.SendMessageAsync
-                        ($"**Command:** {ctx.Message}\n" + $"**Error:** {result.ErrorReason}\n" +
-                         $"**Caller:** {ctx.User} ({ctx.User.Id}) / {ctx.Guild.Name} | {ctx.Channel.Name}").
-                        ConfigureAwait(false);
+                await ReportCommandErrorAsync(loggingChannel, ctx, result).ConfigureAwait(false);
                 await ctx.Channel.SendMessageAsync($"**Error:** {result.ErrorReason}").ConfigureAwait(false);
             }
         }
@@ -76,6 +74,27 @@ namespace BCL {
             await Service.AddModulesAsync(typeof(BotBase).GetTypeInfo().Assembly).ConfigureAwait(false);
             await Service.AddModulesAsync(Assembly.GetEntryAssembly()).ConfigureAwait(false);
             Client.MessageReceived += HandleCommandAsync;
+        }
+
+        public async Task ReportCommandErrorAsync(IMessageChannel logChannel, CommandContext ctx, IResult result) {
+            var eb = new EmbedBuilder()
+                .WithAuthor(ctx.User)
+                .WithColor(new Color(1, 0, 0))
+                .WithTitle(ctx.Message.Content)
+                .WithDescription(result.ErrorReason)
+                .AddField((f) =>
+                    f.WithName("Caller:")
+                     .WithValue($"{ctx.User} | {ctx.User.Id}")
+                )
+                .AddField((f) =>
+                    f.WithName($"Guild:")
+                     .WithValue($"{ctx.Guild?.Name ?? "DM"} | {ctx.Guild?.Id.ToString() ?? ""}")
+                )
+                .AddField((f) =>
+                    f.WithName($"Channel:")
+                     .WithValue($"{ctx.Channel.Name} | {ctx.Channel.Id}")
+                );
+            await logChannel.SendMessageAsync("", embed: eb);
         }
 
         #endregion Implementation of ICommandHandler

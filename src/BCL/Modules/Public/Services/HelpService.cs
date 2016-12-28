@@ -14,7 +14,7 @@
 
         public static EmbedBuilder GetCommandHelpEmbed(CommandInfo command, CommandContext ctx) {
             var prefix = Globals.ServerConfigs[ctx.Guild.Id].CommandPrefix;
-            var title = command.Name + (command.Aliases.Any(a => a != command.Name) ? "Aliases: " + string.Join(", ", command.Aliases) : "");
+            var title = command.Name.ToTitleCase() + (command.Aliases.Any(a => a != command.Name) ? "Aliases: " + string.Join(", ", command.Aliases) : "");
             var description = $"{command.Summary}" +
                 $"\n\tSignature: `{prefix}{command.Name} {(command.Parameters.Any() ? string.Join(" ", command.Parameters.Select(p => p.Name)) : "")}`" +
                 $"\n\tExample: `{prefix}{command.Remarks}`";

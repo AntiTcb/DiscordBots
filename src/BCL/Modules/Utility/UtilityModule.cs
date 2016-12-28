@@ -80,6 +80,8 @@ namespace BCL.Modules.Utility {
                          index++;
                      }
                  }).ConfigureAwait(false);
+
+            await Context.Message.DeleteAsync();
         }
 
         #endregion Public Methods

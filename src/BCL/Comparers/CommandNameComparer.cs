@@ -8,7 +8,7 @@ namespace BCL.Comparers
     {
         #region Public Methods
 
-        public bool Equals(CommandInfo x, CommandInfo y) => x.Name.Equals(y.Name, StringComparison.OrdinalIgnoreCase);
+        public bool Equals(CommandInfo x, CommandInfo y) => x.Name.Equals(y.Name, StringComparison.OrdinalIgnoreCase) && x.Module.Name != y.Module.Name;
 
         public int GetHashCode(CommandInfo obj) => obj.Name.ToLowerInvariant().GetHashCode();
 

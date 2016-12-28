@@ -17,5 +17,8 @@ namespace BCL.Extensions
             builder.WithIconUrl(user.AvatarUrl);
             return builder; 
         }
+
+        public static EmbedBuilder WithAuthor(this EmbedBuilder eb, IUser user) =>
+            eb.WithAuthor((a) => a.AsUser(user));    
     }
 }
