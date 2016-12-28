@@ -84,8 +84,8 @@ namespace BCL.Modules.Utility {
             var owner = await Context.Client.GetUserAsync(Globals.OWNER_ID);
             await ReplyAsync("Summoning Anti-Tcb...");
             var loggingChannel = await Context.Client.GetChannelAsync(Globals.BotConfig.LogChannel) as ITextChannel;
-            var invite = (Context.Channel as IGuildChannel).CreateInviteAsync(maxUses: 1);
-            var summonMsg = $"{owner.Mention}: You're being summoned by {Context.User} to {Context.Guild.Name}. {invite}";
+            var invite = await (Context.Channel as IGuildChannel).CreateInviteAsync(maxUses: 1);
+            var summonMsg = $"{owner.Mention}: You're being summoned by {Context.User} to {Context.Guild.Name}. {invite.Url}";
             await loggingChannel.SendMessageAsync(summonMsg);
         }
 
