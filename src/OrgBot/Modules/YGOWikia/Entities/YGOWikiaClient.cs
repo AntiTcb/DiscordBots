@@ -45,7 +45,7 @@ namespace OrgBot.Modules.YGOWikia.Entities {
                                      x.TextContent.Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries).
                                        ElementAtOrDefault(1));
             var ceffect = Regex.Replace(doc.QuerySelectorAll(".navbox-list").Select(x => x.InnerHtml).ElementAtOrDefault(0) ?? "", "<br>", "\n");
-            var cardeffect = Regex.Replace(Regex.Replace(ceffect, "(<(.*?)>)+?", ""), @"^ *(Monster Effect|Pendulum Effect)\s*\n\s*(\((.*?)\n)?\s*?(?=\w)", "**$1:**\n", RegexOptions.Multiline);
+            var cardeffect = Regex.Replace(Regex.Replace(ceffect, "(<(.*?)>)+?", ""), @"^ *(Monster Effect|Pendulum Effect)\s*\n\s*(\((.*?)\n)?\s*?(?=\w)", "**$1:**\n$2", RegexOptions.Multiline);
             var cardimage = doc.QuerySelector(".image")?.Attributes?["href"]?.Value;
             return YGOWikiaCard.Parse(cardAttrs, cardeffect, url, cardimage);
         }

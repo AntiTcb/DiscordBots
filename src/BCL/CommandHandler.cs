@@ -79,9 +79,10 @@ namespace BCL {
         public async Task ReportCommandErrorAsync(IMessageChannel logChannel, CommandContext ctx, IResult result) {
             var eb = new EmbedBuilder()
                 .WithAuthor(ctx.User)
-                .WithColor(new Color(1, 0, 0))
-                .WithTitle(ctx.Message.Content)
-                .WithDescription(result.ErrorReason)
+                .WithColor(new Color(255, 0, 0))
+                .WithTitle(result.ErrorReason)
+                .WithDescription(ctx.Message.Content)
+                .WithCurrentTimestamp()
                 .AddField((f) =>
                     f.WithName("Caller:")
                      .WithValue($"{ctx.User} | {ctx.User.Id}")

@@ -99,12 +99,13 @@
             var prefix = ctx.Guild == null ? Globals.DEFAULT_PREFIX : Globals.ServerConfigs[ctx.Guild.Id].CommandPrefix;
             var em = new EmbedBuilder()
                 .WithTitle(module.Name)
+                .WithDescription("Commands:")
                 .WithFooter((f) =>
                     f.WithText($"Use {prefix}help <commandname> for specific command information."));
 
             foreach (var c in module.Commands.Distinct(new CommandNameComparer())) {
                 em.AddField((f) =>
-                    f.WithName(string.Join(", ", c.Aliases)).WithValue($"{Format.Underline(c.Summary ?? "")} - {Format.Italics(c.Remarks ?? "")}").WithIsInline(true));
+                    f.WithName(string.Join(", ", c.Aliases)).WithValue($"{Format.Underline(c.Summary ?? "")} - {Format.Italics(c.Remarks ?? "")}"));
             }
             return em;
         }

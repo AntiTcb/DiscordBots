@@ -39,13 +39,13 @@ namespace BCL.Modules.Owner {
             (await Context.Client.GetChannelAsync(channel.Id) as SocketTextChannel)?.SendMessageAsync(text);
         }
 
-        //[Command("getinvite"), Summary("Makes an invite to the specified guild"), Remarks("getinvite 123456")]
-        //public async Task GetInviteAsync([Summary("Target guild")]IGuild guild)
-        //{
-        //    var channel = await Context.Client.GetChannelAsync(guild.DefaultChannelId);
-        //    var invite = await (channel as SocketGuildChannel).CreateInviteAsync();
-        //    await ReplyAsync(invite.Url);
-        //}
+        [Command("getinvite"), Summary("Makes an invite to the specified guild"), Remarks("getinvite 123456")]
+        public async Task GetInviteAsync([Summary("Target guild")]ulong guild)
+        {
+            var channel = await Context.Client.GetChannelAsync((await Context.Client.GetGuildAsync(guild)).DefaultChannelId);
+            var invite = await (channel as SocketGuildChannel).CreateInviteAsync();
+            await ReplyAsync(invite.Url);
+        }
 
         [Command("set"), RequireContext(ContextType.Guild), Summary("sets various bot properties"), Remarks("set nick FooBar")]
         public async Task SetAsync([Summary("Property to change")]UserProperty prop,
