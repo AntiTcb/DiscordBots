@@ -1,5 +1,5 @@
-﻿namespace BCL.Modules.Public.Services {
-
+﻿namespace BCL.Modules.Public.Services
+{
     using BCL.Comparers;
     using BCL.Extensions;
     using Discord;
@@ -10,9 +10,10 @@
     using System.Reflection;
     using System.Text;
 
-    public static class HelpService {
-
-        public static EmbedBuilder GetCommandHelpEmbed(CommandInfo command, CommandContext ctx) {
+    public static class HelpService
+    {
+        public static EmbedBuilder GetCommandHelpEmbed(CommandInfo command, CommandContext ctx)
+        {
             var prefix = Globals.ServerConfigs[ctx.Guild.Id].CommandPrefix;
             var title = command.Name.ToTitleCase() + (command.Aliases.Any(a => a != command.Name) ? "Aliases: " + string.Join(", ", command.Aliases) : "");
             var description = $"{command.Summary}" +
@@ -23,18 +24,22 @@
                 .WithTitle(title)
                 .WithDescription(description);
 
-            foreach (var p in command.Parameters) {
-                if (p.IsOptional) {
+            foreach (var p in command.Parameters)
+            {
+                if (p.IsOptional)
+                {
                     em.AddField((f) =>
                         f.WithName(p.Name)
                          .WithValue($"[{p.Name} = {p.DefaultValue} {(p.IsRemainder ? "...]" : "]")} - Optional {p.Summary}"));
                 }
-                else {
+                else
+                {
                     em.AddField((f) =>
                         f.WithName(p.Name)
                          .WithValue($"<{p.Name} {(p.IsRemainder ? "...>" : ">")} {p.Summary}"));
                 }
-                if (p.Type.GetTypeInfo().IsEnum) {
+                if (p.Type.GetTypeInfo().IsEnum)
+                {
                     var enumValues = Enum.GetNames(p.Type).Cast<object>();
                     em.AddField((f) =>
                         f.WithName($"Possible values of {p.Name}")
@@ -44,19 +49,24 @@
             return em;
         }
 
-        public static string GetCommandHelpString(CommandInfo command) {
+        public static string GetCommandHelpString(CommandInfo command)
+        {
             var sb = new StringBuilder();
             sb.AppendLine(string.Join(", ", command.Aliases.Select(x => x)));
             sb.AppendLine($"\tDescription: {command.Summary}\n\tExample: {command.Remarks}");
 
-            foreach (var p in command.Parameters) {
-                if (p.IsOptional) {
+            foreach (var p in command.Parameters)
+            {
+                if (p.IsOptional)
+                {
                     sb.AppendLine($"[{p.Name} = {p.DefaultValue} {(p.IsRemainder ? "...]" : "]")} - Optional {p.Summary}");
                 }
-                else {
+                else
+                {
                     sb.AppendLine($"<{p.Name} {(p.IsRemainder ? "...>" : ">")} {p.Summary}");
                 }
-                if (p.Type.GetTypeInfo().IsEnum) {
+                if (p.Type.GetTypeInfo().IsEnum)
+                {
                     var enumValues = Enum.GetNames(p.Type).Cast<object>();
                     sb.AppendLine($"\t\t\tPossible values: {string.Join(", ", enumValues.Select(x => x).OrderBy(x => x))}");
                 }
@@ -64,7 +74,8 @@
             return sb.ToString();
         }
 
-        public static EmbedBuilder GetGenericHelpEmbed(IEnumerable<ModuleInfo> modules, CommandContext ctx) {
+        public static EmbedBuilder GetGenericHelpEmbed(IEnumerable<ModuleInfo> modules, CommandContext ctx)
+        {
             var mods = modules.Where(m => m.CanExecute(ctx));
             var prefix = ctx.Guild == null ? Globals.DEFAULT_PREFIX : Globals.ServerConfigs[ctx.Guild.Id].CommandPrefix;
             var em = new EmbedBuilder()
@@ -72,7 +83,8 @@
                 .WithDescription("A quick list of all available commands.")
                 .WithFooter((f) =>
                     f.WithText($"Use {prefix}help <commandname> for specific command information."));
-            foreach (var m in mods) {
+            foreach (var m in mods)
+            {
                 em.AddField((f) =>
                     f.WithName(m.Name)
                      .WithValue(GetModuleString(ctx, m)));
@@ -80,12 +92,15 @@
             return em;
         }
 
-        public static string GetHelpString(IEnumerable<ModuleInfo> modules) {
+        public static string GetHelpString(IEnumerable<ModuleInfo> modules)
+        {
             var sb = new StringBuilder();
             var listedCommands = new List<string>();
-            foreach (var m in modules) {
+            foreach (var m in modules)
+            {
                 sb.AppendLine($"{m.Name}");
-                foreach (var c in m.Commands) {
+                foreach (var c in m.Commands)
+                {
                     if (listedCommands.Contains(c.Name)) { continue; }
                     listedCommands.Add(c.Name);
                     sb.Append($"\t{string.Join(", ", c.Aliases)} - {c.Summary}\n\t{c.Remarks}");
@@ -95,7 +110,8 @@
             return sb.ToString();
         }
 
-        public static EmbedBuilder GetModuleHelpEmbed(ModuleInfo module, CommandContext ctx) {
+        public static EmbedBuilder GetModuleHelpEmbed(ModuleInfo module, CommandContext ctx)
+        {
             var prefix = ctx.Guild == null ? Globals.DEFAULT_PREFIX : Globals.ServerConfigs[ctx.Guild.Id].CommandPrefix;
             var em = new EmbedBuilder()
                 .WithTitle(module.Name)
@@ -103,7 +119,8 @@
                 .WithFooter((f) =>
                     f.WithText($"Use {prefix}help <commandname> for specific command information."));
 
-            foreach (var c in module.Commands.Distinct(new CommandNameComparer())) {
+            foreach (var c in module.Commands.Distinct(new CommandNameComparer()))
+            {
                 em.AddField((f) =>
                     f.WithName(string.Join(", ", c.Aliases)).WithValue($"{Format.Underline(c.Summary ?? "")} - {Format.Italics(c.Remarks ?? "")}"));
             }

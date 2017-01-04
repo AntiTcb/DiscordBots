@@ -7,16 +7,17 @@
 // Last Revised: 11/05/2016 2:26 PM
 // Last Revised by: Alex Gravely
 
-namespace OrgBot.Modules.YGOCard.Entities {
-
+namespace OrgBot.Modules.YGOCard.Entities
+{
     using BCL.Extensions;
     using Discord;
     using Newtonsoft.Json;
     using System.Threading.Tasks;
 
-    public class YGOCard {
-
-        public struct CardColor {
+    public class YGOCard
+    {
+        public struct CardColor
+        {
             public static Color Effect = new Color(255, 139, 33);
             public static Color Fusion = new Color(160, 134, 183);
             public static Color Normal = new Color(253, 230, 138);
@@ -26,8 +27,10 @@ namespace OrgBot.Modules.YGOCard.Entities {
             public static Color Trap = new Color(188, 90, 132);
             public static Color Xyz = new Color(0, 0, 0);
 
-            internal static Color GetColor(YGOCardType type) {
-                switch (type) {
+            internal static Color GetColor(YGOCardType type)
+            {
+                switch (type)
+                {
                     case YGOCardType.Monster:
                     case YGOCardType.Normal:
                     case YGOCardType.P_Normal:
@@ -123,10 +126,10 @@ namespace OrgBot.Modules.YGOCard.Entities {
             }
         }
 
-        public YGOCard() {
-        }
+        public YGOCard() { }
 
-        public YGOCard(YGOCard card) {
+        public YGOCard(YGOCard card)
+        {
             Attack = card.Attack;
             Attribute = card.Attribute;
             CardType = card.CardType;
@@ -139,9 +142,11 @@ namespace OrgBot.Modules.YGOCard.Entities {
             Name = card.Name;
             PendulumEffect = card.PendulumEffect;
             Type = card.Type;
+            ImageUrl = card.ImageUrl;
         }
 
-        public EmbedBuilder ToDiscordEmbed() {
+        public EmbedBuilder ToDiscordEmbed()
+        {
             var em = new EmbedBuilder()
                 .WithTitle(Format.Bold(Name))
                 .WithColor(CardColor.GetColor(CardType))
@@ -151,14 +156,16 @@ namespace OrgBot.Modules.YGOCard.Entities {
                      .WithUrl("https://ygorganization.com"))
                 .WithThumbnailUrl((string.IsNullOrEmpty(ImageUrl) ? "" : $"{YGORG_PIC_BASE_URI}{ImageUrl}"));
 
-            if (CardType == YGOCardType.Spell || CardType == YGOCardType.Trap) {
+            if (CardType == YGOCardType.Spell || CardType == YGOCardType.Trap)
+            {
                 em.WithDescription($"{Type} {CardType}")
                         .AddField((f) =>
                             f.WithName("Effect:")
                              .WithValue(Format.Code(Description, "elm"))
                              .WithIsInline(false));
             }
-            else {
+            else
+            {
                 var isXyz = CardType == YGOCardType.Xyz || CardType == YGOCardType.P_Xyz;
                 var isPend = (int)CardType >= 9;
                 var descriptionFirstLine = $"{(isXyz ? "Rank:" : "Level:")} {Level} | {Attribute.ToUpper()} | {Type}";
@@ -166,7 +173,8 @@ namespace OrgBot.Modules.YGOCard.Entities {
                 var descriptionThirdLine = $"\n{CustomEmoji.LeftScale}{LeftScale} / {RightScale}{CustomEmoji.RightScale}";
                 em.WithDescription(descriptionFirstLine + descriptionSecondLine + (isPend ? descriptionThirdLine : ""));
 
-                if (isPend) {
+                if (isPend)
+                {
                     em.AddField((f) =>
                         f.WithName("Pendulum Effect:")
                          .WithValue(PendulumEffect)
@@ -181,9 +189,11 @@ namespace OrgBot.Modules.YGOCard.Entities {
             return em;
         }
 
-        public string ToDiscordMessage() {
+        public string ToDiscordMessage()
+        {
             string returnString;
-            switch (CardType) {
+            switch (CardType)
+            {
                 case YGOCardType.Effect:
                 case YGOCardType.Fusion:
                 case YGOCardType.Normal:
@@ -235,16 +245,14 @@ namespace OrgBot.Modules.YGOCard.Entities {
 
         const string YGORG_PIC_BASE_URI = "https://ygorganization.com/cardart/";
 
-        #region Private Fields + Properties
-
         string attribute;
         string pendulumEffect;
         string type;
 
-        #endregion Private Fields + Properties
-
-        void Update(YGOCard updatedCard) {
-            if (updatedCard.Id != Id) {
+        void Update(YGOCard updatedCard)
+        {
+            if (updatedCard.Id != Id)
+            {
                 return;
             }
             Attack = updatedCard.Attack;
@@ -258,6 +266,7 @@ namespace OrgBot.Modules.YGOCard.Entities {
             PendulumEffect = updatedCard.PendulumEffect;
             RightScale = updatedCard.RightScale;
             Type = updatedCard.Type;
+            ImageUrl = updatedCard.ImageUrl;
         }
     }
 }
