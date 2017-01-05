@@ -47,10 +47,10 @@ namespace WiseOldBot.Modules.GETracker.Entities {
         public int ItemID { get; set; }
 
         [JsonProperty("lastKnownBuyTime")]
-        public DateTime LastBuy { get; set; }
+        public DateTime? LastBuy { get; set; }
 
         [JsonProperty("lastKnownSellTime")]
-        public DateTime LastSell { get; set; }
+        public DateTime? LastSell { get; set; }
 
         [JsonProperty("lowAlch")]
         public int LowAlchemy { get; set; }
@@ -65,7 +65,7 @@ namespace WiseOldBot.Modules.GETracker.Entities {
         public int SellingQuantity { get; set; }
 
         [JsonProperty("updatedAt")]
-        public DateTime UpdatedAt { get; set; }
+        public DateTime? UpdatedAt { get; set; }
 
         [JsonProperty("url")]
         public Uri URL { get; set; }
@@ -74,14 +74,14 @@ namespace WiseOldBot.Modules.GETracker.Entities {
             return new EmbedBuilder()
                 .WithTitle($"{Name} - {URL}")
                 .WithDescription($"Item ID: {ItemID}")
-                .WithUrl($"{URL}")
+                .WithUrl(URL.ToString())
                 .WithThumbnailUrl(Icon)
                 .WithAuthor((a) =>
                     a.WithIconUrl(Icon)
                      .WithName("GE-Tracker")
                      .WithUrl(URL.ToString()))
                 .WithFooter((f) =>
-                    f.WithText($"Updated at: {UpdatedAt:r} || Cached Until: {CachedUntil:r}\nCurrent time: {DateTime.UtcNow:r}"))
+                    f.WithText($"Updated at: {(UpdatedAt?.ToString() ?? "Never"):r} || Cached Until: {CachedUntil:r}\nCurrent time: {DateTime.UtcNow:r}"))
                 .AddField((f) =>
                     f.WithName("Buying")
                      .WithValue($"Price: {Format.Code($"{BuyingPrice:N0}")}{CustomEmoji.Gold}" +

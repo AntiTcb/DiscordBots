@@ -54,7 +54,7 @@ namespace WiseOldBot.Modules.GETracker {
             }
         }
 
-        [Command("rebuild"), Summary("Rebuilds the item map, allowing new items to be added"), Remarks("rebuild")]
+        [Command("rebuild"), Summary("Rebuilds the item map, allowing new items to be added."), Remarks("rebuild")]
         public async Task RebuildItemMapAsync() {
             using (Context.Channel.EnterTypingState()) {
                 var inItems = await GETrackerAPIClient.DownloadItemsAsync();
