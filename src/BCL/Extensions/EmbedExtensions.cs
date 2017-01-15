@@ -19,6 +19,10 @@ namespace BCL.Extensions
         }
 
         public static EmbedBuilder WithAuthor(this EmbedBuilder eb, IUser user) =>
-            eb.WithAuthor((a) => a.AsUser(user));    
+            eb.WithAuthor((a) => a.AsUser(user));
+
+        public static EmbedBuilder WithMessage(this EmbedBuilder eb, IMessage msg) =>
+            eb.WithAuthor(a => a.AsUser(msg.Author))
+              .WithDescription(msg.Content);
     }
 }
