@@ -35,13 +35,19 @@ namespace WiseOldBot.Modules.GETracker {
         public async Task GetPriceAsync([Remainder, Summary("Item name")] string itemName = "cabbage") {
             using (Context.Channel.EnterTypingState()) {
                 var returnItems = GETrackerAPIClient.FindItemOrItems(itemName);
+                ulong tomxGuildId = 271346318352449539;
+
+                if (Context.Guild.Id == tomxGuildId && Context.Channel.Id != 275374396003319808)
+                {
+                    await ReplyAsync($"Please use the <#{275374396003319808}> channel for the price command.");
+                    return;
+                }
 
                 foreach (var item in returnItems.Take(5)) {
                     if (item.CachedUntil <= DateTime.Now) {
                         await item.UpdateAsync();
                     }
-                }
-
+                }                                                 
                 if (!returnItems.Any()) {
                     await ReplyAsync("Item not found!");
                     return;
