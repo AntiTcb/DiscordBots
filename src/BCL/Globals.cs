@@ -1,30 +1,26 @@
-﻿#region Header
-// Description:
-// 
+﻿// Description:
+//
 // Solution: DiscordBots
 // Project: BCL
-// 
+//
 // Created: 10/09/2016 9:23 PM
 // Last Revised: 10/09/2016 9:23 PM
 // Last Revised by: Alex Gravely
-#endregion
-namespace BCL {
-    using System.Collections.Generic;
+
+namespace BCL
+{
     using Interfaces;
+    using System.Collections.Generic;
 
-    public static class Globals {
-        public const string CONFIG_PATH = "config.json";
-        public const string SERVER_CONFIG_PATH = "server_configs.json";
-        public const ulong OWNER_ID = 89613772372574208;
-        public const string DEFAULT_PREFIX = ";";
-
+    public static class Globals
+    {
         public static IBotConfig BotConfig { get; set; }
-        public static Dictionary<ulong, ServerConfig> ServerConfigs { get; set; } = new Dictionary<ulong, ServerConfig>();
 
         public static List<string> EvalImports { get; } = new List<string> {
             "Discord",
             "Discord.API",
             "Discord.Commands",
+            "Discord.Rest",
             "Discord.WebSocket",
             "System",
             "System.Collections",
@@ -38,5 +34,11 @@ namespace BCL {
             "System.Threading.Tasks",
             "BCL"
         };
+
+        public static Dictionary<ulong, ServerConfig> ServerConfigs { get; set; } = new Dictionary<ulong, ServerConfig>();
+        public const string CONFIG_PATH = "config.json";
+        public const string DEFAULT_PREFIX = ";";
+        public const ulong OWNER_ID = 89613772372574208;
+        public const string SERVER_CONFIG_PATH = "server_configs.json";
     }
 }
