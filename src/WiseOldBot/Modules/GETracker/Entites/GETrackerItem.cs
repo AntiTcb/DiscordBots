@@ -132,5 +132,9 @@ namespace WiseOldBot.Modules.GETracker.Entities {
             //}
             Update((await GETrackerAPIClient.DownloadItemAsync(ItemID)).Item);
         }
+
+        public override bool Equals(object item) => ItemID == (item as GETrackerItem)?.ItemID;
+
+        public override int GetHashCode() => ItemID;
     }
 }
