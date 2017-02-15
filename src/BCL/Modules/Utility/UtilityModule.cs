@@ -11,7 +11,7 @@ namespace BCL.Modules.Utility
 {
     using Discord;
     using Discord.Commands;
-    using Discord.WebSocket;
+    using Preconditions;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -33,15 +33,15 @@ namespace BCL.Modules.Utility
     [Name("Utility")]
     public class UtilityModule : ModuleBase
     {
-        [Command("purge"), Alias("clean", "cleanup", "prune"), Summary("Cleans the bot's messages"),
-            RequireBotPermission(ChannelPermission.ManageMessages)]
+        [Command("purge"), Alias("clean", "cleanup", "prune"), Summary("Cleans the bot's messages")]
+        [RequireBotPermission(ChannelPermission.ManageMessages)]
+        [RequireUserPermissionOrOwner(ChannelPermission.ManageMessages)]
         public async Task CleanAsync
         ([Summary("The optional number of messages to delete; defaults to 10")] int count = 10,
          [Summary("The type of messages to delete - Self, Bot, or All")] DeleteType deleteType = DeleteType.Self,
          [Summary("The strategy to delete messages - BulkDelete or Manual")] DeleteStrategy deleteStrategy =
              DeleteStrategy.BulkDelete)
         {
-            if (Context.User.Id != Globals.OWNER_ID || !(Context.User as SocketGuildUser).GetPermissions((Context.Channel as SocketGuildChannel)).ManageMessages) { return; }
             var index = 0;
             var deleteMessages = new List<IMessage>(count);
             var messages = Context.Channel.GetMessagesAsync();
@@ -87,12 +87,12 @@ namespace BCL.Modules.Utility
             await Context.Message.DeleteAsync();
         }
 
-        [Command("requesthelp"), Alias("summonOwner", "reportbug"), RequireContext(ContextType.Guild),
-                    Summary("Gives Anti-Tcb an alert that something is wrong, and an invite to the guild to provide assitance."), Remarks("summonOwner")]
+        [Command("requesthelp"), Alias("summonOwner", "reportbug"), RequireContext(ContextType.Guild)]
+        [Summary("Gives AntiTcb an alert that something is wrong, and an invite to the guild to provide assitance."), Remarks("summonOwner")]
         public async Task RequestOwnerAsync()
         {
             var owner = await Context.Client.GetUserAsync(Globals.OWNER_ID);
-            await ReplyAsync("Summoning Anti-Tcb...");
+            await ReplyAsync("Summoning AntiTcb...");
             var loggingChannel = await Context.Client.GetChannelAsync(Globals.BotConfig.LogChannel) as ITextChannel;
             var invite = await (Context.Channel as IGuildChannel).CreateInviteAsync(maxUses: 1);
             var summonMsg = $"{owner.Mention}: You're being summoned by {Context.User} to {Context.Guild.Name}. {invite.Url}";
