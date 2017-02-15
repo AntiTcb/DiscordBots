@@ -7,8 +7,8 @@
 // Last Revised: 11/08/2016 11:11 PM
 // Last Revised by: Alex Gravely
 
-namespace OrgBot {
-
+namespace OrgBot
+{
     using BCL;
     using Discord;
     using Discord.Commands;
@@ -17,9 +17,10 @@ namespace OrgBot {
     using System.Threading;
     using System.Threading.Tasks;
 
-    public class OrgBot : BotBase {
-
-        public async override Task InstallCommandsAsync() {
+    public class OrgBot : BotBase
+    {
+        public async override Task InstallCommandsAsync()
+        {
             Commands = new CommandHandler();
             Client.Log += Log;
 
@@ -28,7 +29,8 @@ namespace OrgBot {
             await Commands.InstallAsync(map);
         }
 
-        public async override Task StartAsync<T>() {
+        public async override Task StartAsync<T>()
+        {
             Client = new DiscordSocketClient(new DiscordSocketConfig { LogLevel = LogSeverity.Debug });
 
             AddEventHandlers();
@@ -39,7 +41,8 @@ namespace OrgBot {
             await LoginAndConnectAsync(TokenType.Bot);
         }
 
-        internal async Task AnnounceStreaming() {
+        internal async Task AnnounceStreaming()
+        {
             await (Client.GetChannel(87463676595949568) as SocketTextChannel).SendMessageAsync("We are currently streaming! Check us out: https://twitch.tv/ygorganization");
         }
 
@@ -50,16 +53,19 @@ namespace OrgBot {
                 "OrgBot.Modules", "OrgBot.Modules.YGOCard", "OrgBot.Modules.YGOCard.Entities",
                 "OrgBot.Modules.YGOWikia", "OrgBot.Modules.YGOWikia.Entities" });
 
-        void AddEventHandlers() {
+        void AddEventHandlers()
+        {
             Client.GuildAvailable += CheckForGuildConfigAsync;
             Client.JoinedGuild += CreateGuildConfigAsync;
             Client.LeftGuild += DeleteGuildConfigAsync;
             Client.UserUpdated += WatchDanForStreamingAsync;
         }
 
-        async Task CheckForGuildConfigAsync(SocketGuild socketGuild) {
+        async Task CheckForGuildConfigAsync(SocketGuild socketGuild)
+        {
             ServerConfig outValue;
-            if (!Globals.ServerConfigs.TryGetValue(socketGuild.Id, out outValue)) {
+            if (!Globals.ServerConfigs.TryGetValue(socketGuild.Id, out outValue))
+            {
                 var defChannel = await socketGuild.GetDefaultChannelAsync();
 #if !DEBUG
                 await defChannel.SendMessageAsync("Server config file not found! Generating one now!");
@@ -69,18 +75,24 @@ namespace OrgBot {
             }
         }
 
-        void EnableStreamAnnounceTimer() {
+        void EnableStreamAnnounceTimer()
+        {
             StreamAnnouceTimer = new Timer(async s => { await AnnounceStreaming(); }, null, TimeSpan.FromMinutes(0), TimeSpan.FromMinutes(10));
         }
 
-        async Task WatchDanForStreamingAsync(SocketUser before, SocketUser after) {
-            if (before.Id != 107522436093734912) return;
-            if (after.Game?.StreamType == StreamType.Twitch && after.Game?.StreamUrl == "https://twitch.tv/ygorganization") {
+        Task WatchDanForStreamingAsync(SocketUser before, SocketUser after)
+        {
+            if (before.Id != 107522436093734912)
+                return Task.CompletedTask;
+            if (after.Game?.StreamType == StreamType.Twitch && after.Game?.StreamUrl == "https://twitch.tv/ygorganization")
+            {
                 EnableStreamAnnounceTimer();
             }
-            else {
+            else
+            {
                 StreamAnnouceTimer.Change(Timeout.Infinite, Timeout.Infinite);
             }
+            return Task.CompletedTask;
         }
     }
 }
