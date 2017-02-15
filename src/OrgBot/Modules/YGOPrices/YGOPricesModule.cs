@@ -30,7 +30,7 @@ namespace OrgBot.Modules.YGOPrices
                     return;
                 }
                 var em = card?.ToDiscordEmbed();
-                em.WithUrl(Uri.EscapeUriString("http://yugiohprices.com/card_price?name={cardName}"));
+                em.WithUrl(Uri.EscapeUriString($"http://yugiohprices.com/card_price?name={cardName}"));
                 await ReplyAsync("", embed: em);
             }
         }
