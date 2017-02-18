@@ -13,9 +13,10 @@ namespace OrgBot.Modules.YGOWikia.Entities {
     {
         None,
         Monster,
-        PendulumMonster,
-        XyzMonster,
-        PendulumXyzMonster,
+        Link,
+        Pendulum,
+        Xyz,
+        PendulumXyz,
         Spell,
         Trap
     }

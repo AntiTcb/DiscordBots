@@ -1,85 +1,88 @@
-﻿#region Header
-
-// Description:
-// 
+﻿// Description:
+//
 // Solution: DiscordBots
 // Project: OrgBot
-// 
+//
 // Created: 10/29/2016 11:34 PM
 // Last Revised: 10/30/2016 1:53 PM
 // Last Revised by: Alex Gravely
 
-#endregion
-
 namespace OrgBot.Modules.YGOWikia.Entities
 {
-    #region Using
-
+    using Discord;
     using System;
     using System.Linq;
-    using Discord;
 
-    #endregion
-
-    public class YGOWikiaCard {
-        #region Public Fields + Properties
-
+    public class YGOWikiaCard
+    {
+        public string ATK { get; set; }
         public string Attribute { get; set; }
 
-        public CardCategory Category
-            =>
-            string.IsNullOrEmpty(Types) ? CardCategory.None :
-            PendulumScales != null
-                ? Rank != null ? CardCategory.PendulumXyzMonster : CardCategory.PendulumMonster
-                : Types.Contains("Spell Card")
-                    ? CardCategory.Spell : Types.Contains("Trap Card") ? CardCategory.Trap : Rank != null ? CardCategory.XyzMonster : CardCategory.Monster;
+        public CardCategory Category 
+            => string.IsNullOrEmpty(Types) ? CardCategory.None : PendulumScales != null 
+                ? Rank != null 
+                ? CardCategory.PendulumXyz : CardCategory.Pendulum : Types.Contains("Spell Card") || Types == "Spell" 
+                ? CardCategory.Spell : Types.Contains("Trap Card") || Types == "Trap" 
+                ? CardCategory.Trap : Rank != null 
+                ? CardCategory.Xyz : Types.Contains("Link") 
+                ? CardCategory.Link : CardCategory.Monster;
 
+        public string DEF { get; set; }
+        public string LinkNumber { get; set; }
         public string Effect { get; set; }
+        public string ImageUrl { get; set; }
         public string Level { get; set; }
+        public string LinkMarkers { get; set; }
         public string Name { get; set; }
         public string PendulumScales { get; set; }
-        public string Rank { get; set; }
-        public string ATK { get; set; }
-        public string DEF { get; set; }
-        public string Types { get; set; }
         public string Property { get; set; }
+        public string Rank { get; set; }
+        public string Types { get; set; }
         public string Url { get; set; }
-        public string ImageUrl { get; set; }
 
-        #endregion Public Fields + Properties
-
-        #region Public Methods
-
-        public static YGOWikiaCard Parse(ILookup<string, string> things, string effect, string url, string imgUrl) {
+        public static YGOWikiaCard Parse(ILookup<string, string> things, string effect, string url, string imgUrl)
+        {
             if (things == null) { return null; }
-            var newCard = new YGOWikiaCard {
+            var newCard = new YGOWikiaCard
+            {
                 Name = things["English"].ElementAtOrDefault(0) ?? "Parse failed",
-                Types = things["Types"].ElementAtOrDefault(0) ?? things["Type"].ElementAtOrDefault(0),
+                Types = things["Types"].ElementAtOrDefault(0)?.Trim()
+                    ?? things["Type"].ElementAtOrDefault(0)?.Trim()
+                    ?? things["Card type"].ElementAtOrDefault(0)?.Trim(),
+
                 Attribute = things["Attribute"].ElementAtOrDefault(0),
-                ATK = things["ATK / DEF"].ElementAtOrDefault(0)?.Split('/')?.ElementAtOrDefault(0)?.Trim() ?? things["ATK/DEF"].ElementAtOrDefault(0)?.Split('/')?.ElementAtOrDefault(0)?.Trim(),
-                DEF = things["ATK / DEF"].ElementAtOrDefault(0)?.Split('/')?.ElementAtOrDefault(1)?.Trim() ?? things["ATK/DEF"].ElementAtOrDefault(0)?.Split('/')?.ElementAtOrDefault(1)?.Trim(),
+                ATK = things["ATK / LINK"].ElementAtOrDefault(0)?.Split('/')?.ElementAtOrDefault(0).Trim() 
+                    ?? things["ATK / DEF"].ElementAtOrDefault(0)?.Split('/')?.ElementAtOrDefault(0)?.Trim() 
+                    ?? things["ATK/DEF"].ElementAtOrDefault(0)?.Split('/')?.ElementAtOrDefault(0)?.Trim(),
+
+                DEF = things["ATK / DEF"].ElementAtOrDefault(0)?.Split('/')?.ElementAtOrDefault(1)?.Trim() 
+                    ?? things["ATK/DEF"].ElementAtOrDefault(0)?.Split('/')?.ElementAtOrDefault(1)?.Trim(),
+
+                LinkNumber = things["ATK / LINK"].ElementAtOrDefault(0)?.Split('/')?.ElementAtOrDefault(1)?.Trim(),
+                LinkMarkers = things["Link Markers"].ElementAtOrDefault(0),
                 Level = things["Level"].ElementAtOrDefault(0),
                 Rank = things["Rank"].ElementAtOrDefault(0),
                 PendulumScales = things["Pendulum Scale"].ElementAtOrDefault(0)?.Trim(),
                 Property = things["Property"].ElementAtOrDefault(0),
                 Effect = effect.Trim(),
                 Url = url,
-                ImageUrl = imgUrl 
+                ImageUrl = imgUrl
             };
             return newCard;
         }
 
-        public EmbedBuilder ToDiscordEmbed() {
-            var isPend = Category == CardCategory.PendulumMonster || Category == CardCategory.PendulumXyzMonster;
-            var isXyz = Category == CardCategory.XyzMonster || Category == CardCategory.PendulumXyzMonster;
+        public EmbedBuilder ToDiscordEmbed()
+        {
+            var isPend = Category == CardCategory.Pendulum || Category == CardCategory.PendulumXyz;
+            var isXyz = Category == CardCategory.Xyz || Category == CardCategory.PendulumXyz;
             var isSpellOrTrap = Category == CardCategory.Spell || Category == CardCategory.Trap;
-            var description = isSpellOrTrap ? $"{Property?.TrimEnd()} {Types}" : $"{(isXyz ? $"Rank {Rank}" : $"Level {Level}")} | {Attribute?.Trim()} | {Types}";
-            var atkDefLine = $"ATK / {ATK} \tDEF / {DEF}";
-            var scaleLine = $"<:leftscale:251264662572761089>{PendulumScales} / {PendulumScales}<:rightscale:251264701730652161>";
+            var description = isSpellOrTrap ? $"{Property?.TrimEnd()} {Types}" : $"{(isXyz ? $"Rank {Rank}" : (Category == CardCategory.Link ? "" : $"Level {Level} | "))}{Attribute?.Trim()} | {Types}";
+            var statLine = Category == CardCategory.Link ? $"**ATK** / {ATK} \t **LINK** / {LinkNumber}\n **Link Markers:** {LinkMarkers}" : $"**ATK** / {ATK} \t**DEF** / {DEF}";
+            var scaleLine = $"{CustomEmoji.LeftScale}{PendulumScales} / {PendulumScales}{CustomEmoji.RightScale}";
             var em = new EmbedBuilder()
                 .WithTitle($"{Name} - {Url}")
                 .WithUrl(Url)
-                .WithDescription($"{description}{(isSpellOrTrap ? "" : $"\n{atkDefLine}")}{(isPend ? $"\n{scaleLine}" : "")}")
+                .WithDescription($"{description}{(isSpellOrTrap ? "" : $"\n{statLine}")}{(isPend ? $"\n{scaleLine}" : "")}")
                 .WithThumbnailUrl(ImageUrl)
                 .WithAuthor((a) =>
                     a.WithName("Yu-Gi-Oh! Wikia")
@@ -92,22 +95,24 @@ namespace OrgBot.Modules.YGOWikia.Entities
             return em;
         }
 
-        public string ToDiscordMessage() {
+        public string ToDiscordMessage()
+        {
             string returnString = $"{Name} | {Types} ";
-            switch (Category) {
+            switch (Category)
+            {
                 case CardCategory.Monster:
                     returnString += $"| {Attribute}\nLevel: {Level} | ATK / {ATK} DEF /{DEF}";
                     break;
 
-                case CardCategory.PendulumMonster:
+                case CardCategory.Pendulum:
                     returnString += $"| {Attribute}\nLevel: {Level} | Scales: {PendulumScales} | ATK / {ATK}  DEF / {DEF}";
                     break;
 
-                case CardCategory.XyzMonster:
+                case CardCategory.Xyz:
                     returnString += $"| {Attribute}\nRank: {Rank} | ATK / {ATK} DEF / {DEF}";
                     break;
 
-                case CardCategory.PendulumXyzMonster:
+                case CardCategory.PendulumXyz:
                     returnString += $"| {Attribute}\nRank: {Rank} | Scales: {PendulumScales} | ATK / {ATK } DEF / {DEF}";
                     break;
 
@@ -121,7 +126,5 @@ namespace OrgBot.Modules.YGOWikia.Entities
             }
             return Format.Code($"{returnString}\n{Effect}\n\n", "elm") + $"<{Url}>";
         }
-
-        #endregion Public Methods
     }
 }
