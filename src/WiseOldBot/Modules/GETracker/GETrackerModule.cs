@@ -46,6 +46,10 @@ namespace WiseOldBot.Modules.GETracker
                     await ReplyAsync($"Please use the <#{275374396003319808}> channel for the price command.");
                     return;
                 }
+                if (Context.Guild.Id == 169578245837029376 && Context.Channel.Id != 181778450967822336)
+                {
+                    await ReplyAsync($"Please use the <#{181778450967822336}> channel for the price command.");
+                }
 
                 foreach (var item in returnItems.Take(5))
                 {
@@ -56,7 +60,7 @@ namespace WiseOldBot.Modules.GETracker
                 }
                 if (!returnItems.Any())
                 {
-                    await ReplyAsync("Item not found! If this is a new item, please run the `rebuild` command, then try again. :smiley_cat:");
+                    await ReplyAsync("Item not found! If this is a new item, please run the `rebuild` command, then try again. If not, double check your spelling! :smiley_cat:");
                     return;
                 }
                 else if (returnItems.Count() == 1)
