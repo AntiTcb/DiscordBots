@@ -49,6 +49,7 @@ namespace WiseOldBot.Modules.GETracker
                 if (Context.Guild.Id == 169578245837029376 && Context.Channel.Id != 181778450967822336)
                 {
                     await ReplyAsync($"Please use the <#{181778450967822336}> channel for the price command.");
+                    return;
                 }
 
                 foreach (var item in returnItems.Take(5))
