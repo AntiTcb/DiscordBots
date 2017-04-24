@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace BCL.Entities.Interfaces
+namespace BCL.Services
 {
-    public interface IGuildConfig
-    {
+    public class ConfigurationService
+    {      
     }
 }
