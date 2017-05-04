@@ -38,7 +38,7 @@ namespace WiseOldBot.Modules.GETracker.Entities {
         #region Public Constructors
 
         static GETrackerAPIClient() {
-            var items = API.DownloadItemsAsync().Result["data"].GroupBy(x => x.Name.ToLower()).
+            var items = API.DownloadItemsAsync().GetAwaiter().GetResult()["data"].GroupBy(x => x.Name.ToLower()).
                             ToDictionary(g => g.Key, g => g.OrderBy(x => x.ItemID).ToList());
             Items = new ItemMap(items);
         }
