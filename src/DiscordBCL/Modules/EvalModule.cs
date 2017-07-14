@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Discord.Commands;
 using DiscordBCL.Services;
 
@@ -21,14 +18,6 @@ namespace DiscordBCL.Modules
             [Command, Alias("=>"), Priority(1)]
             public async Task EvalAsync([Remainder]string expr) 
                 => await _eval.EvaluteAsync(Context, expr);
-
-            [Command("test"), Priority(100)]
-            public async Task Test()
-            {
-                string hiMom = "hi mom";
-                string hiDad = "hi dad";
-                await _eval.EvaluteAsync(Context, $"\"{hiMom + hiDad}\"");
-            }
         }
     }
 }
