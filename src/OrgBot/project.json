@@ -1,6 +1,6 @@
 {
     "title": "OrgBot",
-    "version": "1.8.2-*",
+    "version": "1.8.3-*",
   "buildOptions": {
     "emitEntryPoint": true,
     "nowarn": ["AD0001"]

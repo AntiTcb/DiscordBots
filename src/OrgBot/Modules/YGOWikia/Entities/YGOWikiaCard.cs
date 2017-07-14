@@ -32,7 +32,7 @@ namespace OrgBot.Modules.YGOWikia.Entities
         public string Effect { get; set; }
         public string ImageUrl { get; set; }
         public string Level { get; set; }
-        public string LinkMarkers { get; set; }
+        public string LinkArrows { get; set; }
         public string Name { get; set; }
         public string PendulumScales { get; set; }
         public string Property { get; set; }
@@ -59,7 +59,7 @@ namespace OrgBot.Modules.YGOWikia.Entities
                     ?? things["ATK/DEF"].ElementAtOrDefault(0)?.Split('/')?.ElementAtOrDefault(1)?.Trim(),
 
                 LinkNumber = things["ATK / LINK"].ElementAtOrDefault(0)?.Split('/')?.ElementAtOrDefault(1)?.Trim(),
-                LinkMarkers = things["Link Markers"].ElementAtOrDefault(0),
+                LinkArrows = things["Link Arrows"].ElementAtOrDefault(0),
                 Level = things["Level"].ElementAtOrDefault(0),
                 Rank = things["Rank"].ElementAtOrDefault(0),
                 PendulumScales = things["Pendulum Scale"].ElementAtOrDefault(0)?.Trim(),
@@ -77,7 +77,7 @@ namespace OrgBot.Modules.YGOWikia.Entities
             var isXyz = Category == CardCategory.Xyz || Category == CardCategory.PendulumXyz;
             var isSpellOrTrap = Category == CardCategory.Spell || Category == CardCategory.Trap;
             var description = isSpellOrTrap ? $"{Property?.TrimEnd()} {Types}" : $"{(isXyz ? $"Rank {Rank}" : (Category == CardCategory.Link ? "" : $"Level {Level} | "))}{Attribute?.Trim()} | {Types}";
-            var statLine = Category == CardCategory.Link ? $"**ATK** / {ATK} \t **LINK** / {LinkNumber}\n **Link Markers:** {LinkMarkers}" : $"**ATK** / {ATK} \t**DEF** / {DEF}";
+            var statLine = Category == CardCategory.Link ? $"**ATK** / {ATK} \t **LINK** / {LinkNumber}\n **Link Arrows:** {LinkArrows}" : $"**ATK** / {ATK} \t**DEF** / {DEF}";
             var scaleLine = $"{CustomEmoji.LeftScale}{PendulumScales} / {PendulumScales}{CustomEmoji.RightScale}";
             var em = new EmbedBuilder()
                 .WithTitle($"{Name} - {Url}")

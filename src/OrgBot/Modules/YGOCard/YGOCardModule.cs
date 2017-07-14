@@ -80,7 +80,7 @@ namespace OrgBot.Modules.YGOCard
         }
 
         [Command("listcards"), Summary("Lists all cards that match a substring, ordered by name length."), Remarks("listcards kuriboh")]
-        public async Task GetCardsAsync([Summary("Card name, case insensitive.")Remainder] string cardName)
+        public async Task GetCardsAsync([Summary("Card name, case insensitive."), Remainder] string cardName)
         {
             using (Context.Channel.EnterTypingState())
             {
