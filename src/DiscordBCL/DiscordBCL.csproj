@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard1.6</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Discord.Addons.EmojiTools" Version="2.0.1" />
+    <PackageReference Include="Discord.Addons.InteractiveCommands" Version="1.2.4" />
+    <PackageReference Include="Discord.Addons.Paginator" Version="2.3.0" />
+    <PackageReference Include="Discord.Net.Commands" Version="1.0.1" />
+    <PackageReference Include="Discord.Net.Webhook" Version="1.0.1" />
+    <PackageReference Include="Discord.Net.WebSocket" Version="1.0.1" />
+    <PackageReference Include="Humanizer.Core" Version="2.2.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="2.2.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="1.1.2" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="1.1.2" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="1.1.2" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="1.1.2" />
+    <PackageReference Include="System.Diagnostics.Process" Version="4.3.0" />
+  </ItemGroup>
+
+</Project>
