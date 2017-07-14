@@ -7,7 +7,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{E0E650C5-8A6
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DiscordBCL", "src\DiscordBCL\DiscordBCL.csproj", "{07A6D7B2-B42C-4115-AB49-C89C533B3E07}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AntiBot", "src\AntiBot\AntiBot.csproj", "{A7E5BA7E-53B0-414B-A00F-04DC613E0950}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AntiBot", "src\AntiBot\AntiBot.csproj", "{A7E5BA7E-53B0-414B-A00F-04DC613E0950}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{48DE6250-3259-4710-99E7-E6AA2028AFF7}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
