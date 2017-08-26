@@ -37,33 +37,35 @@ namespace OrgBot.Modules.YGOCard
             await ReplyAsync(":thumbsup:");
         }
 
-        [Command("card"), Alias("c"), Summary("Pulls card info from the YGOrg Database."), Remarks("card Sangan")]
+        [Command("card"), Alias("c"), Summary("Pulls card info from the YGOrg Database."), Remarks("card sangan")]
         public async Task GetCardAsync([Summary("Card name, case insensitive"), Remainder] string cardName)
         {
-            await Context.Channel.TriggerTypingAsync();
-            if (cardName == "")
+            using (Context.Channel.EnterTypingState())
             {
-                await ReplyAsync("I need a card name!");
-                return;
-            }
-            var card = YGOCardAPIClient.Cards.FindCards(cardName).FirstOrDefault();
-            if (card == null)
-            {
-                await ReplyAsync("Card not found.");
-                return;
-            }
-            if (card.Name == "Spirit Elimination")
-            {
-                var msg = await ReplyAsync("NO! NO, NO, NO, NO, NO! NO! STOP ASKING QUESTIONS ABOUT THIS CARD!");
-                await Task.Delay(4000);
+                if (cardName == "")
+                {
+                    await ReplyAsync("I need a card name!");
+                    return;
+                }
+                var card = YGOCardAPIClient.Cards.FindCards(cardName).FirstOrDefault();
+                if (card == null)
+                {
+                    await ReplyAsync("Card not found.");
+                    return;
+                }
+                if (card.Name == "Spirit Elimination")
+                {
+                    var msg = await ReplyAsync("NO! NO, NO, NO, NO, NO! NO! STOP ASKING QUESTIONS ABOUT THIS CARD!");
+                    await Task.Delay(4000);
+                    await ReplyAsync("", embed: card.ToDiscordEmbed());
+                    return;
+                }
                 await ReplyAsync("", embed: card.ToDiscordEmbed());
-                return;
             }
-            await ReplyAsync("", embed: card.ToDiscordEmbed());
         }
 
         [Command("image"), Alias("pic", "ci"), Summary("Displays the pictures for the specified card."), Remarks("pic sangan")]
-        public async Task GetCardImageAsync([Summary("Card name, case insensitive"), Remainder]string cardName)
+        public async Task GetCardImageAsync([Summary("Card name, case insensitive"), Remainder] string cardName)
         {
             var cards = YGOCardAPIClient.Cards.FindCards(cardName);
             if (!cards.Any())

@@ -10,6 +10,7 @@ namespace OrgBot.Modules
     {
         public string Link { get; set; }
     }
+    [Name("General")]
     public class GeneralModule : ModuleBase
     {
         [Command("site"), Summary("Returns the YGOrganization site url.")]
