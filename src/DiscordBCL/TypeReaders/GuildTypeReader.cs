@@ -1,20 +1,16 @@
-﻿using System;
+﻿using Discord;
+using Discord.Commands;
+using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Globalization;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using Discord;
-using Discord.Commands;
 
 namespace DiscordBCL
 {
-    internal class GuildTypeReader<T> : TypeReader
+    public class GuildTypeReader<T> : TypeReader
         where T : class, IGuild
     {
-        public NumberStyles NumberSt { get; private set; }
-
         public override async Task<TypeReaderResult> Read(ICommandContext context, string input, IServiceProvider services)
         {
             var results = new Dictionary<ulong, TypeReaderValue>();
@@ -29,7 +25,7 @@ namespace DiscordBCL
                 AddResult(results, guild as T, guild.Name == input ? 0.9f : 0.8f);
 
             if (results.Count > 0)
-                return TypeReaderResult.FromSuccess(results.Values.ToImmutableArray());
+                return TypeReaderResult.FromSuccess(results.Values);
 
             return TypeReaderResult.FromError(CommandError.ObjectNotFound, "Guild not found.");
         }

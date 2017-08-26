@@ -1,41 +1,38 @@
-﻿using System;                                                                             
+﻿using Discord;
+using Discord.Commands;
+using Discord.WebSocket;
+using DiscordBCL.Services;
+using Humanizer;
+using Humanizer.Localisation;
+using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
-using Discord;
-using Discord.Commands;
-using Discord.WebSocket;
-using Humanizer;
-using Humanizer.Localisation;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace DiscordBCL.Modules
 {
     [Name("Info")]
     public class InfoModule : ModuleBase<ShardedCommandContext>
     {
-        private CommandService _cmdService;
-        private IServiceProvider _provider;
-        private string _prefix => _provider.GetRequiredService<IConfiguration>()["prefix"];
+        public CommandService CommandService { get; set; }
+        public IServiceProvider Provider { get; set; }
+        public GuildConfigService GuildConfigService { get; set; }
 
-        public InfoModule(CommandService cmdService, IServiceProvider provider)
-        {
-            _cmdService = cmdService;
-            _provider = provider;                                                                
-        }
+        private string _prefix;
 
         [Command("help", RunMode = RunMode.Async)]
         [Alias("commands")]
         [Remarks("help")]
         public async Task HelpAsync()
         {
-            var modules = _cmdService.Modules.Where(m => 
-                m.CanExecute(Context, _provider) && !m.Attributes.Any(a => a is HiddenAttribute)).OrderBy(m => m.Name);
-            var sentMessage = await ReplyAsync("", embed: modules.GetEmbed(Context, _provider)).ConfigureAwait(false);
+            var modules = CommandService.Modules
+                .Where(m => m.CanExecute(Context, Provider) && !m.Attributes.Any(a => a is HiddenAttribute))
+                .OrderBy(m => m.Name);
+
+            var sentMessage = await ReplyAsync("", embed: modules.GetEmbed(Context, Provider)).ConfigureAwait(false);
             await Task.Delay(30000).ConfigureAwait(false);
             await sentMessage.DeleteAsync().ConfigureAwait(false);
         }
@@ -46,8 +43,8 @@ namespace DiscordBCL.Modules
         [Remarks("help help")]
         public async Task HelpAsync([Remainder]CommandInfo commandName)
         {
-            if (!commandName.CanExecute(Context, _provider))                        
-                await ReplyAsync("You do not have permission to run this command.");
+            if (!commandName.CanExecute(Context, Provider))                        
+                await ReplyAsync("You do not have permission to run this command.").ConfigureAwait(false);
             else 
                 await ReplyAsync("", embed: commandName.GetEmbed(Context)).ConfigureAwait(false);
         }
@@ -58,11 +55,11 @@ namespace DiscordBCL.Modules
         [Remarks("help info")]
         public async Task HelpAsync([Remainder]ModuleInfo moduleName)
         {
-            if (!moduleName.CanExecute(Context, _provider))
-                await ReplyAsync("You do not have permission to view this module.");
+            if (!moduleName.CanExecute(Context, Provider))
+                await ReplyAsync("You do not have permission to view this module.").ConfigureAwait(false);
             else
-                await ReplyAsync("", embed: moduleName.GetEmbed(Context, _provider));
-        }                                                                  
+                await ReplyAsync("", embed: moduleName.GetEmbed(Context, Provider)).ConfigureAwait(false);
+        }
 
         [Command("info")]
         [Summary("Gets general information about the bot.")]
@@ -81,11 +78,11 @@ namespace DiscordBCL.Modules
                     Name = app.Owner.ToString(),
                     IconUrl = app.Owner.GetAvatarUrl(),
                     Url = "https://github.com/AntiTcb"
-                },                                                              
+                },
                 Description = "Check out the source code on GitHub!",
                 Url = "https://github.com/AntiTcb/DiscordBots/", // TODO
                 Title = $"{assemblyName.Name} {assemblyName.Version}" 
-            };                                                                             
+            };
             eb.AddField("Library", $"[Discord.Net v{DiscordConfig.Version}](https://github.com/RogueException/Discord.Net)");
             eb.AddField("Runtime", $"{AppContext.TargetFrameworkName} {RuntimeInformation.ProcessArchitecture} " +
                     $"({RuntimeInformation.OSDescription} {RuntimeInformation.OSArchitecture})");
@@ -96,7 +93,7 @@ namespace DiscordBCL.Modules
             eb.AddInlineField("Channels", channelCount);
             eb.AddInlineField("Users", memberCount);   
 
-            await ReplyAsync("", embed: eb);
+            await ReplyAsync("", embed: eb).ConfigureAwait(false);
         }
 
         [Command("latency", RunMode = RunMode.Async)]
@@ -117,7 +114,7 @@ namespace DiscordBCL.Modules
 
             int latency = Context.Client.Latency;
             var s = Stopwatch.StartNew();
-            var m = await ReplyAsync($"Heartbeat: {latency}ms, Init: ---, Round-Trip Time: ---");
+            var m = await ReplyAsync($"Heartbeat: {latency}ms, Init: ---, Round-Trip Time: ---").ConfigureAwait(false);
             long init = s.ElapsedMilliseconds;
             target = m.Id;
             s.Restart();
@@ -125,13 +122,13 @@ namespace DiscordBCL.Modules
 
             try
             {
-                await Task.Delay(TimeSpan.FromSeconds(30), cts.Token);
+                await Task.Delay(TimeSpan.FromSeconds(30), cts.Token).ConfigureAwait(false);
             }
             catch (TaskCanceledException)
             {
                 long rtt = s.ElapsedMilliseconds;
                 s.Stop();
-                await m.ModifyAsync(x => x.Content = $"Heartbeat: {latency}ms, Init: {init}ms, Round-Trip Time: {rtt}ms");
+                await m.ModifyAsync(x => x.Content = $"Heartbeat: {latency}ms, Init: {init}ms, Round-Trip Time: {rtt}ms").ConfigureAwait(false);
                 return;
             }
             finally
@@ -139,7 +136,7 @@ namespace DiscordBCL.Modules
                 Context.Client.MessageReceived -= WaitTarget;
             }
             s.Stop();
-            await m.ModifyAsync(x => x.Content = $"Heartbeat: {latency}ms, Init: {init}ms, Round-Trip Time: timeout");
+            await m.ModifyAsync(x => x.Content = $"Heartbeat: {latency}ms, Init: {init}ms, Round-Trip Time: timeout").ConfigureAwait(false);
         }
 
         [Command("invite"), Alias("join")]
@@ -160,6 +157,14 @@ namespace DiscordBCL.Modules
                 ThumbnailUrl = app.IconUrl
             };
             await ReplyAsync("", embed:eb).ConfigureAwait(false);
+        }
+
+        protected override void BeforeExecute(CommandInfo command)
+        {
+            if (Context.Guild != null)
+                _prefix = Context.Client.CurrentUser.Mention;
+            else
+                _prefix = GuildConfigService.GetConfig(Context.Guild.Id).Prefix;
         }
 
         private static string GetUptime()

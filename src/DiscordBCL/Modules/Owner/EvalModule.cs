@@ -15,7 +15,7 @@ namespace DiscordBCL.Modules
                 _eval = eval;
             }
 
-            [Command, Alias("=>"), Priority(1)]
+            [Command("=>"), Alias("exec")]
             public async Task EvalAsync([Remainder]string expr) 
                 => await _eval.EvaluteAsync(Context, expr);
         }

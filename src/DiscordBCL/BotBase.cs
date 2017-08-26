@@ -1,28 +1,28 @@
-﻿using System;
-using System.IO;      
-using System.Threading.Tasks;
-using Discord;
+﻿using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
+using DiscordBCL.Configuration;
 using DiscordBCL.Services;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Threading.Tasks;
 
 namespace DiscordBCL
-{                                
+{
     public abstract class BotBase
     {
-        protected DiscordShardedClient Client { get; set; }
-        protected IConfiguration _config;
+        protected DiscordShardedClient Client { get; set; } 
+        protected BotConfig _config;
         protected IServiceProvider _services; 
 
         public BotBase(int totalShards = 1) 
             : this(CreateDefaultSocketConfig(totalShards))
         {
-            _config = LoadConfig();
-            _services = ConfigureServices();              
+            _config = BotConfig.Load();
+            _services = ConfigureServices();
             // Initialize services
             _services.GetRequiredService<EvalService>();
+            _services.GetRequiredService<LiteDbService>();
             Client.Log += OnClientLogAsync;
         }
 
@@ -34,26 +34,11 @@ namespace DiscordBCL
 
         public virtual async Task RunAsync(TokenType tokenType)
         {
-            PrettyConsole.WriteLine("Loading Command Handling Service...");
             await _services.GetRequiredService<CommandHandlingService>().InitializeAsync().ConfigureAwait(false);
-            await Client.LoginAsync(tokenType, _config["token"]).ConfigureAwait(false);
-            await Client.StartAsync().ConfigureAwait(false);                     
-            await Task.Delay(-1).ConfigureAwait(false);                                       
-        }
-
-        protected virtual IConfiguration LoadConfig()
-        {
-            if (!File.Exists("config.json"))
-            {
-                File.Create("config.json");
-                throw new InvalidOperationException("config.json file not found, one has been created. Please restart!");
-            }
-
-            return new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("config.json", false, true)
-                .Build();
-        }
+            await Client.LoginAsync(tokenType, _config.Token).ConfigureAwait(false);
+            await Client.StartAsync().ConfigureAwait(false);
+            await Task.Delay(-1).ConfigureAwait(false);
+        }     
 
         protected virtual IServiceProvider ConfigureServices() 
             => new ServiceCollection()
@@ -61,6 +46,8 @@ namespace DiscordBCL
                 .AddSingleton(new CommandService(CreateDefaultCommandServiceConfig()))
                 .AddSingleton<CommandHandlingService>()
                 .AddSingleton<EvalService>()
+                .AddSingleton<LiteDbService>()
+                .AddSingleton<GuildConfigService>()
                 .AddSingleton(_config)
                 .BuildServiceProvider();
 

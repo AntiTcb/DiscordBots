@@ -26,6 +26,7 @@ namespace DiscordBCL.Services
             _assemblies = GetAssemblies();
             _namespaceImports = GetCustomNamespaces();
             _options = ScriptOptions.Default.AddReferences(_assemblies).AddImports(_namespaceImports);
+            PrettyConsole.Log(LogSeverity.Info, "Services", "Loaded EvalService.");
         }
 
         public async Task EvaluteAsync(ShardedCommandContext ctx, string expr)
