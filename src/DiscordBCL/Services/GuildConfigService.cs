@@ -6,7 +6,6 @@ namespace DiscordBCL.Services
     public class GuildConfigService
     {
         private readonly LiteDbService _dbService;
-
         private ConcurrentDictionary<ulong, GuildConfig> _configCache = new ConcurrentDictionary<ulong, GuildConfig>();
 
         public GuildConfigService(LiteDbService dbService)

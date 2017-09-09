@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Discord;
+using Discord.Commands;
+using Humanizer;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Discord;
-using Discord.Commands;
-using Humanizer;
 
 namespace DiscordBCL
 {
@@ -22,7 +22,13 @@ namespace DiscordBCL
 
             return builder;
         }
-                      
+
+        public static IEnumerable<Embed> GetPagedEmbeds(this IEnumerable<ModuleInfo> mods, SocketCommandContext ctx, IServiceProvider provider)
+        {
+            foreach (var mod in mods)
+                yield return mod.GetEmbed(ctx, provider);
+        }
+
         public static Embed GetEmbed(this IEnumerable<ModuleInfo> mods, SocketCommandContext ctx, IServiceProvider provider)
         {
             var availModules = mods.Where(m => m.CanExecute(ctx, provider)

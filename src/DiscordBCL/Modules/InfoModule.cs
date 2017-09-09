@@ -1,4 +1,5 @@
 ﻿using Discord;
+using Discord.Addons.Interactive;
 using Discord.Commands;
 using Discord.WebSocket;
 using DiscordBCL.Services;
@@ -15,7 +16,7 @@ using System.Threading.Tasks;
 namespace DiscordBCL.Modules
 {
     [Name("Info")]
-    public class InfoModule : ModuleBase<ShardedCommandContext>
+    public class InfoModule : InteractiveBase<ShardedCommandContext>
     {
         public CommandService CommandService { get; set; }
         public IServiceProvider Provider { get; set; }
@@ -37,13 +38,23 @@ namespace DiscordBCL.Modules
             await sentMessage.DeleteAsync().ConfigureAwait(false);
         }
 
+        [Command("helppages", RunMode = RunMode.Async)]
+        public async Task HelpAsync2()
+        {
+            var modules = CommandService.Modules
+                .Where(m => m.CanExecute(Context, Provider) && !m.Attributes.Any(a => a is HiddenAttribute))
+                .OrderBy(m => m.Name);
+
+            await PagedReplyAsync(modules.GetPagedEmbeds(Context, Provider), true);
+        }
+
         [Command("help", RunMode = RunMode.Async), Priority(1)]
         [Alias("help:command")]
         [Summary("Information about a specific command.")]
-        [Remarks("help help")]
+        [Remarks("help prefix")]
         public async Task HelpAsync([Remainder]CommandInfo commandName)
         {
-            if (!commandName.CanExecute(Context, Provider))                        
+            if (!commandName.CanExecute(Context, Provider))
                 await ReplyAsync("You do not have permission to run this command.").ConfigureAwait(false);
             else 
                 await ReplyAsync("", embed: commandName.GetEmbed(Context)).ConfigureAwait(false);
@@ -52,7 +63,7 @@ namespace DiscordBCL.Modules
         [Command("help", RunMode = RunMode.Async), Priority(2)]
         [Alias("help:module")]
         [Summary("Information about a specific module.")]
-        [Remarks("help info")]
+        [Remarks("help config")]
         public async Task HelpAsync([Remainder]ModuleInfo moduleName)
         {
             if (!moduleName.CanExecute(Context, Provider))

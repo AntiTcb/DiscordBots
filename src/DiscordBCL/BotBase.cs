@@ -9,11 +9,12 @@ using System.Threading.Tasks;
 
 namespace DiscordBCL
 {
-    public abstract class BotBase
+    public abstract partial class BotBase
     {
         protected DiscordShardedClient Client { get; set; } 
         protected BotConfig _config;
-        protected IServiceProvider _services; 
+        protected IServiceProvider _services;
+        protected GuildConfigService _guildConfigService;
 
         public BotBase(int totalShards = 1) 
             : this(CreateDefaultSocketConfig(totalShards))
@@ -22,15 +23,20 @@ namespace DiscordBCL
             _services = ConfigureServices();
             // Initialize services
             _services.GetRequiredService<EvalService>();
-            _services.GetRequiredService<LiteDbService>();
-            Client.Log += OnClientLogAsync;
+            _guildConfigService = _services.GetRequiredService<GuildConfigService>();
+            AttachEventHandlers();
         }
-
-        private Task OnClientLogAsync(LogMessage arg)
-            => PrettyConsole.LogAsync(arg.Severity, arg.Source, arg.Exception?.ToString() ?? arg.Message);
 
         public BotBase(DiscordSocketConfig config) 
             => Client = new DiscordShardedClient(config);
+
+        public virtual void AttachEventHandlers()
+        {
+            Client.Log += LogMessageAsync;
+            Client.JoinedGuild += CreateGuildConfigAsync;
+            Client.GuildAvailable += ValidateGuildConfigAsync;
+            Client.LeftGuild += RemoveGuildConfigAsync;
+        }
 
         public virtual async Task RunAsync(TokenType tokenType)
         {
@@ -61,7 +67,6 @@ namespace DiscordBCL
                 LogLevel = LogSeverity.Info
 #endif
             };
-
         public static DiscordSocketConfig CreateDefaultSocketConfig(int shardAmount) 
             => new DiscordSocketConfig
             {

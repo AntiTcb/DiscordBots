@@ -6,18 +6,14 @@ namespace DiscordBCL.Modules
 {
     public partial class OwnerModule
     {
-        [Group("eval")]
+        [Group("eval"), Hidden]
         public class EvalModule : ModuleBase<ShardedCommandContext>
         {
-            private readonly EvalService _eval;
-            public EvalModule(EvalService eval)
-            {
-                _eval = eval;
-            }
+            public EvalService Eval { get; set; }
 
             [Command("=>"), Alias("exec")]
             public async Task EvalAsync([Remainder]string expr) 
-                => await _eval.EvaluteAsync(Context, expr);
+                => await Eval.EvaluteAsync(Context, expr);
         }
     }
 }
