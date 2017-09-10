@@ -31,11 +31,11 @@ namespace BCL.Modules.Utility
     }
 
     [Name("Utility")]
-    public class UtilityModule : ModuleBase
+    public class UtilityModule : ModuleBase<SocketCommandContext>
     {
         [Command("purge"), Alias("clean", "cleanup", "prune"), Summary("Cleans the bot's messages")]
         [RequireBotPermission(ChannelPermission.ManageMessages)]
-        [RequireUserPermissionOrOwner(ChannelPermission.ManageMessages)]
+        [RequireUserPermission(ChannelPermission.ManageMessages, Group = "A"), RequireOwner(Group = "A")]
         public async Task CleanAsync
         ([Summary("The optional number of messages to delete; defaults to 10")] int count = 10,
          [Summary("The type of messages to delete - Self, Bot, or All")] DeleteType deleteType = DeleteType.Self,
@@ -88,12 +88,13 @@ namespace BCL.Modules.Utility
         }
 
         [Command("requesthelp"), Alias("summonOwner", "reportbug"), RequireContext(ContextType.Guild)]
+        [RequireBotPermission(ChannelPermission.CreateInstantInvite)]
         [Summary("Gives AntiTcb an alert that something is wrong, and an invite to the guild to provide assitance."), Remarks("summonOwner")]
         public async Task RequestOwnerAsync()
         {
-            var owner = await Context.Client.GetUserAsync(Globals.OWNER_ID);
+            var owner = Context.Client.GetUser(Globals.OWNER_ID);
             await ReplyAsync("Summoning AntiTcb...");
-            var loggingChannel = await Context.Client.GetChannelAsync(Globals.BotConfig.LogChannel) as ITextChannel;
+            var loggingChannel = Context.Client.GetChannel(Globals.BotConfig.LogChannel) as ITextChannel;
             var invite = await (Context.Channel as IGuildChannel).CreateInviteAsync(maxUses: 1);
             var summonMsg = $"{owner.Mention}: You're being summoned by {Context.User} to {Context.Guild.Name}. {invite.Url}";
             await loggingChannel.SendMessageAsync(summonMsg);

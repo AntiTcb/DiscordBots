@@ -14,7 +14,7 @@ namespace OrgBot.Modules.YGOWikia {
     using System.Threading.Tasks;
 
     [Name("Yu-Gi-Oh! Wikia"), Group("wikia")]
-    public class YGOWikiaModule : ModuleBase {
+    public class YGOWikiaModule : ModuleBase<SocketCommandContext> {
 
         [Command("card"), Alias("c"), Summary("Gets card information from the Yu-Gi-Oh! Wikia. Must be a real card."), Remarks("wikia card sangan")]
         public async Task GetCardAsync([Remainder] string cardName) {
@@ -28,7 +28,7 @@ namespace OrgBot.Modules.YGOWikia {
                     await ReplyAsync($"Could not parse card information. Card name needs more precision, or page HTML is invalid. Attempted to parse information from: <{card.Url}>");
                     return;
                 }
-                await ReplyAsync("", embed: card?.ToDiscordEmbed());
+                await ReplyAsync("", embed: card?.ToDiscordEmbed().Build());
             }
         }
     }

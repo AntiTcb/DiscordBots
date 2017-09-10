@@ -1,13 +1,4 @@
-﻿// Description:
-//
-// Solution: DiscordBots
-// Project: OrgBot
-//
-// Created: 10/18/2016 7:27 PM
-// Last Revised: 10/18/2016 7:27 PM
-// Last Revised by: Alex Gravely
-
-namespace BCL.Extensions {
+﻿namespace BCL.Extensions {
 
     using System;
 

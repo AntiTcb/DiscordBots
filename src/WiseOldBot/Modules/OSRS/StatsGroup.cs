@@ -17,7 +17,7 @@ namespace WiseOldBot.Modules.OSRS {
     public partial class OSRSModule {
 
         [Name("OSRS Stats")]
-        public class StatsGroup : ModuleBase {
+        public class StatsGroup : ModuleBase<SocketCommandContext> {
 
             [Command("lookup"), Alias("l"),
                 Summary("Looks up an account from the high scores, with various skill and mode options."),
@@ -32,7 +32,7 @@ namespace WiseOldBot.Modules.OSRS {
                 }
                 var player = await OSRSAPIClient.DownloadStatsAsync(playerName, gameMode);
                 if (player != null) {
-                    await ReplyAsync("", embed: player.SkillToDiscordEmbed(skillType));
+                    await ReplyAsync("", embed: player.SkillToDiscordEmbed(skillType).Build());
                     return;
                 }
                 await ReplyAsync("Player's highscores could not be found.");

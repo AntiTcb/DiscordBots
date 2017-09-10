@@ -16,17 +16,16 @@
             _roleIds = roleIds;
         }
 
-        public override async Task<PreconditionResult> CheckPermissions(CommandContext context, CommandInfo command, IDependencyMap map)
+        public override Task<PreconditionResult> CheckPermissions(ICommandContext context, CommandInfo command, IServiceProvider services)
         {
-            if (!(context.User is IGuildUser))
-            {
-                return PreconditionResult.FromError("This command may only be run within a guild.");
-            }
+            if (context.Guild == null)
+                return Task.FromResult(PreconditionResult.FromError("This command may only be run within a guild."));
+
             var guildUser = context.User as IGuildUser;
             var hasRole = guildUser.RoleIds.Intersect(_roleIds).Any();
-            return await Task.FromResult(hasRole)
-                ? PreconditionResult.FromSuccess()
-                : PreconditionResult.FromError("You do not have a role required for this command.");
+            return hasRole
+                ? Task.FromResult(PreconditionResult.FromSuccess())
+                : Task.FromResult(PreconditionResult.FromError("You do not have a role required for this command."));
         }
     }
 }

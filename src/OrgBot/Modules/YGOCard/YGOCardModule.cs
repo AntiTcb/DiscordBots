@@ -1,15 +1,5 @@
-﻿// Description:
-//
-// Solution: DiscordBots
-// Project: OrgBot
-//
-// Created: 10/19/2016 12:23 AM
-// Last Revised: 10/30/2016 3:47 PM
-// Last Revised by: Alex Gravely
-
-namespace OrgBot.Modules.YGOCard
+﻿namespace OrgBot.Modules.YGOCard
 {
-    using Discord;
     using Discord.Commands;
     using Entities;
     using System.Linq;
@@ -17,7 +7,7 @@ namespace OrgBot.Modules.YGOCard
     using System.Threading.Tasks;
 
     [Name("YGOrg")]
-    public partial class YGOCardModule : ModuleBase
+    public partial class YGOCardModule : ModuleBase<SocketCommandContext>
     {
         [Command("cardupdate"), Alias("cu"), Summary("Forces a card to update its data from the YGOrg Database."), Remarks("cardupdate sangan")]
         public async Task ForceCardUpdateAsync([Summary("Card name, case insensitive"), Remainder] string cardName)
@@ -57,29 +47,29 @@ namespace OrgBot.Modules.YGOCard
                 {
                     var msg = await ReplyAsync("NO! NO, NO, NO, NO, NO! NO! STOP ASKING QUESTIONS ABOUT THIS CARD!");
                     await Task.Delay(4000);
-                    await ReplyAsync("", embed: card.ToDiscordEmbed());
+                    await ReplyAsync("", embed: card.ToDiscordEmbed().Build());
                     return;
                 }
-                await ReplyAsync("", embed: card.ToDiscordEmbed());
+                await ReplyAsync("", embed: card.ToDiscordEmbed().Build());
             }
         }
 
-        [Command("image"), Alias("pic", "ci"), Summary("Displays the pictures for the specified card."), Remarks("pic sangan")]
-        public async Task GetCardImageAsync([Summary("Card name, case insensitive"), Remainder] string cardName)
-        {
-            var cards = YGOCardAPIClient.Cards.FindCards(cardName);
-            if (!cards.Any())
-            {
-                await ReplyAsync("No cards with that name were found.");
-                return;
-            }
-            var cardInfo = cards.First();
-            var eb = new EmbedBuilder()
-                .WithTitle(cardInfo.Name)
-                .WithColor(YGOCard.CardColor.GetColor(cardInfo.CardType))
-                .WithCurrentTimestamp()
-                .WithImageUrl(cardInfo.ImageUrl);
-        }
+        //[Command("image"), Alias("pic", "ci"), Summary("Displays the pictures for the specified card."), Remarks("pic sangan")]
+        //public async Task GetCardImageAsync([Summary("Card name, case insensitive"), Remainder] string cardName)
+        //{
+        //    var cards = YGOCardAPIClient.Cards.FindCards(cardName);
+        //    if (!cards.Any())
+        //    {
+        //        await ReplyAsync("No cards with that name were found.");
+        //        return;
+        //    }
+        //    var cardInfo = cards.First();
+        //    var eb = new EmbedBuilder()
+        //        .WithTitle(cardInfo.Name)
+        //        .WithColor(YGOCard.CardColor.GetColor(cardInfo.CardType))
+        //        .WithCurrentTimestamp()
+        //        .WithImageUrl(cardInfo.ImageUrl);
+        //}
 
         [Command("listcards"), Summary("Lists all cards that match a substring, ordered by name length."), Remarks("listcards kuriboh")]
         public async Task GetCardsAsync([Summary("Card name, case insensitive."), Remainder] string cardName)

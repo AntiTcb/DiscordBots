@@ -11,7 +11,7 @@ namespace OrgBot.Modules
         public string Link { get; set; }
     }
     [Name("General")]
-    public class GeneralModule : ModuleBase
+    public class GeneralModule : ModuleBase<SocketCommandContext>
     {
         [Command("site"), Summary("Returns the YGOrganization site url.")]
         public async Task SiteAsync() 

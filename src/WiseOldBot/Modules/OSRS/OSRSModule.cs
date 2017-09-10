@@ -16,29 +16,25 @@ namespace WiseOldBot.Modules.OSRS {
     using System.Threading.Tasks;
 
     [Name("OSRS")]
-    public partial class OSRSModule : ModuleBase {
+    public partial class OSRSModule : ModuleBase<SocketCommandContext> {
 
         [Command("lvl2exp"), Alias("l2e"),
             Summary("Gets the minimum experience required for the input level."),
             Remarks("lvl2exp 95")]
         public async Task CalculateExperienceAsync([Summary("Level")]uint level) {
             var exp = LevelToExperience(level);
-            if (level > 99) {
-                await Context.Channel.SendMessageAsync($"Minimum exp: {exp}.");
-            }
+            if (level > 99)
+                await ReplyAsync($"Minimum exp: {exp}.");
             else {
                 var nextLevelExp = LevelToExperience(level + 1);
-                await
-                    Context.Channel.SendMessageAsync
-                            ($"Minimum exp: {exp}. Next level: {nextLevelExp}. Difference:{nextLevelExp - exp}");
+                await ReplyAsync($"Minimum exp: {exp}. Next level: {nextLevelExp}. Difference:{nextLevelExp - exp}");
             }
         }
 
-        [Command("exp2lvl"), Alias("e2l"),
-                    Summary("Gets the Level the input experience amount would equate to."),
-            Remarks("exp2lvl 100000")]
+        [Command("exp2lvl"), Alias("e2l")]
+        [Summary("Gets the Level the input experience amount would equate to."), Remarks("exp2lvl 100000")]
         public async Task CalculateLevelAsync([Summary("Experience amount")]uint exp)
-            => await Context.Channel.SendMessageAsync($"Level: {ExperienceToLevel(exp)}");
+            => await ReplyAsync($"Level: {ExperienceToLevel(exp)}");
 
         [Command("defname"), Alias("account"),
             Summary("Sets or unsets a default runescape username. Pass the --unset flag before your username to unset.")
@@ -51,14 +47,12 @@ namespace WiseOldBot.Modules.OSRS {
             switch (username) {
                 case "--unset":
                     ((WiseOldBotConfig)Globals.BotConfig).UsernameMap.Remove(userID);
-                    await Context.Channel.SendMessageAsync("Default account name unset!");
+                    await ReplyAsync("Default account name unset!");
                     break;
 
                 default:
                     ((WiseOldBotConfig)Globals.BotConfig).UsernameMap[userID] = username;
-                    await
-                        Context.Channel.SendMessageAsync
-                                ($"Default account name set to {Format.Code(((WiseOldBotConfig)Globals.BotConfig).UsernameMap[userID])}");
+                    await ReplyAsync($"Default account name set to {Format.Code(((WiseOldBotConfig)Globals.BotConfig).UsernameMap[userID])}");
                     break;
             }
             await ConfigHandler.SaveAsync(Globals.CONFIG_PATH, Globals.BotConfig);

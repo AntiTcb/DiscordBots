@@ -1,5 +1,5 @@
 {
-    "version": "1.4.1-*",
+    "version": "2.0.0-*",
     "description": "A base class library for Discord Bots using the Discord.Net library.",
     "authors": [ "AntiTcb" ],
 
@@ -13,12 +13,12 @@
     },
 
     "dependencies": {
-        "Discord.Net": "1.0.0-beta2-00501",
+        "Discord.Net": "1.0.2",
         "NETStandard.Library": "1.6.1",
-        "System.Net.WebSockets.Client": "4.3.0",
-        "Microsoft.Extensions.DependencyModel": "1.1.0",
+        "System.Net.WebSockets.Client": "4.3.1",
         "System.Diagnostics.Process": "4.3.0",
-        "Microsoft.CodeAnalysis.CSharp.Scripting": "1.3.2"
+        "Microsoft.CodeAnalysis.CSharp.Scripting": "1.3.2",
+        "Microsoft.Extensions.DependencyInjection": "1.1.1"
     },
 
   "frameworks": {

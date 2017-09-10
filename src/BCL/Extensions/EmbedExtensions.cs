@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Discord;
-using Discord.Commands;
+﻿using Discord;
 
 namespace BCL.Extensions
 {
@@ -14,12 +9,12 @@ namespace BCL.Extensions
             else {
                 builder.WithName(user.Username);
             }
-            builder.WithIconUrl(user.AvatarUrl);
+            builder.WithIconUrl(user.GetAvatarUrl());
             return builder; 
         }
 
-        public static EmbedBuilder WithAuthor(this EmbedBuilder eb, IUser user) =>
-            eb.WithAuthor((a) => a.AsUser(user));
+        //public static EmbedBuilder WithAuthor(this EmbedBuilder eb, IUser user) =>
+        //    eb.WithAuthor((a) => a.AsUser(user));
 
         public static EmbedBuilder WithMessage(this EmbedBuilder eb, IMessage msg) =>
             eb.WithAuthor(a => a.AsUser(msg.Author))

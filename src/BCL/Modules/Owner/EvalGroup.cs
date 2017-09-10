@@ -1,13 +1,4 @@
-﻿// Description:
-//
-// Solution: DiscordBots
-// Project: BCL
-//
-// Created: 10/27/2016 10:48 PM
-// Last Revised: 11/03/2016 9:19 PM
-// Last Revised by: Alex Gravely
-
-namespace BCL.Modules.Owner {
+﻿namespace BCL.Modules.Owner {
 
     using Discord.Commands;
     using Interfaces;
@@ -19,12 +10,12 @@ namespace BCL.Modules.Owner {
 
         public sealed class EvalGlobals {
             internal IBotConfig BC { get; set; }
-            internal CommandContext CC { get; set; }
+            internal SocketCommandContext CC { get; set; }
             internal IServerConfig SC { get; set; }
         }
 
         [Name("Eval"), Group("eval"), RequireOwner]
-        public class EvalGroup : ModuleBase {
+        public class EvalGroup : ModuleBase<SocketCommandContext> {
 
             [Command("add"),
                 Summary("Adds a namespace import to the eval namespace imports list."),

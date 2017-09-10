@@ -6,19 +6,9 @@
 
     public static class YGOPricesClient
     {
-        #region Internal Fields + Properties
-
         internal static readonly IYGOPricesAPI API = RestClient.For<IYGOPricesAPI>(BASE_URI);
 
-        #endregion Internal Fields + Properties
-
-        #region Private Fields + Properties
-
         const string BASE_URI = "http://yugiohprices.com/api/";
-
-        #endregion Private Fields + Properties
-
-        #region Public Methods
 
         public static async Task<YGOPricesCard?> GetCardAndPriceResponseAsync(string cardName)
         {
@@ -34,6 +24,5 @@
             }
         }
 
-        #endregion Public Methods
     }
 }

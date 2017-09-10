@@ -1,18 +1,4 @@
-﻿#region Header
-
-// Description:
-// 
-// Solution: DiscordBots
-// Project: BCL
-// 
-// Created: 11/03/2016 8:33 PM
-// Last Revised: 11/03/2016 9:32 PM
-// Last Revised by: Alex Gravely
-
-#endregion
-
-namespace BCL.Modules.Owner.Services {
-    #region Using
+﻿namespace BCL.Modules.Owner.Services {
 
     using System;
     using System.Collections.Generic;
@@ -24,19 +10,12 @@ namespace BCL.Modules.Owner.Services {
     using Microsoft.CodeAnalysis.CSharp.Scripting;
     using Microsoft.CodeAnalysis.Scripting;
 
-    #endregion
-
     public static class EvalService {
-        #region Private Fields + Properties
 
         public static IEnumerable<Assembly> Assemblies => GetAssemblies();
         public static IEnumerable<string> Imports => Globals.EvalImports;
 
-        #endregion Private Fields + Properties   
-
-        #region Public Methods
-
-        public static async Task EvaluateAsync(CommandContext context, string script) {
+        public static async Task EvaluateAsync(SocketCommandContext context, string script) {
             using (context.Channel.EnterTypingState()) {
                 var options = ScriptOptions.Default.AddReferences(Assemblies).AddImports(Imports);
                 var working = await context.Channel.SendMessageAsync("**Evaluating**, just a sec...");
@@ -65,18 +44,17 @@ namespace BCL.Modules.Owner.Services {
             yield return typeof(ILookup<string, string>).GetTypeInfo().Assembly;
         }
 
-        #endregion Public Methods
     }
 
     public class ScriptGlobals {
-        #region Public Fields + Properties
 
-        public SocketGuildChannel channel => context.Channel as SocketGuildChannel;
+        public ISocketMessageChannel channel => context.Channel;
         public DiscordSocketClient client { get; internal set; }
-        public CommandContext context { get; internal set; }
-        public SocketGuild guild => context.Guild as SocketGuild;
-        public SocketMessage msg => context.Message as SocketMessage;
-
-        #endregion Public Fields + Properties
+        public SocketCommandContext context { get; internal set; }
+        public SocketGuild guild => context.Guild;
+        public SocketUserMessage msg => context.Message;
+        public SocketUser user => context.User;
+        public SocketGuildUser guser => context.User as SocketGuildUser;
+        public SocketTextChannel gChannel => context.Channel as SocketTextChannel;
     }
 }

@@ -31,7 +31,7 @@ namespace OrgBot.Modules.YGOPrices
                 }
                 var em = card?.ToDiscordEmbed();
                 em.WithUrl(Uri.EscapeUriString($"http://yugiohprices.com/card_price?name={cardName}"));
-                await ReplyAsync("", embed: em);
+                await ReplyAsync("", embed: em.Build());
             }
         }
 

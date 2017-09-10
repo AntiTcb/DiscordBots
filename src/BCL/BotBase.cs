@@ -1,37 +1,32 @@
-﻿// Description:
-//
-// Solution: DiscordBots
-// Project: BCL
-//
-// Created: 09/26/2016 11:16 PM
-// Last Revised: 10/30/2016 3:51 PM
-// Last Revised by: Alex Gravely
-
-namespace BCL
+﻿namespace BCL
 {
     using Discord;
     using Discord.WebSocket;
     using Interfaces;
+    using Microsoft.Extensions.DependencyInjection;
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     using System.Threading.Tasks;
 
     public abstract class BotBase : IBotBase
     {
         public DiscordSocketClient Client { get; set; }
-        public ICommandHandler Commands { get; set; }
+        public CommandHandler Commands { get; set; }
+        public IServiceProvider Services { get; set; }
+
+        public BotBase()
+        {
+            Client = new DiscordSocketClient(new DiscordSocketConfig { MessageCacheSize = 100, LogLevel = LogSeverity.Debug });
+            Services = ConfigureServices();
+            Commands = Services.GetRequiredService<CommandHandler>();
+        }
 
         public async virtual Task CreateGuildConfigAsync(SocketGuild guild)
         {
-            var textChannels = await guild.GetTextChannelsAsync();
-            var defaultChannel = textChannels
-                .Where(c => guild.CurrentUser.GetPermissions(c).ReadMessages)
-                .OrderBy(c => c.Position)
-                .FirstOrDefault();
-            if (defaultChannel != null)
-                await defaultChannel.SendMessageAsync($"Thank you for adding me to the server! The default prefix is currently set to `{Globals.DEFAULT_PREFIX}`." +
+            if (guild.DefaultChannel != null)
+                await guild.DefaultChannel.SendMessageAsync($"Thank you for adding me to the server! The default prefix is currently set to `{Globals.DEFAULT_PREFIX}`." +
                     $"Any user with the Manage Server permission may change this with the `setprefix` command. Use `{Globals.DEFAULT_PREFIX}help` to see all my commands").ConfigureAwait(false);
+
             var newServerConfig = new ServerConfig(Globals.DEFAULT_PREFIX, new Dictionary<string, string>());
             Globals.ServerConfigs.Add(guild.Id, newServerConfig);
             await ConfigHandler.SaveAsync(Globals.SERVER_CONFIG_PATH, Globals.ServerConfigs).ConfigureAwait(false);
@@ -40,9 +35,8 @@ namespace BCL
         public async virtual Task DeleteGuildConfigAsync(SocketGuild guild)
         {
             if (Globals.ServerConfigs.ContainsKey(guild.Id))
-            {
-                Globals.ServerConfigs.Remove(guild.Id);
-            }
+                Globals.ServerConfigs.Remove(guild.Id);     
+
             await ConfigHandler.SaveAsync(Globals.SERVER_CONFIG_PATH, Globals.ServerConfigs).ConfigureAwait(false);
         }
 
@@ -53,6 +47,7 @@ namespace BCL
         }
 
         public abstract Task InstallCommandsAsync();
+        public abstract IServiceProvider ConfigureServices();
 
         public virtual Task Log(LogMessage log)
         {
@@ -63,7 +58,7 @@ namespace BCL
         public async virtual Task LoginAndConnectAsync(TokenType tokenType)
         {
             await Client.LoginAsync(tokenType, Globals.BotConfig.BotToken).ConfigureAwait(false);
-            await Client.ConnectAsync().ConfigureAwait(false);
+            await Client.StartAsync().ConfigureAwait(false);
             await Task.Delay(-1).ConfigureAwait(false);
         }
 

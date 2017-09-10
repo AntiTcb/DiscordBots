@@ -14,12 +14,12 @@
             _userIds = userIds;
         }
 
-        public override async Task<PreconditionResult> CheckPermissions(CommandContext context, CommandInfo command, IDependencyMap map)
+        public override Task<PreconditionResult> CheckPermissions(ICommandContext context, CommandInfo command, IServiceProvider services)
         {
             var isWhitelistedUser = _userIds.Contains(context.User.Id);
-            return await Task.FromResult(isWhitelistedUser)
-                ? PreconditionResult.FromSuccess()
-                : PreconditionResult.FromError("You are not allowed to run this command.");
+            return isWhitelistedUser
+                ? Task.FromResult(PreconditionResult.FromSuccess())
+                : Task.FromResult(PreconditionResult.FromError("You are not allowed to run this command."));
         }
     }
 }

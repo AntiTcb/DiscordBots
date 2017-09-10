@@ -1,36 +1,37 @@
-﻿// Description:
-//
-// Solution: DiscordBots
-// Project: WiseOldBot
-//
-// Created: 10/18/2016 4:17 PM
-// Last Revised: 10/23/2016 6:51 PM
-// Last Revised by: Alex Gravely
-
-namespace WiseOldBot
+﻿namespace WiseOldBot
 {
     using BCL;
     using Discord;
     using Discord.Commands;
     using Discord.WebSocket;
+    using System;
     using System.Threading.Tasks;
+    using Microsoft.Extensions.DependencyInjection;
+    using Modules.GETracker.Entities;
 
     public class WiseOldBot : BotBase
     {
+        public WiseOldBot() : base() {
+            var _ = GETrackerAPIClient.BASE_URI;   
+        }
+
+        public override IServiceProvider ConfigureServices()
+        {
+            return new ServiceCollection()
+                .AddSingleton(Client)
+                .AddSingleton(new CommandService(new CommandServiceConfig { LogLevel = LogSeverity.Debug }))
+                .AddSingleton<CommandHandler>()
+                .BuildServiceProvider();
+        }
         public async override Task InstallCommandsAsync()
         {
-            Commands = new CommandHandler();
             Client.Log += Log;
-
-            var map = new DependencyMap();
-            map.Add(Client);
-            await Commands.InstallAsync(map);
+            Commands.CommandService.Log += Log;
+            await Commands.InstallAsync();
         }
 
         public async override Task StartAsync<T>()
         {
-            Client = new DiscordSocketClient(new DiscordSocketConfig { LogLevel = LogSeverity.Debug });
-
             AddEventHandlers();
             AddEvalImports();
 
@@ -39,19 +40,19 @@ namespace WiseOldBot
             await LoginAndConnectAsync(TokenType.Bot);
         }
 
-        static void AddEvalImports() =>
+        private static void AddEvalImports() =>
             Globals.EvalImports.AddRange(new[] {"WiseOldBot",
                 "WiseOldBot.Modules.GETracker", "WiseOldBot.Modules.GETracker.Entities",
                 "WiseOldBot.Modules.OSRS", "WiseOldBot.Modules.OSRS.Entities"});
 
-        void AddEventHandlers()
+        private void AddEventHandlers()
         {
             Client.GuildAvailable += CheckForGuildConfigAsync;
             Client.JoinedGuild += CreateGuildConfigAsync;
             Client.LeftGuild += DeleteGuildConfigAsync;
         }
 
-        async Task CheckForGuildConfigAsync(SocketGuild socketGuild)
+        private async Task CheckForGuildConfigAsync(SocketGuild socketGuild)
         {
             ServerConfig outValue;
             if (!Globals.ServerConfigs.TryGetValue(socketGuild.Id, out outValue))

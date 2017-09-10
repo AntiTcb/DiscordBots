@@ -14,7 +14,7 @@ namespace WiseOldBot
         [JsonProperty("logChannel")]
         public ulong LogChannel { get; set; }
         [JsonProperty("usernameMap")]
-        public Dictionary<ulong, string> UsernameMap { get; set; }
+        public Dictionary<ulong, string> UsernameMap { get; set; }   
 
         public WiseOldBotConfig(string botToken, ulong logChannel) {
             BotToken = botToken;

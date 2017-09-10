@@ -23,19 +23,16 @@ namespace BCL.Modules.Public
     using System.Threading.Tasks;
 
     [Name("Public")]
-    public partial class PublicModule : ModuleBase
+    public partial class PublicModule : ModuleBase<SocketCommandContext>
     {
-        public PublicModule(IDependencyMap map)
-        {
-            _service = map.Get<CommandService>();
-        }
+        public CommandService CommandService { get; set; }
 
         [Command("help"),
             Alias("commands", "command", "cmds", "cmd"),
             Summary("Information about the bot's commands.")]
         public async Task HelpAsync([Remainder, Summary("Command/Module name to search for")]string name = "")
         {
-            var modules = _service.Modules.OrderBy(x => x.Name);
+            var modules = CommandService.Modules.OrderBy(x => x.Name);
             var commands = modules.SelectMany(m => m.Commands.Select(x => x).Distinct(new CommandNameComparer()));
 
             var cmd = commands.FirstOrDefault(x => x.Aliases.Contains(name.ToLower()));
@@ -47,7 +44,7 @@ namespace BCL.Modules.Public
                 case HelpMode.All:
                     var errMsg = name == "" ? "" :
                         module == null && cmd == null ? "Module/Command not found, showing generic help instead." : "";
-                    await ReplyAsync(errMsg, embed: HelpService.GetGenericHelpEmbed(modules, Context).WithAuthor(Context.Client.CurrentUser));
+                    await ReplyAsync(errMsg, embed: HelpService.GetGenericHelpEmbed(modules, Context).WithAuthor(Context.Client.CurrentUser).Build());
                     break;
 
                 case HelpMode.Module:
@@ -56,7 +53,7 @@ namespace BCL.Modules.Public
                         await ReplyAsync("You do not have permission to see information for this module.");
                         return;
                     }
-                    await ReplyAsync("", embed: HelpService.GetModuleHelpEmbed(module, Context).WithAuthor(Context.Client.CurrentUser));
+                    await ReplyAsync("", embed: HelpService.GetModuleHelpEmbed(module, Context).WithAuthor(Context.Client.CurrentUser).Build());
                     break;
 
                 case HelpMode.Command:
@@ -65,7 +62,7 @@ namespace BCL.Modules.Public
                         await ReplyAsync("You do not have permission to see information for this command.");
                         return;
                     }
-                    await ReplyAsync("", embed: HelpService.GetCommandHelpEmbed(cmd, Context).WithAuthor(Context.Client.CurrentUser));
+                    await ReplyAsync("", embed: HelpService.GetCommandHelpEmbed(cmd, Context).WithAuthor(Context.Client.CurrentUser).Build());
                     break;
             }
         }
@@ -74,21 +71,16 @@ namespace BCL.Modules.Public
         public async virtual Task InfoAsync()
         {
             var app = await Context.Client.GetApplicationInfoAsync().ConfigureAwait(false);
-            var completedChannelCount =
-                await Task.WhenAll((await Context.Client.GetGuildsAsync()).Select(async g => await g.GetChannelsAsync()));
-            var completedUserCount =
-                await Task.WhenAll((await Context.Client.GetGuildsAsync()).Select(async g => await g.GetUsersAsync()));
-            await
-                ReplyAsync
-                    ($"{Format.Bold("Info")}\n" + $"- Author: {app.Owner.Username} (ID: {app.Owner.Id})\n" +
+
+            await ReplyAsync($"{Format.Bold("Info")}\n" + $"- Author: {app.Owner} (ID: {app.Owner.Id})\n" +
                      $"- Repo: <https://github.com/AntiTcb/DiscordBots/tree/master/src/{app.Name}>\n" +
                      $"- Assembly: {Assembly.GetEntryAssembly().GetName().Name} {Assembly.GetEntryAssembly().GetName().Version}\n" +
                      $"- Library: Discord.Net ({DiscordConfig.Version})\n" +
                      $"- Runtime: {RuntimeInformation.FrameworkDescription} {RuntimeInformation.OSArchitecture}\n" +
                      $"- Uptime: {GetUptime()}\n\n" + $"{Format.Bold("Stats")}\n" + $"- Heap Size: {GetHeapSize()} MB\n" +
-                     $"- Guilds: {(await Context.Client.GetGuildsAsync().ConfigureAwait(false)).Count}\n" +
-                     $"- Channels: {completedChannelCount.Sum(c => c.Count)} " +
-                     $"- Users: {completedUserCount.Sum(u => u.Count)}").ConfigureAwait(false);
+                     $"- Guilds: {Context.Client.Guilds.Count}\n" +
+                     $"- Channels: {Context.Client.Guilds.Sum(g => g.Channels.Count)} " +
+                     $"- Users: Online - {Context.Client.Guilds.Sum(g => g.Users.Count)} | Total - {Context.Client.Guilds.Sum(g => g.MemberCount)}").ConfigureAwait(false);
         }
 
         [Command("join"), Alias("invite"), Summary("Returns the Invite URL of the bot.")]
@@ -96,9 +88,7 @@ namespace BCL.Modules.Public
         {
             var app = await Context.Client.GetApplicationInfoAsync().ConfigureAwait(false);
             await ReplyAsync($"<https://discordapp.com/oauth2/authorize?permissions=67496960&client_id={app.Id}&scope=bot>").ConfigureAwait(false);
-        }
-
-        CommandService _service;
+        }                         
 
         static string GetHeapSize() => Math.Round(GC.GetTotalMemory(true) / (1024.0 * 1024.0), 2).ToString(CultureInfo.InvariantCulture);
 

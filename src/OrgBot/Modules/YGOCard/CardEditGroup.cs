@@ -19,7 +19,7 @@ namespace OrgBot.Modules.YGOCard
     public partial class YGOCardModule
     {
         [Name("Card-Editing"), Group("edit"), RequireContext(ContextType.Guild), RequireRole(OrgBotGlobals.NUMBERS_ROLE_ID)]
-        public class CardEditGroup : ModuleBase
+        public class CardEditGroup : ModuleBase<SocketCommandContext>
         {
             [Command("discard"), Alias("dontsave", "revert"), Remarks("edit discard")]
             public async Task DiscardChangesAsync()
@@ -151,9 +151,7 @@ namespace OrgBot.Modules.YGOCard
             {
                 if (YGOCardAPIClient.IsUserEditing(Context.User))
                 {
-                    await
-                        ReplyAsync
-                            ("You may only edit one card at a time! Save or discard your changes before editing another card.");
+                    await ReplyAsync("You may only edit one card at a time! Save or discard your changes before editing another card.");
                     return;
                 }
                 var card = YGOCardAPIClient.Cards.FindCards(cardName).FirstOrDefault();

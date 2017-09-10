@@ -15,7 +15,7 @@
             _channelIds = channelIds;
         }
 
-        public override async Task<PreconditionResult> CheckPermissions(CommandContext context, CommandInfo command, IDependencyMap map)
+        public override async Task<PreconditionResult> CheckPermissions(ICommandContext context, CommandInfo command, IServiceProvider services)
         {
             var isWhitelistedChannel = _channelIds.Contains(context.Channel.Id);
             return await Task.FromResult(isWhitelistedChannel)

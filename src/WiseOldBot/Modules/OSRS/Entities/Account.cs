@@ -1,28 +1,11 @@
-﻿#region Header
-
-// Description:
-// 
-// Solution: DiscordBots
-// Project: WiseOldBot
-// 
-// Created: 09/25/2016 6:48 AM
-// Last Revised: 11/01/2016 9:03 PM
-// Last Revised by: Alex Gravely
-
-#endregion
-
-namespace WiseOldBot.Modules.OSRS {
-    #region Using
+﻿namespace WiseOldBot.Modules.OSRS {
 
     using System;
     using System.Text.RegularExpressions;
     using Discord;
     using Entities;
 
-    #endregion
-
     public class Account {
-        #region Public Structs + Classes
 
         public Account(string username, string uri, string[] skills) {
             Username = username;
@@ -78,10 +61,6 @@ namespace WiseOldBot.Modules.OSRS {
             Hunter = new Skill(skills[(int) SkillType.Hunter]);
         }
 
-        #endregion Public Structs + Classes
-
-        #region Public Fields + Properties
-
         public Skill Agility { get; set; }
         public Skill Attack { get; set; }
 
@@ -120,10 +99,6 @@ namespace WiseOldBot.Modules.OSRS {
         public Skill Woodcutting { get; set; }
         string _hsType;
         public string Url => Uri.EscapeUriString($"http://services.runescape.com/m={_hsType}/hiscorepersonal.ws?user1={Username}");
-
-        #endregion Public Fields + Properties
-
-        #region Public Methods
 
         Skill GetSkillBySkillType(SkillType skill) {
             switch (skill) {
@@ -185,64 +160,72 @@ namespace WiseOldBot.Modules.OSRS {
                 return ToDiscordEmbed();
             }
             else if(skill == SkillType.Combat) {
-                return new EmbedBuilder().WithTitle(Username).WithDescription($"Combat - {StatsSource.GetGameModeName()}").AddField((f) => f.WithName("Combat").WithValue($"{Combat}"));
+                return new EmbedBuilder()
+                {
+                    Title = Username,
+                    Description = $"Combat - {StatsSource.GetGameModeName()}",
+                    Url = Url
+                }                                                            
+                .AddField("Combat", Combat);
             }
-            return GetSkillBySkillType(skill).ToDiscordEmbed().WithTitle(Username).WithDescription($"{skill.GetFullSkillName()} - {StatsSource.GetGameModeName()}");
+            return GetSkillBySkillType(skill).ToDiscordEmbed()
+                .WithTitle(Username)
+                .WithDescription($"{skill.GetFullSkillName()} - {StatsSource.GetGameModeName()}")
+                .WithUrl(Url);
         }
 
         public string SkillToDiscordMessage(SkillType skill) {
             var returnString = $"{Format.Bold($"{Username}: {skill}")}\n";
-            if (skill == SkillType.All) {
+            if (skill == SkillType.All) 
                 return ToDiscordMessage();
-            } else if (skill == SkillType.Combat) {
+             else if (skill == SkillType.Combat) 
                 return returnString + Format.Code($"{Combat}");
-            } else {
+             else 
                 return returnString + GetSkillBySkillType(skill).ToDiscordMessage(); 
-            }
         }
 
         public EmbedBuilder ToDiscordCombatEmbed() {
             return new EmbedBuilder()
-                .WithTitle(Username)
-                .WithDescription($"{StatsSource}")
-                .AddField((f) =>
-                    f.WithName(nameof(Combat))
-                     .WithValue($"{Combat}"));
+            {
+                Title = Username,
+                Description = StatsSource.ToString(),
+                Url = Url
+            }.AddField(nameof(Combat), $"{Combat}");
         }
 
         public EmbedBuilder ToDiscordEmbed() {
             return new EmbedBuilder()
-                .WithTitle(Username)
-                .WithDescription($"{StatsSource.GetGameModeName()}")
-                .WithUrl(Url)
-                .AddField((f) =>
-                    f.WithName("Combat")
-                     .WithValue($"{Combat}"))
-                .AddField((f) => f.WithName(nameof(Attack)).WithValue(Attack.ToString()).WithIsInline(true))
-                .AddField((f) => f.WithName(nameof(Hitpoints)).WithValue(Hitpoints.ToString()).WithIsInline(true))
-                .AddField((f) => f.WithName(nameof(Mining)).WithValue(Mining.ToString()).WithIsInline(true))
-                .AddField((f) => f.WithName(nameof(Strength)).WithValue(Strength.ToString()).WithIsInline(true))
-                .AddField((f) => f.WithName(nameof(Agility)).WithValue(Agility.ToString()).WithIsInline(true))
-                .AddField((f) => f.WithName(nameof(Smithing)).WithValue(Smithing.ToString()).WithIsInline(true))
-                .AddField((f) => f.WithName(nameof(Defense)).WithValue(Defense.ToString()).WithIsInline(true))
-                .AddField((f) => f.WithName(nameof(Herblore)).WithValue(Herblore.ToString()).WithIsInline(true))
-                .AddField((f) => f.WithName(nameof(Fishing)).WithValue(Fishing.ToString()).WithIsInline(true))
-                .AddField((f) => f.WithName(nameof(Ranged)).WithValue(Ranged.ToString()).WithIsInline(true))
-                .AddField((f) => f.WithName(nameof(Thieving)).WithValue(Thieving.ToString()).WithIsInline(true))
-                .AddField((f) => f.WithName(nameof(Cooking)).WithValue(Cooking.ToString()).WithIsInline(true))
-                .AddField((f) => f.WithName(nameof(Prayer)).WithValue(Prayer.ToString()).WithIsInline(true))
-                .AddField((f) => f.WithName(nameof(Crafting)).WithValue(Crafting.ToString()).WithIsInline(true))
-                .AddField((f) => f.WithName(nameof(Firemaking)).WithValue(Firemaking.ToString()).WithIsInline(true))
-                .AddField((f) => f.WithName(nameof(Magic)).WithValue(Magic.ToString()).WithIsInline(true))
-                .AddField((f) => f.WithName(nameof(Fletching)).WithValue(Fletching.ToString()).WithIsInline(true))
-                .AddField((f) => f.WithName(nameof(Woodcutting)).WithValue(Woodcutting.ToString()).WithIsInline(true))
-                .AddField((f) => f.WithName(nameof(Runecrafting)).WithValue(Runecrafting.ToString()).WithIsInline(true))
-                .AddField((f) => f.WithName(nameof(Slayer)).WithValue(Slayer.ToString()).WithIsInline(true))
-                .AddField((f) => f.WithName(nameof(Farming)).WithValue(Farming.ToString()).WithIsInline(true))
-                .AddField((f) => f.WithName(nameof(Construction)).WithValue(Construction.ToString()).WithIsInline(true))
-                .AddField((f) => f.WithName(nameof(Hunter)).WithValue(Hunter.ToString()).WithIsInline(true))
-                .AddField((f) => f.WithName(nameof(Total)).WithValue(Total.ToString()).WithIsInline(true));
+            {
+                Title = Username,
+                Description = StatsSource.GetGameModeName(),
+                Url = Url
             }
+                .AddField("Combat", $"{Combat}")
+                .AddField($"{nameof(Attack)}{CustomEmoji.Attack}", Attack.ToString(), true)
+                .AddField($"{nameof(Hitpoints)}{CustomEmoji.Hitpoints}", Hitpoints.ToString(), true)
+                .AddField($"{nameof(Mining)}{CustomEmoji.Mining}", Mining.ToString(), true)
+                .AddField($"{nameof(Strength)}{CustomEmoji.Strength}", Strength.ToString(), true)
+                .AddField($"{nameof(Agility)}{CustomEmoji.Agility}", Agility.ToString(), true)
+                .AddField($"{nameof(Smithing)}{CustomEmoji.Smithing}", Smithing.ToString(), true)
+                .AddField($"{nameof(Defense)}{CustomEmoji.Defense}", Defense.ToString(), true)
+                .AddField($"{nameof(Herblore)}{CustomEmoji.Herblore}", Herblore.ToString(), true)
+                .AddField($"{nameof(Fishing)}{CustomEmoji.Fishing}", Fishing.ToString(), true)
+                .AddField($"{nameof(Ranged)}{CustomEmoji.Ranged}", Ranged.ToString(), true)
+                .AddField($"{nameof(Thieving)}{CustomEmoji.Thieving}", Thieving.ToString(), true)
+                .AddField($"{nameof(Cooking)}{CustomEmoji.Cooking}", Cooking.ToString(), true)
+                .AddField($"{nameof(Prayer)}{CustomEmoji.Prayer}", Prayer.ToString(), true)
+                .AddField($"{nameof(Crafting)}{CustomEmoji.Crafting}", Crafting.ToString(), true)
+                .AddField($"{nameof(Firemaking)}{CustomEmoji.Firemaking}", Firemaking.ToString(), true)
+                .AddField($"{nameof(Magic)}{CustomEmoji.Magic}", Magic.ToString(), true)
+                .AddField($"{nameof(Fletching)}{CustomEmoji.Fletching}", Fletching.ToString(), true)
+                .AddField($"{nameof(Woodcutting)}{CustomEmoji.Woodcutting}", Woodcutting.ToString(), true)
+                .AddField($"{nameof(Runecrafting)}{CustomEmoji.Runecrafting}", Runecrafting.ToString(), true)
+                .AddField($"{nameof(Slayer)}{CustomEmoji.Slayer}", Slayer.ToString(), true)
+                .AddField($"{nameof(Farming)}{CustomEmoji.Farming}", Farming.ToString(), true)
+                .AddField($"{nameof(Construction)}{CustomEmoji.Construction}", Construction.ToString(), true)
+                .AddField($"{nameof(Hunter)}{CustomEmoji.Hunter}", Hunter.ToString(), true)
+                .AddField(nameof(Total), Total.ToString(), true);
+        }
 
         public string ToDiscordMessage()
             =>
@@ -273,5 +256,4 @@ namespace WiseOldBot.Modules.OSRS {
             $"WOODCUTTING / {Woodcutting.Level} / {Woodcutting.Experience:N0} / {Woodcutting.Rank:N0}\n```";
     }
 
-    #endregion Public Methods
 }

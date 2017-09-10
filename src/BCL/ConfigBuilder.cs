@@ -20,7 +20,7 @@ namespace BCL {
             internal static T CreateBotConfig<T>() where T : IBotConfig, new() {
                 object boxedConfig = new T();
                 foreach (var prop in typeof(T).GetRuntimeProperties()) {
-                    if ((prop.PropertyType != typeof(string)) || (prop.PropertyType != typeof(ulong))) {
+                    if (prop.PropertyType != typeof(string) && !prop.PropertyType.GetTypeInfo().IsPrimitive) {
                         prop.SetValue(boxedConfig, Activator.CreateInstance(prop.PropertyType));
                         continue;
                     }

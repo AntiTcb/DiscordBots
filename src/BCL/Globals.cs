@@ -1,13 +1,4 @@
-﻿// Description:
-//
-// Solution: DiscordBots
-// Project: BCL
-//
-// Created: 10/09/2016 9:23 PM
-// Last Revised: 10/09/2016 9:23 PM
-// Last Revised by: Alex Gravely
-
-namespace BCL
+﻿namespace BCL
 {
     using Interfaces;
     using System.Collections.Generic;
@@ -37,7 +28,11 @@ namespace BCL
 
         public static Dictionary<ulong, ServerConfig> ServerConfigs { get; set; } = new Dictionary<ulong, ServerConfig>();
         public const string CONFIG_PATH = "config.json";
+#if DEBUG
+        public const string DEFAULT_PREFIX = ";>";
+#else                                            
         public const string DEFAULT_PREFIX = ";";
+#endif
         public const ulong OWNER_ID = 89613772372574208;
         public const string SERVER_CONFIG_PATH = "server_configs.json";
     }
