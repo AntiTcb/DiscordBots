@@ -7,8 +7,8 @@
 // Last Revised: 10/16/2016 10:44 PM
 // Last Revised by: Alex Gravely
 
-namespace WiseOldBot.Modules.OSRS {
-
+namespace WiseOldBot.Modules.OSRS
+{
     using BCL;
     using Discord;
     using Discord.Commands;
@@ -16,16 +16,18 @@ namespace WiseOldBot.Modules.OSRS {
     using System.Threading.Tasks;
 
     [Name("OSRS")]
-    public partial class OSRSModule : ModuleBase<SocketCommandContext> {
-
+    public partial class OSRSModule : ModuleBase<SocketCommandContext>
+    {
         [Command("lvl2exp"), Alias("l2e"),
             Summary("Gets the minimum experience required for the input level."),
             Remarks("lvl2exp 95")]
-        public async Task CalculateExperienceAsync([Summary("Level")]uint level) {
+        public async Task CalculateExperienceAsync([Summary("Level")]uint level)
+        {
             var exp = LevelToExperience(level);
             if (level > 99)
                 await ReplyAsync($"Minimum exp: {exp}.");
-            else {
+            else
+            {
                 var nextLevelExp = LevelToExperience(level + 1);
                 await ReplyAsync($"Minimum exp: {exp}. Next level: {nextLevelExp}. Difference:{nextLevelExp - exp}");
             }
@@ -39,12 +41,15 @@ namespace WiseOldBot.Modules.OSRS {
         [Command("defname"), Alias("account"),
             Summary("Sets or unsets a default runescape username. Pass the --unset flag before your username to unset.")
             Remarks("defname anti-tcb")]
-        public async Task ManageUsernameMapAsync([Remainder, Summary("RuneScape username")] string username) {
+        public async Task ManageUsernameMapAsync([Remainder, Summary("RuneScape username")] string username)
+        {
             var userID = Context.User.Id;
-            if (!((WiseOldBotConfig)Globals.BotConfig).UsernameMap.ContainsKey(userID)) {
+            if (!((WiseOldBotConfig)Globals.BotConfig).UsernameMap.ContainsKey(userID))
+            {
                 ((WiseOldBotConfig)Globals.BotConfig).UsernameMap.Add(userID, null);
             }
-            switch (username) {
+            switch (username)
+            {
                 case "--unset":
                     ((WiseOldBotConfig)Globals.BotConfig).UsernameMap.Remove(userID);
                     await ReplyAsync("Default account name unset!");
@@ -58,12 +63,15 @@ namespace WiseOldBot.Modules.OSRS {
             await ConfigHandler.SaveAsync(Globals.CONFIG_PATH, Globals.BotConfig);
         }
 
-        uint ExperienceToLevel(double exp) {
+        uint ExperienceToLevel(double exp)
+        {
             double pts = 0;
-            for (var lvl = 1; lvl < 99; ++lvl) {
+            for (var lvl = 1; lvl < 99; ++lvl)
+            {
                 pts += Math.Floor(lvl + (300 * Math.Pow(2, lvl / 7D)));
                 var output = pts / 4D;
-                if (!((exp - output) < 0)) {
+                if (!((exp - output) < 0))
+                {
                     continue;
                 }
                 var l_out = (pts - Math.Floor(lvl + (300 * Math.Pow(2, lvl / 7D)))) / 4;
@@ -72,9 +80,11 @@ namespace WiseOldBot.Modules.OSRS {
             return 99;
         }
 
-        double LevelToExperience(uint level) {
+        double LevelToExperience(uint level)
+        {
             double total = 0;
-            for (var i = 1; i < level; i++) {
+            for (var i = 1; i < level; i++)
+            {
                 total += Math.Floor(i + (300 * Math.Pow(2, i / 7.0)));
             }
             return Math.Floor(total / 4);
