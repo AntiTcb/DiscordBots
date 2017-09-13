@@ -244,3 +244,4 @@ ModelManifest.xml
 # User defined ignore
 **/config.json
 **/src/AntiBot/
+/src/OrgBot

@@ -175,7 +175,7 @@ namespace DiscordBCL.Modules
             if (Context.Guild != null)
                 _prefix = Context.Client.CurrentUser.Mention;
             else
-                _prefix = GuildConfigService.GetConfig(Context.Guild.Id).Prefix;
+                _prefix = GuildConfigService.GetConfig(Context.Guild.Id).Prefix ?? Context.Guild.CurrentUser.Mention;
         }
 
         private static string GetUptime()
