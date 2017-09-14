@@ -6,7 +6,7 @@
   "compilationOptions": {},
   "targets": {
     ".NETCoreApp,Version=v1.0": {
-      "WiseOldBot/1.7.3": {
+      "WiseOldBot/1.7.4": {
         "dependencies": {
           "BCL": "2.0.0",
           "Humanizer.Core": "2.2.0",
@@ -1690,7 +1690,7 @@
     }
   },
   "libraries": {
-    "WiseOldBot/1.7.3": {
+    "WiseOldBot/1.7.4": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

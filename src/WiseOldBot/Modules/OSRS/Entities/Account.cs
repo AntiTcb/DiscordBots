@@ -116,7 +116,13 @@
                     Description = $"Combat - {StatsSource.GetGameModeName()}",
                     Url = Url
                 }
-                .AddField("Combat", Combat);
+                .AddField("Combat", Combat)
+                .AddField("Attack", Attack.ToString(), true)
+                .AddField("Strength", Strength.ToString(), true)
+                .AddField("Defense", Defense.ToString(), true)
+                .AddField("Ranged", Ranged.ToString(), true)
+                .AddField("Magic", Magic.ToString(), true)
+                .AddField("Prayer", Prayer.ToString(), true);
             }
             return GetSkillBySkillType(skill).ToDiscordEmbed()
                 .WithTitle(Username)
