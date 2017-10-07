@@ -245,3 +245,7 @@ ModelManifest.xml
 **/config.json
 **/src/AntiBot/
 /src/OrgBot
+
+bots/**/configs/
+
+*.db
