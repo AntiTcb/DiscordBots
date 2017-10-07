@@ -1,5 +1,6 @@
-﻿using DiscordBCL.Models;
+﻿using DiscordBCL.Configuration;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 
 namespace DiscordBCL.Services
 {
@@ -11,8 +12,10 @@ namespace DiscordBCL.Services
         public GuildConfigService(LiteDbService dbService)
             => _dbService = dbService;
 
-        public void AddConfig(ulong guildId, string prefix)
-            => _dbService.Add(new GuildConfig(guildId) { Prefix = prefix });
+        public void AddConfig(ulong id, string prefix = null)
+            => _dbService.Add(new GuildConfig(id) { Prefix = prefix });
+        public void AddConfig(GuildConfig config)
+            => _dbService.Add(config);
 
         public GuildConfig GetConfig(ulong guildId)
         {
@@ -20,6 +23,9 @@ namespace DiscordBCL.Services
                 return config;
             return _configCache[guildId] = _dbService.Get<GuildConfig>(guildId);
         }
+
+        public IEnumerable<GuildConfig> GetConfigs() 
+            => _dbService.GetAll<GuildConfig>();
 
         public void UpdateConfig(GuildConfig config)
         {

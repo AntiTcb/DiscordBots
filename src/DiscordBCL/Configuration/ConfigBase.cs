@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using Newtonsoft.Json;
 
 namespace DiscordBCL.Configuration
@@ -14,13 +13,13 @@ namespace DiscordBCL.Configuration
 
         public void SaveJson()
         {
-            string file = Path.Combine(AppContext.BaseDirectory, "configs", FileName);
+            string file = Path.Combine("configs", FileName);
             File.WriteAllText(file, ToJson());
         }
 
         public static T Load<T>() where T : ConfigBase
         {
-            string file = Path.Combine(AppContext.BaseDirectory, "configs", FileName);
+            string file = Path.Combine("configs", FileName);
             return JsonConvert.DeserializeObject<T>(File.ReadAllText(file));
         }
 

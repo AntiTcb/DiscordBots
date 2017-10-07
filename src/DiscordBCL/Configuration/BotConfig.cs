@@ -8,6 +8,8 @@ namespace DiscordBCL.Configuration
     {
         [JsonProperty("token")]
         public string Token { get; set; }
+        [JsonProperty("dbConn")]
+        public string ConnectionString { get; set; }
         [JsonProperty("logChannelId")]
         public ulong LogChannelId { get; set; }
 
@@ -22,7 +24,7 @@ namespace DiscordBCL.Configuration
         
         internal static void EnsureExists()
         {
-            string file = Path.Combine(AppContext.BaseDirectory, "configs", FileName);
+            string file = Path.Combine("configs", FileName);
             if (!File.Exists(file))
             {
                 string path = Path.GetDirectoryName(file);
@@ -31,6 +33,7 @@ namespace DiscordBCL.Configuration
 
                 var config = new BotConfig();
                 config.SaveJson();
+                throw new Exception("Edit the config file and restart.");
             }
         }
     }

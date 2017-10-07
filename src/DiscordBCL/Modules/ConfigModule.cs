@@ -1,7 +1,7 @@
 ﻿using Discord;
 using Discord.Commands;
-using DiscordBCL.Services;
 using System.Threading.Tasks;
+using DiscordBCL.Services;
 
 namespace DiscordBCL.Modules
 {
@@ -16,6 +16,10 @@ namespace DiscordBCL.Modules
         public async Task ChangePrefixAsync(string prefix = null)
         {
             var config = GuildConfigService.GetConfig(Context.Guild.Id);
+
+            if (config == null)
+                await ReplyAsync("No config found!");
+
             if (string.IsNullOrWhiteSpace(prefix))
             {
                 await ReplyAsync(config.Prefix).ConfigureAwait(false);

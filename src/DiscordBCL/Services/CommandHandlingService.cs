@@ -96,7 +96,7 @@ namespace DiscordBCL.Services
             if (msg.HasMentionPrefix(_discord.CurrentUser, ref argPos))
                 return true;
 
-            if (msg is IGuildChannel gChan)                                                        
+            if (msg is IGuildChannel gChan)
                 return msg.HasStringPrefix(_gConfigService.GetConfig(gChan.Id).Prefix, ref argPos);
             else
                 return false;

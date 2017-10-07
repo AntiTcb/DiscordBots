@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace DiscordBCL
 {
-    internal class ModuleInfoTypeReader : TypeReader
+    public class ModuleInfoTypeReader : TypeReader
     {
         public override Task<TypeReaderResult> Read(ICommandContext context, string input, IServiceProvider services)
         {

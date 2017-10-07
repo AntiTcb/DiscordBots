@@ -1,49 +1,40 @@
-﻿using LiteDB;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
+using DiscordBCL.Configuration;
+using LiteDB;
 
 namespace DiscordBCL.Services
 {
-    public class LiteDbService
+    public class LiteDbService : IDisposable
     {
-        const string _connString = "Database.db";
+        private LiteRepository _dbRepo;
 
-        public void Add<T>(T value)
-        {
-            using (var db = new LiteDatabase(_connString))
-            {
-                db.GetCollection<T>().Insert(value);
-            }
-        }
+        public LiteDbService(BotConfig config)
+            => _dbRepo = new LiteRepository(config.ConnectionString);
+
+        public BsonValue Add<T>(T value)
+            => _dbRepo.Insert(value);
 
         public T Get<T>(BsonValue id)
-        {
-            using (var db = new LiteDatabase(_connString))
-            {
-                return db.GetCollection<T>().FindById(id);
-            }
-        }
-
+            => _dbRepo.Get<T>(id);
+        public T Get<T>(Expression<Func<T, bool>> func)
+            => _dbRepo.GetOne(func);
+        public IEnumerable<T> GetAll<T>()
+            => _dbRepo.GetAll<T>();
         public bool TryGet<T>(BsonValue id, out T value)
-        {
-            using (var db = new LiteDatabase(_connString))
-            {
-                return db.GetCollection<T>().TryGetValue(id, out value);
-            }
-        }
+            => _dbRepo.TryGet(id, out value);
 
-        public void Remove<T>(BsonValue id)
-        {
-            using (var db = new LiteDatabase(_connString))
-            {
-                db.GetCollection<T>().Delete(id);
-            }
-        }
+        public bool Remove<T>(BsonValue id) 
+            => _dbRepo.Delete<T>(id);
+        public bool Remove<T>(Expression<Func<T, bool>> func)
+            => _dbRepo.Delete(func) > 0;
 
-        public void Update<T>(T value)
-        {
-            using (var db = new LiteDatabase(_connString))
-            {
-                db.GetCollection<T>().Update(value);
-            }
-        }
+        public bool Update<T>(T value)
+            => _dbRepo.Update(value);
+        public IEnumerable<T> Where<T>(Expression<Func<T, bool>> func)
+            => _dbRepo.Where(func);
+
+        public void Dispose() => _dbRepo?.Dispose();
     }
 }

@@ -12,6 +12,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
+using DiscordBCL.Configuration;
 
 namespace DiscordBCL.Modules
 {
@@ -20,7 +21,7 @@ namespace DiscordBCL.Modules
     {
         public CommandService CommandService { get; set; }
         public IServiceProvider Provider { get; set; }
-        public GuildConfigService GuildConfigService { get; set; }
+        public GuildConfigService GuildConfigs { get; set; }
 
         private string _prefix;
 
@@ -175,7 +176,7 @@ namespace DiscordBCL.Modules
             if (Context.Guild != null)
                 _prefix = Context.Client.CurrentUser.Mention;
             else
-                _prefix = GuildConfigService.GetConfig(Context.Guild.Id).Prefix ?? Context.Guild.CurrentUser.Mention;
+                _prefix = GuildConfigs.GetConfig(Context.Guild.Id).Prefix ?? Context.Guild.CurrentUser.Mention;
         }
 
         private static string GetUptime()

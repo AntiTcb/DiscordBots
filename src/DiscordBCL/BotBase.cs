@@ -6,6 +6,7 @@ using DiscordBCL.Services;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading.Tasks;
+using LiteDB;
 
 namespace DiscordBCL
 {
@@ -20,10 +21,10 @@ namespace DiscordBCL
             : this(CreateDefaultSocketConfig(totalShards))
         {
             _config = BotConfig.Load();
-            _services = ConfigureServices();
+            _services = ConfigureServices().BuildServiceProvider();
             // Initialize services
             _services.GetRequiredService<EvalService>();
-            _guildConfigService = _services.GetRequiredService<GuildConfigService>();
+            _services.GetRequiredService<GuildConfigService>();
             AttachEventHandlers();
         }
 
@@ -44,18 +45,17 @@ namespace DiscordBCL
             await Client.LoginAsync(tokenType, _config.Token).ConfigureAwait(false);
             await Client.StartAsync().ConfigureAwait(false);
             await Task.Delay(-1).ConfigureAwait(false);
-        }     
+        }
 
-        protected virtual IServiceProvider ConfigureServices() 
+        protected virtual IServiceCollection ConfigureServices()
             => new ServiceCollection()
                 .AddSingleton(Client)
                 .AddSingleton(new CommandService(CreateDefaultCommandServiceConfig()))
                 .AddSingleton<CommandHandlingService>()
                 .AddSingleton<EvalService>()
-                .AddSingleton<LiteDbService>()
+                .AddScoped<LiteDbService>()
                 .AddSingleton<GuildConfigService>()
-                .AddSingleton(_config)
-                .BuildServiceProvider();
+                .AddSingleton(_config);
 
         public static CommandServiceConfig CreateDefaultCommandServiceConfig()
             => new CommandServiceConfig

@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace DiscordBCL
 {
-    internal class CommandInfoTypeReader : TypeReader
+    public class CommandInfoTypeReader : TypeReader
     {
         public override Task<TypeReaderResult> Read(ICommandContext context, string input, IServiceProvider services)
         {

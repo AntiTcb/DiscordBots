@@ -1,4 +1,4 @@
-﻿namespace DiscordBCL.Models
+﻿namespace DiscordBCL.Configuration
 {
     public class GuildConfig
     {
