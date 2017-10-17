@@ -1,22 +1,19 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.27004.2002
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{E0E650C5-8A69-477E-9A1B-EA6500EFCA74}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F00EF7AD-9612-4A7F-AF1B-F205981CA1DE}"
-	ProjectSection(SolutionItems) = preProject
-		global.json = global.json
-	EndProjectSection
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "WiseOldBot", "src\WiseOldBot\WiseOldBot.xproj", "{E12DCECB-30F1-490D-849D-8DD8601D9BA9}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "BCL", "src\BCL\BCL.xproj", "{C1BF18D5-E2C2-4526-927D-DEBA9B0FB7EB}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "OrgBot", "src\OrgBot\OrgBot.xproj", "{391ECD30-38E5-4A5F-891D-69013336B983}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{628D26F6-56AF-4815-85E8-B3E20DA6F2B6}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WiseOldBot", "src\WiseOldBot\WiseOldBot.csproj", "{E12DCECB-30F1-490D-849D-8DD8601D9BA9}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BCL", "src\BCL\BCL.csproj", "{C1BF18D5-E2C2-4526-927D-DEBA9B0FB7EB}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrgBot", "src\OrgBot\OrgBot.csproj", "{391ECD30-38E5-4A5F-891D-69013336B983}"
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "BotTests", "tests\BotTests\BotTests.xproj", "{2FA30565-9BF1-4331-9AAA-5EC717BEC321}"
 EndProject
@@ -58,5 +55,8 @@ Global
 		{391ECD30-38E5-4A5F-891D-69013336B983} = {E0E650C5-8A69-477E-9A1B-EA6500EFCA74}
 		{2FA30565-9BF1-4331-9AAA-5EC717BEC321} = {628D26F6-56AF-4815-85E8-B3E20DA6F2B6}
 		{7169CCC5-B480-43BC-A1D3-71A48DFFA1DC} = {E0E650C5-8A69-477E-9A1B-EA6500EFCA74}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3C85A85A-2235-4AD5-82BD-18C5F1198B49}
 	EndGlobalSection
 EndGlobal

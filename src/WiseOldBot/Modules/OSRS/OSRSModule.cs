@@ -39,7 +39,7 @@ namespace WiseOldBot.Modules.OSRS
             => await ReplyAsync($"Level: {ExperienceToLevel(exp)}");
 
         [Command("defname"), Alias("account"),
-            Summary("Sets or unsets a default runescape username. Pass the --unset flag before your username to unset.")
+            Summary("Sets or unsets a default runescape username. Pass the --unset flag before your username to unset."),
             Remarks("defname anti-tcb")]
         public async Task ManageUsernameMapAsync([Remainder, Summary("RuneScape username")] string username)
         {
