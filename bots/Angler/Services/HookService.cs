@@ -30,12 +30,38 @@ namespace Angler.Services
             return _webhooks.TryAdd(wh.Id, wh);
         }
 
+        public bool UpdateWebhook(ulong webhookId, Website site)
+        {
+            var wh = _dbService.Get<Webhook>(x => x.Id == webhookId);
+            wh.Site = site;
+            _webhooks[webhookId] = wh;
+            return _dbService.Update(wh);
+        }
+
+        public void PurgeCache()
+        {
+            _webhooks = new ConcurrentDictionary<ulong, Webhook>(_dbService.GetAll<Webhook>().Select(x => new KeyValuePair<ulong, Webhook>(x.Id, x)));
+        }
+
         public async Task FireWebhooksAsync(Website site, IMessage message)
         {
-            var whs = _webhooks.Where(x => x.Value.Site == site).Select(x => x.Value);
+            var whs = _webhooks.Where(x => x.Value.Site == site || x.Value.Site == Website.All).Select(x => x.Value);
 
             foreach (var wh in whs)
                 await wh.GetClient().SendMessageAsync(message);
+        }
+        public async Task FireWebhooksAsync(Website site, string url)
+        {
+            var whs = _webhooks.Where(x => x.Value.Site == site || x.Value.Site == Website.All).Select(x => x.Value);
+
+            string avatar = url.Contains("ygorganization")
+                ? "https://ygorganization.com/wp-content/uploads/2014/09/TheOrgLogo.png"
+                : url.Contains("cardfightcoalition")
+                  ? "https://ygorganization.com/wp-content/uploads/2016/08/CCFBlogo-1.png"
+                  : null;
+
+            foreach (var wh in whs)
+                await wh.GetClient().SendMessageAsync($"{Format.Bold("New Post!")}\n{url}", username: "OrgBot Jr.", avatarUrl: avatar);
         }
 
         public (IEnumerable<Webhook> webhooks, IEnumerable<Webhook> dbHooks) ListWebhooks() 

@@ -6,7 +6,6 @@ using DiscordBCL.Services;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading.Tasks;
-using LiteDB;
 
 namespace DiscordBCL
 {
@@ -39,10 +38,10 @@ namespace DiscordBCL
             Client.LeftGuild += RemoveGuildConfigAsync;
         }
 
-        public virtual async Task RunAsync(TokenType tokenType)
+        public virtual async Task RunAsync()
         {
             await _services.GetRequiredService<CommandHandlingService>().InitializeAsync().ConfigureAwait(false);
-            await Client.LoginAsync(tokenType, _config.Token).ConfigureAwait(false);
+            await Client.LoginAsync(TokenType.Bot, _config.Token).ConfigureAwait(false);
             await Client.StartAsync().ConfigureAwait(false);
             await Task.Delay(-1).ConfigureAwait(false);
         }

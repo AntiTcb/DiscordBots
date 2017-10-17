@@ -49,6 +49,7 @@ namespace Angler.Services
             _cmdService.AddTypeReader<ModuleInfo>(new ModuleInfoTypeReader());
             _cmdService.AddTypeReader<SocketGuild>(new GuildTypeReader<SocketGuild>());
             _cmdService.AddTypeReader<RestGuild>(new GuildTypeReader<RestGuild>());
+            _cmdService.AddTypeReader<Uri>(new UriTypeReader());
 
             await _cmdService.AddModulesAsync(Assembly.GetEntryAssembly()).ConfigureAwait(false);
             await _cmdService.AddModulesAsync(typeof(BotBase).GetTypeInfo().Assembly).ConfigureAwait(false);

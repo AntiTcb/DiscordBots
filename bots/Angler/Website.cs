@@ -1,8 +1,12 @@
-﻿namespace Angler
+﻿using System;
+
+namespace Angler
 {
+    [Flags]
     public enum Website
     {
-        YGOrg,
-        CardCoal
+        YGOrg = 1,
+        CardCoal = 2,
+        All = YGOrg | CardCoal
     }
 }
