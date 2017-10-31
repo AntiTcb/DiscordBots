@@ -25,9 +25,9 @@ namespace BCL
             if (message == null || msg.Author.Id == Client.CurrentUser.Id) 
                 return;
 
-            var argPos = 0;
+            int argPos = 0;
             var guildChannel = message.Channel as SocketGuildChannel;
-            var prefix = guildChannel?.Guild == null
+            string prefix = guildChannel?.Guild == null
                              ? ServerConfig.DefaultPrefix : Globals.ServerConfigs[guildChannel.Guild.Id].CommandPrefix;
 
             if (!(message.HasMentionPrefix(Client.CurrentUser, ref argPos) ||
