@@ -1,18 +1,10 @@
-﻿// Description:
-//
-// Solution: DiscordBots
-// Project: WiseOldBot
-//
-// Created: 10/16/2016 9:47 PM
-// Last Revised: 10/19/2016 12:21 AM
-// Last Revised by: Alex Gravely
-
-namespace WiseOldBot.Modules.GETracker.Entities
+﻿namespace WiseOldBot.Modules.GETracker.Entities
 {
     using RestEase;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+    using BCL;
 
     public static class GETrackerAPIClient
     {
@@ -22,8 +14,9 @@ namespace WiseOldBot.Modules.GETracker.Entities
 
         static GETrackerAPIClient()
         {
+            API.Token = $"Bearer {((WiseOldBotConfig)Globals.BotConfig).GETrackerToken}";
             var items = API.DownloadItemsAsync().GetAwaiter().GetResult()["data"].GroupBy(x => x.Name.ToLower()).
-                            ToDictionary(g => g.Key, g => g.OrderBy(x => x.ItemID).ToList());
+                            ToDictionary(g => g.Key, g => g.OrderBy(x => x.ItemId).ToList());
             Items = new ItemMap(items);
         }
 
@@ -37,11 +30,9 @@ namespace WiseOldBot.Modules.GETracker.Entities
 
         public static GETrackerItem GetItemOrDefault(string itemName)
         {
-            List<GETrackerItem> item;
-            if (Items.TryGetValue(itemName.ToLower(), out item))
-            {
+            if (Items.TryGetValue(itemName.ToLower(), out var item))
                 return item.FirstOrDefault();
-            }
+
             return Items.FindItems(itemName).FirstOrDefault();
         }
     }

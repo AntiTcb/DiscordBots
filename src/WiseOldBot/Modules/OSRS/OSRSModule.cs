@@ -1,13 +1,4 @@
-﻿// Description:
-//
-// Solution: DiscordBots
-// Project: WiseOldBot
-//
-// Created: 10/11/2016 6:18 PM
-// Last Revised: 10/16/2016 10:44 PM
-// Last Revised by: Alex Gravely
-
-namespace WiseOldBot.Modules.OSRS
+﻿namespace WiseOldBot.Modules.OSRS
 {
     using BCL;
     using Discord;

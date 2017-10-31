@@ -1,14 +1,17 @@
 ﻿namespace WiseOldBot.Modules.GETracker
 {
-    using Discord.Commands;
-    using Entities;
     using System;
     using System.Linq;
     using System.Threading.Tasks;
+    using Discord;
+    using Discord.Commands;
+    using Entities;
 
     [Name("GE-Tracker")]
     public class GETrackerModule : ModuleBase<SocketCommandContext>
     {
+        static ulong[] WhitelistedPriceRoleIds => new ulong[] { 179648866138718212, 179649074260082688, 270649339225964554, 302269308451422228 };
+
         [Command("alch"), Summary("Gets the alchemy values for an item"), Remarks("alch rune platebody")]
         public async Task GetAlchPriceAsync([Remainder, Summary("Item name")] string itemName = "cabbage")
         {
@@ -36,7 +39,9 @@
                     await ReplyAsync($"Please use the <#{275374396003319808}> channel for the price command.");
                     return;
                 }
-                if (Context.Guild.Id == 169578245837029376 && Context.Channel.Id != 181778450967822336)
+                // GE-Tracker guild
+                if (Context.Guild.Id == 169578245837029376 && Context.Channel.Id != 181778450967822336 &&
+                    (Context.User is IGuildUser gUser && !gUser.RoleIds.Intersect(WhitelistedPriceRoleIds).Any()))
                 {
                     await ReplyAsync($"Please use the <#{181778450967822336}> channel for the price command.");
                     return;
@@ -70,10 +75,10 @@
             using (Context.Channel.EnterTypingState())
             {
                 var inItems = (await GETrackerAPIClient.DownloadItemsAsync())["data"].GroupBy(x => x.Name).
-                    ToDictionary(g => g.Key, g => g.OrderBy(x => x.ItemID).ToList());
+                    ToDictionary(g => g.Key, g => g.OrderBy(x => x.ItemId).ToList());
                 var newItems = inItems.Values.SelectMany(x => x)
                     .Except(GETrackerAPIClient.Items.Values.SelectMany(x => x))
-                    .GroupBy(x => x.Name).ToDictionary(g => g.Key, g => g.OrderBy(x => x.ItemID).ToList());
+                    .GroupBy(x => x.Name).ToDictionary(g => g.Key, g => g.OrderBy(x => x.ItemId).ToList());
                 var newItemCount = newItems.Count();
 
                 foreach (var item in newItems)

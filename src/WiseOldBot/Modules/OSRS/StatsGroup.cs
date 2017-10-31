@@ -1,13 +1,4 @@
-﻿// Description:
-//
-// Solution: DiscordBots
-// Project: WiseOldBot
-//
-// Created: 10/11/2016 6:18 PM
-// Last Revised: 11/01/2016 8:10 PM
-// Last Revised by: Alex Gravely
-
-namespace WiseOldBot.Modules.OSRS
+﻿namespace WiseOldBot.Modules.OSRS
 {
     using BCL;
     using Discord.Commands;
@@ -19,7 +10,7 @@ namespace WiseOldBot.Modules.OSRS
         [Name("OSRS Stats")]
         public class StatsGroup : ModuleBase<SocketCommandContext>
         {
-            [Command("lookup"), Alias("l")]
+            [Command("lookup"), Alias("l"), Priority(1)]
             [Summary("Looks up an account from the high scores, with various skill and mode options.")]
             [Remarks("lookup regular all anti-tcb")]
             public async Task GetStatsAsync([Summary("Game mode")]GameMode gameMode = GameMode.Regular,
@@ -42,15 +33,15 @@ namespace WiseOldBot.Modules.OSRS
                 await ReplyAsync("Player's highscores could not be found.");
             }
 
-            [Command("lookup"), Alias("l"),
-                Summary("Looks up an account from the high scores, with various skill and mode options")]
+            [Command("lookup"), Alias("l"), Priority(2)]
+            [Summary("Looks up an account from the high scores, with various skill and mode options")]
             public async Task GetStatsAsync([Summary("Game mode")]GameMode gameMode = GameMode.Regular, [Summary("Account to search"), Remainder]string playerName = "")
             {
                 await GetStatsAsync(gameMode, SkillType.All, playerName);
             }
 
-            [Command("lookup"), Alias("l"),
-                Summary("Looks up an account from the high scores, with various skill and mode options")]
+            [Command("lookup"), Alias("l"), Priority(3)]
+            [Summary("Looks up an account from the high scores, with various skill and mode options")]
             public async Task GetStatsAsync([Summary("Skill")]SkillType skillType = SkillType.All, [Summary("Account to search"), Remainder]string playerName = "")
             {
                 await GetStatsAsync(GameMode.Regular, skillType, playerName);
