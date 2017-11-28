@@ -7,6 +7,7 @@
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
+    using Discord.Commands;
 
     public abstract class BotBase : IBotBase
     {
@@ -49,10 +50,16 @@
         public abstract Task InstallCommandsAsync();
         public abstract IServiceProvider ConfigureServices();
 
-        public virtual Task Log(LogMessage log)
+        public virtual async Task Log(LogMessage log)
         {
             Console.WriteLine(log.ToString());
-            return Task.CompletedTask;
+
+            if (log.Exception != null && log.Exception is CommandException ex)
+            {
+                var loggingChannel = Client.GetChannel(Globals.BotConfig.LogChannel) as SocketTextChannel;
+                await ReportCommandErrorAsync(loggingChannel, ctx, result).ConfigureAwait(false);
+                await ex.Context.Channel.SendMessageAsync($"**Error:** {ex.ErrorReason}").ConfigureAwait(false);
+            }
         }
 
         public async virtual Task LoginAndConnectAsync(TokenType tokenType)

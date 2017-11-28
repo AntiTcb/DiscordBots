@@ -27,7 +27,7 @@
             }
         }
 
-        [Command("price"), Alias("p"), Summary("Gets the GE-Tracker info for an item"), Remarks("price rune platebody")]
+        [Command("price", RunMode = RunMode.Async), Alias("p"), Summary("Gets the GE-Tracker info for an item"), Remarks("price rune platebody")]
         public async Task GetPriceAsync([Remainder, Summary("Item name")] string itemName = "cabbage")
         {
             using (Context.Channel.EnterTypingState())

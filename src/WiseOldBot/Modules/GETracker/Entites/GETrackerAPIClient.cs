@@ -9,7 +9,7 @@
     public static class GETrackerAPIClient
     {
         public static ItemMap Items { get; set; }
-        internal const string BASE_URI = "https://ge-tracker.com/api";
+        internal const string BASE_URI = "https://www.ge-tracker.com/api";
         static readonly IGETrackerAPI API = RestClient.For<IGETrackerAPI>(BASE_URI);
 
         static GETrackerAPIClient()
