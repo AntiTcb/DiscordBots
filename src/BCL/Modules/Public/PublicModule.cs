@@ -74,7 +74,11 @@ namespace BCL.Modules.Public
 
             await ReplyAsync($"{Format.Bold("Info")}\n" + $"- Author: {app.Owner} (ID: {app.Owner.Id})\n" +
                      $"- Repo: <https://github.com/AntiTcb/DiscordBots/tree/master/src/{app.Name}>\n" +
+#if DEBUG
+                     $"- Assembly: {Assembly.GetEntryAssembly().GetName().Name} {Assembly.GetEntryAssembly().GetName().Version} DEBUG\n" +
+#else
                      $"- Assembly: {Assembly.GetEntryAssembly().GetName().Name} {Assembly.GetEntryAssembly().GetName().Version}\n" +
+#endif
                      $"- Library: Discord.Net ({DiscordConfig.Version})\n" +
                      $"- Runtime: {RuntimeInformation.FrameworkDescription} {RuntimeInformation.OSArchitecture}\n" +
                      $"- Uptime: {GetUptime()}\n\n" + $"{Format.Bold("Stats")}\n" + $"- Heap Size: {GetHeapSize()} MB\n" +

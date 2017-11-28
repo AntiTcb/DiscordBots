@@ -4,54 +4,53 @@
     using Entities;
     using System;
     using System.Text.RegularExpressions;
+    using System.Linq;
+    using System.Collections.Generic;
 
     public class Account
     {
         public Skill Agility { get; set; }
-
         public Skill Attack { get; set; }
+        public Skill Construction { get; set; }
+        public Skill Cooking { get; set; }
+        public Skill Crafting { get; set; }
+        public Skill Defense { get; set; }
+        public Skill Farming { get; set; }
+        public Skill Firemaking { get; set; }
+        public Skill Fishing { get; set; }
+        public Skill Fletching { get; set; }
+        public Skill Herblore { get; set; }
+        public Skill Hitpoints { get; set; }
+        public Skill Hunter { get; set; }
+        public Skill Magic { get; set; }
+        public Skill Mining { get; set; }
+        public Skill Prayer { get; set; }
+        public Skill Ranged { get; set; }
+        public Skill Runecrafting { get; set; } 
+        public Skill Slayer { get; set; } 
+        public Skill Smithing { get; set; }
+        public GameMode StatsSource { get; set; }
+        public Skill Strength { get; set; }
+        public Skill Thieving { get; set; }
+        public Skill Total { get; set; }
+        public string Username { get; set; }
+        public Skill Woodcutting { get; set; }
 
         public decimal Combat
             =>
-            Math.Round
-                ((((Defense + Hitpoints + Math.Floor((decimal)(Prayer / 2))) * (decimal)0.25) +
-                  (decimal)
-                  Math.Max
-                      ((Attack + Strength) * 0.325,
-                       Math.Max(Math.Floor(Magic * 1.5) * 0.325, Math.Floor(Ranged * 1.5) * 0.325))) * 100) / 100;
+            Math.Round((((Defense + Hitpoints + Math.Floor((decimal)(Prayer / 2))) * (decimal)0.25) + (decimal) Math.Max((Attack + Strength) * 0.325,
+                Math.Max(Math.Floor(Magic * 1.5) * 0.325, Math.Floor(Ranged * 1.5) * 0.325))) * 100) / 100;
 
-        public Skill Construction { get; set; }       
-        public Skill Cooking { get; set; }           
-        public Skill Crafting { get; set; }          
-        public Skill Defense { get; set; }           
-        public Skill Farming { get; set; }           
-        public Skill Firemaking { get; set; }        
-        public Skill Fishing { get; set; }           
-        public Skill Fletching { get; set; }         
-        public Skill Herblore { get; set; }          
-        public Skill Hitpoints { get; set; }         
-        public Skill Hunter { get; set; }            
-        public Skill Magic { get; set; }             
-        public Skill Mining { get; set; }            
-        public Skill Prayer { get; set; }            
-        public Skill Ranged { get; set; }            
-        public Skill Runecrafting { get; set; }      
-        public Skill Slayer { get; set; }            
-        public Skill Smithing { get; set; }          
-        public GameMode StatsSource { get; set; }    
-        public Skill Strength { get; set; }          
-        public Skill Thieving { get; set; }          
-        public Skill Total { get; set; }             
-        public string Url => Uri.EscapeUriString($"http://services.runescape.com/m={_hsType}/hiscorepersonal.ws?user1={Username}");        
-        public string Username { get; set; }                                                                                               
-        public Skill Woodcutting { get; set; }
+        public string Url => Uri.EscapeUriString($"http://services.runescape.com/m={_hsType}/hiscorepersonal.ws?user1={Username}");
 
         string _hsType;
+
+        static Regex UrlParser = new Regex("(hiscore_oldschool.*?)/", RegexOptions.Compiled);
 
         public Account(string username, string uri, string[] skills)
         {
             Username = username;
-            _hsType = Regex.Match(uri, "(hiscore_oldschool.*?)/").Groups[1].Value;
+            _hsType = UrlParser.Match(uri).Groups[1].Value;
             switch (_hsType)
             {
                 case "hiscore_oldschool":
@@ -78,30 +77,30 @@
                     break;
             }
 
-            Total = new Skill(skills[(int)SkillType.Total]);
-            Attack = new Skill(skills[(int)SkillType.Attack]);
-            Defense = new Skill(skills[(int)SkillType.Defense]);
-            Strength = new Skill(skills[(int)SkillType.Strength]);
-            Hitpoints = new Skill(skills[(int)SkillType.Hitpoints]);
-            Ranged = new Skill(skills[(int)SkillType.Ranged]);
-            Prayer = new Skill(skills[(int)SkillType.Prayer]);
-            Magic = new Skill(skills[(int)SkillType.Magic]);
-            Agility = new Skill(skills[(int)SkillType.Agility]);
-            Construction = new Skill(skills[(int)SkillType.Construction]);
-            Cooking = new Skill(skills[(int)SkillType.Cooking]);
-            Woodcutting = new Skill(skills[(int)SkillType.Woodcutting]);
-            Fletching = new Skill(skills[(int)SkillType.Fletching]);
-            Crafting = new Skill(skills[(int)SkillType.Crafting]);
-            Farming = new Skill(skills[(int)SkillType.Farming]);
-            Firemaking = new Skill(skills[(int)SkillType.Firemaking]);
-            Fishing = new Skill(skills[(int)SkillType.Fishing]);
-            Smithing = new Skill(skills[(int)SkillType.Smithing]);
-            Mining = new Skill(skills[(int)SkillType.Mining]);
-            Herblore = new Skill(skills[(int)SkillType.Herblore]);
-            Thieving = new Skill(skills[(int)SkillType.Thieving]);
-            Slayer = new Skill(skills[(int)SkillType.Slayer]);
-            Runecrafting = new Skill(skills[(int)SkillType.Runecrafting]);
-            Hunter = new Skill(skills[(int)SkillType.Hunter]);
+            Total = new Skill(skills[SkillType.Total.GetIndex().Value]);
+            Attack = new Skill(skills[SkillType.Attack.GetIndex().Value]);
+            Defense = new Skill(skills[SkillType.Defense.GetIndex().Value]);
+            Strength = new Skill(skills[SkillType.Strength.GetIndex().Value]);
+            Hitpoints = new Skill(skills[SkillType.Hitpoints.GetIndex().Value]);
+            Ranged = new Skill(skills[SkillType.Ranged.GetIndex().Value]);
+            Prayer = new Skill(skills[SkillType.Prayer.GetIndex().Value]);
+            Magic = new Skill(skills[SkillType.Magic.GetIndex().Value]);
+            Agility = new Skill(skills[SkillType.Agility.GetIndex().Value]);
+            Construction = new Skill(skills[SkillType.Construction.GetIndex().Value]);
+            Cooking = new Skill(skills[SkillType.Cooking.GetIndex().Value]);
+            Woodcutting = new Skill(skills[SkillType.Woodcutting.GetIndex().Value]);
+            Fletching = new Skill(skills[SkillType.Fletching.GetIndex().Value]);
+            Crafting = new Skill(skills[SkillType.Crafting.GetIndex().Value]);
+            Farming = new Skill(skills[SkillType.Farming.GetIndex().Value]);
+            Firemaking = new Skill(skills[SkillType.Firemaking.GetIndex().Value]);
+            Fishing = new Skill(skills[SkillType.Fishing.GetIndex().Value]);
+            Smithing = new Skill(skills[SkillType.Smithing.GetIndex().Value]);
+            Mining = new Skill(skills[SkillType.Mining.GetIndex().Value]);
+            Herblore = new Skill(skills[SkillType.Herblore.GetIndex().Value]);
+            Thieving = new Skill(skills[SkillType.Thieving.GetIndex().Value]);
+            Slayer = new Skill(skills[SkillType.Slayer.GetIndex().Value]);
+            Runecrafting = new Skill(skills[SkillType.Runecrafting.GetIndex().Value]);
+            Hunter = new Skill(skills[SkillType.Hunter.GetIndex().Value]);
         }
 
         public EmbedBuilder SkillToDiscordEmbed(SkillType skill)
@@ -117,22 +116,39 @@
                     Url = Url
                 }
                 .AddField("Combat", Combat)
-                .AddField($"Attack {CustomEmoji.Attack}", Attack.ToString(), true)
-                .AddField($"Strength {CustomEmoji.Strength}", Strength.ToString(), true)
-                .AddField($"Defense {CustomEmoji.Defense}", Defense.ToString(), true)
-                .AddField($"Ranged {CustomEmoji.Ranged}", Ranged.ToString(), true)
-                .AddField($"Magic {CustomEmoji.Magic}", Magic.ToString(), true)
-                .AddField($"Prayer {CustomEmoji.Prayer}", Prayer.ToString(), true);
+                .AddField($"{CustomEmoji.Attack} Attack", Attack.ToString(), true)
+                .AddField($"{CustomEmoji.Strength} Strength", Strength.ToString(), true)
+                .AddField($"{CustomEmoji.Defense}Defense", Defense.ToString(), true)
+                .AddField($"{CustomEmoji.Hitpoints} Hitpoints", Hitpoints.ToString(), true)
+                .AddField($"{CustomEmoji.Ranged} Ranged", Ranged.ToString(), true)
+                .AddField($"{CustomEmoji.Magic} Magic", Magic.ToString(), true)
+                .AddField($"{CustomEmoji.Prayer} Prayer", Prayer.ToString(), true)
+                .AddField($"{CustomEmoji.Slayer} Slayer", Slayer.ToString(), true)
+                .AddField("Total", Total.ToString(), true);
+            }
+            var skillFlags = skill.GetUniqueFlags<SkillType>();
+            if (skillFlags.Count() > 1)
+            {
+                var eb = new EmbedBuilder
+                {
+                    Title = Username,
+                    Description = StatsSource.GetGameModeName(),
+                    Url = Url
+                };
+                foreach (var s in skill.GetUniqueFlags<SkillType>())
+                    eb.AddField(s.GetSkillNameAndIcon(), GetSkillBySkillType(s).ToString(), true);
+
+                return eb;
             }
             return GetSkillBySkillType(skill).ToDiscordEmbed()
                 .WithTitle(Username)
-                .WithDescription($"{skill.GetFullSkillName()} - {StatsSource.GetGameModeName()}")
+                .WithDescription($"{skill.GetSkillNameAndIcon()} - {StatsSource.GetGameModeName()}")
                 .WithUrl(Url);
         }
 
         public string SkillToDiscordMessage(SkillType skill)
         {
-            var returnString = $"{Format.Bold($"{Username}: {skill}")}\n";
+            string returnString = $"{Format.Bold($"{Username}: {skill}")}\n";
             if (skill == SkillType.All)
                 return ToDiscordMessage();
             else if (skill == SkillType.Combat)
@@ -141,50 +157,46 @@
                 return returnString + GetSkillBySkillType(skill).ToDiscordMessage();
         }
 
-        public EmbedBuilder ToDiscordCombatEmbed()
+        public EmbedBuilder ToDiscordCombatEmbed() 
+            => new EmbedBuilder()
         {
-            return new EmbedBuilder()
-            {
-                Title = Username,
-                Description = StatsSource.ToString(),
-                Url = Url
-            }.AddField(nameof(Combat), $"{Combat}");
-        }
+            Title = Username,
+            Description = StatsSource.ToString(),
+            Url = Url
+        }.AddField(nameof(Combat), Combat.ToString());
 
-        public EmbedBuilder ToDiscordEmbed()
+        public EmbedBuilder ToDiscordEmbed() 
+            => new EmbedBuilder()
         {
-            return new EmbedBuilder()
-            {
-                Title = Username,
-                Description = StatsSource.GetGameModeName(),
-                Url = Url
-            }
-                .AddField("Combat", $"{Combat}")
-                .AddField($"{nameof(Attack)}{CustomEmoji.Attack}", Attack.ToString(), true)
-                .AddField($"{nameof(Hitpoints)}{CustomEmoji.Hitpoints}", Hitpoints.ToString(), true)
-                .AddField($"{nameof(Mining)}{CustomEmoji.Mining}", Mining.ToString(), true)
-                .AddField($"{nameof(Strength)}{CustomEmoji.Strength}", Strength.ToString(), true)
-                .AddField($"{nameof(Agility)}{CustomEmoji.Agility}", Agility.ToString(), true)
-                .AddField($"{nameof(Smithing)}{CustomEmoji.Smithing}", Smithing.ToString(), true)
-                .AddField($"{nameof(Defense)}{CustomEmoji.Defense}", Defense.ToString(), true)
-                .AddField($"{nameof(Herblore)}{CustomEmoji.Herblore}", Herblore.ToString(), true)
-                .AddField($"{nameof(Fishing)}{CustomEmoji.Fishing}", Fishing.ToString(), true)
-                .AddField($"{nameof(Ranged)}{CustomEmoji.Ranged}", Ranged.ToString(), true)
-                .AddField($"{nameof(Thieving)}{CustomEmoji.Thieving}", Thieving.ToString(), true)
-                .AddField($"{nameof(Cooking)}{CustomEmoji.Cooking}", Cooking.ToString(), true)
-                .AddField($"{nameof(Prayer)}{CustomEmoji.Prayer}", Prayer.ToString(), true)
-                .AddField($"{nameof(Crafting)}{CustomEmoji.Crafting}", Crafting.ToString(), true)
-                .AddField($"{nameof(Firemaking)}{CustomEmoji.Firemaking}", Firemaking.ToString(), true)
-                .AddField($"{nameof(Magic)}{CustomEmoji.Magic}", Magic.ToString(), true)
-                .AddField($"{nameof(Fletching)}{CustomEmoji.Fletching}", Fletching.ToString(), true)
-                .AddField($"{nameof(Woodcutting)}{CustomEmoji.Woodcutting}", Woodcutting.ToString(), true)
-                .AddField($"{nameof(Runecrafting)}{CustomEmoji.Runecrafting}", Runecrafting.ToString(), true)
-                .AddField($"{nameof(Slayer)}{CustomEmoji.Slayer}", Slayer.ToString(), true)
-                .AddField($"{nameof(Farming)}{CustomEmoji.Farming}", Farming.ToString(), true)
-                .AddField($"{nameof(Construction)}{CustomEmoji.Construction}", Construction.ToString(), true)
-                .AddField($"{nameof(Hunter)}{CustomEmoji.Hunter}", Hunter.ToString(), true)
-                .AddField(nameof(Total), Total.ToString(), true);
+            Title = Username,
+            Description = StatsSource.GetGameModeName(),
+            Url = Url
         }
+                .AddField("Combat", $"{Combat}")
+                .AddField($"{CustomEmoji.Attack} {nameof(Attack)}", Attack.ToString(), true)
+                .AddField($"{CustomEmoji.Hitpoints} {nameof(Hitpoints)}", Hitpoints.ToString(), true)
+                .AddField($"{CustomEmoji.Mining} {nameof(Mining)}", Mining.ToString(), true)
+                .AddField($"{CustomEmoji.Strength} {nameof(Strength)}", Strength.ToString(), true)
+                .AddField($"{CustomEmoji.Agility} {nameof(Agility)}", Agility.ToString(), true)
+                .AddField($"{CustomEmoji.Smithing} {nameof(Smithing)}", Smithing.ToString(), true)
+                .AddField($"{CustomEmoji.Defense} {nameof(Defense)}", Defense.ToString(), true)
+                .AddField($"{CustomEmoji.Herblore} {nameof(Herblore)}", Herblore.ToString(), true)
+                .AddField($"{CustomEmoji.Fishing} {nameof(Fishing)}", Fishing.ToString(), true)
+                .AddField($"{CustomEmoji.Ranged} {nameof(Ranged)}", Ranged.ToString(), true)
+                .AddField($"{CustomEmoji.Thieving} {nameof(Thieving)}", Thieving.ToString(), true)
+                .AddField($"{CustomEmoji.Cooking} {nameof(Cooking)}", Cooking.ToString(), true)
+                .AddField($"{CustomEmoji.Prayer} {nameof(Prayer)}", Prayer.ToString(), true)
+                .AddField($"{CustomEmoji.Crafting} {nameof(Crafting)}", Crafting.ToString(), true)
+                .AddField($"{CustomEmoji.Firemaking} {nameof(Firemaking)}", Firemaking.ToString(), true)
+                .AddField($"{CustomEmoji.Magic} {nameof(Magic)}", Magic.ToString(), true)
+                .AddField($"{CustomEmoji.Fletching} {nameof(Fletching)}", Fletching.ToString(), true)
+                .AddField($"{CustomEmoji.Woodcutting} {nameof(Woodcutting)}", Woodcutting.ToString(), true)
+                .AddField($"{CustomEmoji.Runecrafting} {nameof(Runecrafting)}", Runecrafting.ToString(), true)
+                .AddField($"{CustomEmoji.Slayer} {nameof(Slayer)}", Slayer.ToString(), true)
+                .AddField($"{CustomEmoji.Farming} {nameof(Farming)}", Farming.ToString(), true)
+                .AddField($"{CustomEmoji.Construction} {nameof(Construction)}", Construction.ToString(), true)
+                .AddField($"{CustomEmoji.Hunter} {nameof(Hunter)}", Hunter.ToString(), true)
+                .AddField(nameof(Total), Total.ToString(), true);
 
         public string ToDiscordMessage()
             =>

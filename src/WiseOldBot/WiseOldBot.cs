@@ -25,8 +25,8 @@
         }
         public async override Task InstallCommandsAsync()
         {
-            Client.Log += Log;
-            Commands.CommandService.Log += Log;
+            Client.Log += LogAsync;
+            Commands.CommandService.Log += LogAsync;
             await Commands.InstallAsync();
         }
 
@@ -54,8 +54,7 @@
 
         private async Task CheckForGuildConfigAsync(SocketGuild socketGuild)
         {
-            ServerConfig outValue;
-            if (!Globals.ServerConfigs.TryGetValue(socketGuild.Id, out outValue))
+            if (!Globals.ServerConfigs.TryGetValue(socketGuild.Id, out var outValue))
             {
                 Globals.ServerConfigs.Add(socketGuild.Id, new ServerConfig { CommandPrefix = Globals.DEFAULT_PREFIX });
                 await ConfigHandler.SaveAsync(Globals.SERVER_CONFIG_PATH, Globals.ServerConfigs);

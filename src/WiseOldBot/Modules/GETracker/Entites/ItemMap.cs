@@ -12,8 +12,7 @@
         public IEnumerable<GETrackerItem> FindItemOrItems(string itemName)
         {
             itemName = itemName.ToLower();
-            List<GETrackerItem> returnItems;
-            if (TryGetValue(itemName, out returnItems))
+            if (TryGetValue(itemName, out var returnItems))
             {
                 return returnItems;
             }
