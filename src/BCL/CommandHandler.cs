@@ -25,9 +25,9 @@ namespace BCL
             if (message == null || msg.Author.Id == Client.CurrentUser.Id) 
                 return;
 
-            var argPos = 0;
+            int argPos = 0;
             var guildChannel = message.Channel as SocketGuildChannel;
-            var prefix = guildChannel?.Guild == null
+            string prefix = guildChannel?.Guild == null
                              ? ServerConfig.DefaultPrefix : Globals.ServerConfigs[guildChannel.Guild.Id].CommandPrefix;
 
             if (!(message.HasMentionPrefix(Client.CurrentUser, ref argPos) ||
@@ -55,7 +55,7 @@ namespace BCL
             Client.MessageReceived += HandleCommandAsync;
         }
 
-        public async Task ReportCommandErrorAsync(IMessageChannel logChannel, ICommandContext ctx, IResult result) {
+        public static async Task ReportCommandErrorAsync(IMessageChannel logChannel, ICommandContext ctx, IResult result) {
             var eb = new EmbedBuilder()
                 .WithAuthor(ctx.User)
                 .WithColor(new Color(255, 0, 0))

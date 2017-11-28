@@ -23,8 +23,8 @@
 
         public async override Task InstallCommandsAsync()
         {
-            Client.Log += Log;
-            Commands.CommandService.Log += Log;
+            Client.Log += LogAsync;
+            Commands.CommandService.Log += LogAsync;
             await Commands.InstallAsync();
         }
 

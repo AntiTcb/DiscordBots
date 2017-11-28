@@ -246,7 +246,8 @@ ModelManifest.xml
 /src/WiseOldBot/config.json
 /src/WiseOldBot/server_configs.json
 server_configs.json
-server_configs.json
-server_configs.json
-server_configs.json
 AntiBot
+
+*.db
+
+bots/Angler/configs/

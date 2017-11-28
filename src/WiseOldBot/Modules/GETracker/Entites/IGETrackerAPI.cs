@@ -6,6 +6,9 @@
 
     public interface IGETrackerAPI
     {
+        [Header("Authorization")]
+        string Token { get; set; }
+
         [Get("items/{itemId}")]
         Task<GETrackerItem.Wrapper> DownloadItemAsync([Path("itemId")] int itemId);
 

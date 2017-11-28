@@ -1,13 +1,4 @@
-﻿// Description:
-//
-// Solution: DiscordBots
-// Project: WiseOldBot
-//
-// Created: 10/11/2016 6:18 PM
-// Last Revised: 10/16/2016 10:44 PM
-// Last Revised by: Alex Gravely
-
-namespace WiseOldBot.Modules.OSRS
+﻿namespace WiseOldBot.Modules.OSRS
 {
     using BCL;
     using Discord;
@@ -39,7 +30,7 @@ namespace WiseOldBot.Modules.OSRS
             => await ReplyAsync($"Level: {ExperienceToLevel(exp)}");
 
         [Command("defname"), Alias("account"),
-            Summary("Sets or unsets a default runescape username. Pass the --unset flag before your username to unset.")
+            Summary("Sets or unsets a default runescape username. Pass the --unset flag before your username to unset."),
             Remarks("defname anti-tcb")]
         public async Task ManageUsernameMapAsync([Remainder, Summary("RuneScape username")] string username)
         {
