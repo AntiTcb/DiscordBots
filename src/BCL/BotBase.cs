@@ -11,6 +11,7 @@
     using Humanizer;
     using Serilog;
     using System.IO;
+    using System.Text;
 
     public abstract class BotBase : IBotBase
     {
@@ -71,8 +72,17 @@
                 {
                     Title = msg,
                     Color = Color.DarkRed,
-                    Description = Format.Sanitize(cmdEx.InnerException.StackTrace).Truncate(5500)
+                    //Description = Format.Sanitize(cmdEx.InnerException.StackTrace).Truncate(5500)
                 };
+                var ex = cmdEx.InnerException;
+                var sb = new StringBuilder("**Exceptions:**\n");
+                int exCount = 1;
+                while (ex != null)
+                {
+                    sb.AppendLine($"Exception #{exCount}: {ex.ToString()}");
+                    ex = ex.InnerException;
+                }
+                eb.WithDescription(sb.ToString());
                 await cmdEx.Context.Channel.SendMessageAsync("", embed: eb).ConfigureAwait(false);
                 var loggingChannel = Client.GetChannel(Globals.BotConfig.LogChannel) as SocketTextChannel;
                 await loggingChannel.SendMessageAsync("", embed: eb).ConfigureAwait(false);
