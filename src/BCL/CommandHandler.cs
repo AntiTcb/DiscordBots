@@ -55,7 +55,7 @@ namespace BCL
             Client.MessageReceived += HandleCommandAsync;
         }
 
-        public async Task ReportCommandErrorAsync(IMessageChannel logChannel, ICommandContext ctx, IResult result) {
+        public static async Task ReportCommandErrorAsync(IMessageChannel logChannel, ICommandContext ctx, IResult result) {
             var eb = new EmbedBuilder()
                 .WithAuthor(ctx.User)
                 .WithColor(new Color(255, 0, 0))

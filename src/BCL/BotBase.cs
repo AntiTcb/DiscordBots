@@ -8,6 +8,9 @@
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using Discord.Commands;
+    using Humanizer;
+    using Serilog;
+    using System.IO;
 
     public abstract class BotBase : IBotBase
     {
@@ -20,6 +23,11 @@
             Client = new DiscordSocketClient(new DiscordSocketConfig { MessageCacheSize = 100, LogLevel = LogSeverity.Debug });
             Services = ConfigureServices();
             Commands = Services.GetRequiredService<CommandHandler>();
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Debug()
+                .WriteTo.File(Path.Combine("logs", "log.txt"), rollingInterval: RollingInterval.Day)
+                .WriteTo.Console()
+                .CreateLogger();
         }
 
         public async virtual Task CreateGuildConfigAsync(SocketGuild guild)
@@ -50,15 +58,24 @@
         public abstract Task InstallCommandsAsync();
         public abstract IServiceProvider ConfigureServices();
 
-        public virtual async Task Log(LogMessage log)
+        public virtual async Task LogAsync(LogMessage log)
         {
-            Console.WriteLine(log.ToString());
+            string msg = log.Exception?.ToString() ?? log.Message;
 
-            if (log.Exception != null && log.Exception is CommandException ex)
+            Log.Debug(msg);
+
+            if (log.Exception is CommandException cmdEx)
             {
+                msg = $"{cmdEx.InnerException.GetType().Name}: {cmdEx.InnerException.Message}";
+                var eb = new EmbedBuilder
+                {
+                    Title = msg,
+                    Color = Color.DarkRed,
+                    Description = Format.Sanitize(cmdEx.InnerException.StackTrace).Truncate(5500)
+                };
+                await cmdEx.Context.Channel.SendMessageAsync("", embed: eb).ConfigureAwait(false);
                 var loggingChannel = Client.GetChannel(Globals.BotConfig.LogChannel) as SocketTextChannel;
-                await ReportCommandErrorAsync(loggingChannel, ctx, result).ConfigureAwait(false);
-                await ex.Context.Channel.SendMessageAsync($"**Error:** {ex.ErrorReason}").ConfigureAwait(false);
+                await loggingChannel.SendMessageAsync("", embed: eb).ConfigureAwait(false);
             }
         }
 
