@@ -35,7 +35,7 @@ namespace BCL
                 return;
 
             var ctx = new SocketCommandContext(Client, message);
-            var result = await CommandService.ExecuteAsync(ctx, argPos, Services, MultiMatchHandling.Best).ConfigureAwait(false);
+            var result = await CommandService.ExecuteAsync(ctx, argPos, Services).ConfigureAwait(false);
             if (!result.IsSuccess) {
                 if (result.Error.GetValueOrDefault() == CommandError.UnknownCommand) {
 #if DEBUG

@@ -1,16 +1,16 @@
 {
   "runtimeTarget": {
     "name": ".NETCoreApp,Version=v2.0",
-    "signature": "bfca856c554e89efad1fa228db0f592d6c28e0b6"
+    "signature": "e29d5d24f29ade7101e43a8f3037b241c1618fe1"
   },
   "compilationOptions": {},
   "targets": {
     ".NETCoreApp,Version=v2.0": {
-      "WiseOldBot/2.2.0": {
+      "WiseOldBot/2.2.1": {
         "dependencies": {
-          "BCL": "2.1.1",
+          "BCL": "2.1.2",
           "Humanizer.Core": "2.2.0",
-          "RestEase": "1.4.3"
+          "RestEase": "1.4.4"
         },
         "runtime": {
           "WiseOldBot.dll": {}
@@ -252,7 +252,7 @@
           "lib/netstandard1.3/Newtonsoft.Json.dll": {}
         }
       },
-      "RestEase/1.4.3": {
+      "RestEase/1.4.4": {
         "dependencies": {
           "Newtonsoft.Json": "10.0.2",
           "System.Collections.Concurrent": "4.3.0",
@@ -1504,7 +1504,7 @@
           "System.Xml.XPath": "4.3.0"
         }
       },
-      "BCL/2.1.1": {
+      "BCL/2.1.2": {
         "dependencies": {
           "Discord.Net": "1.0.2",
           "Humanizer.Core": "2.2.0",
@@ -1522,7 +1522,7 @@
     }
   },
   "libraries": {
-    "WiseOldBot/2.2.0": {
+    "WiseOldBot/2.2.1": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
@@ -1667,12 +1667,12 @@
       "path": "newtonsoft.json/10.0.2",
       "hashPath": "newtonsoft.json.10.0.2.nupkg.sha512"
     },
-    "RestEase/1.4.3": {
+    "RestEase/1.4.4": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-yHohdljNfG12PDIWfyb79DPNp1hgcAmGyGaahKoPUMNBXEOBbAjRdghCtIMkaa+/YV12pcajhyaXatRwbcMhDw==",
-      "path": "restease/1.4.3",
-      "hashPath": "restease.1.4.3.nupkg.sha512"
+      "sha512": "sha512-1oLe8HGrNvpBz7/s69oTEmNyHryYBb/VvPqLW3hnjpWqbFNndss0WcOrPHLWDAqy5GlNVVnHMhOfqKYdDltaTA==",
+      "path": "restease/1.4.4",
+      "hashPath": "restease.1.4.4.nupkg.sha512"
     },
     "runtime.debian.8-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0": {
       "type": "package",
@@ -2388,7 +2388,7 @@
       "path": "system.xml.xpath.xdocument/4.3.0",
       "hashPath": "system.xml.xpath.xdocument.4.3.0.nupkg.sha512"
     },
-    "BCL/2.1.1": {
+    "BCL/2.1.2": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

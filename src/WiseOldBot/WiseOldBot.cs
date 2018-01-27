@@ -11,18 +11,15 @@
 
     public class WiseOldBot : BotBase
     {
-        public WiseOldBot() : base() {
-            var _ = GETrackerAPIClient.BASE_URI;   
-        }
+        public WiseOldBot() : base() => _ = GETrackerAPIClient.BASE_URI;
 
-        public override IServiceProvider ConfigureServices()
-        {
-            return new ServiceCollection()
+        public override IServiceProvider ConfigureServices() 
+            => new ServiceCollection()
                 .AddSingleton(Client)
                 .AddSingleton(new CommandService(new CommandServiceConfig { LogLevel = LogSeverity.Debug }))
                 .AddSingleton<CommandHandler>()
                 .BuildServiceProvider();
-        }
+
         public async override Task InstallCommandsAsync()
         {
             Client.Log += LogAsync;

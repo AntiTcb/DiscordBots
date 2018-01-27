@@ -7,7 +7,7 @@
     public struct ServerConfig : IServerConfig {
 
 #if DEBUG
-        public const string DefaultPrefix = ";>";
+        public const string DefaultPrefix = "debug>>";
 #else
         public const string DefaultPrefix = ";";
 #endif

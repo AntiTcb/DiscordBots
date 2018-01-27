@@ -30,10 +30,9 @@
         [Command("price", RunMode = RunMode.Async), Alias("p"), Summary("Gets the GE-Tracker info for an item"), Remarks("price rune platebody")]
         public async Task GetPriceAsync([Remainder, Summary("Item name")] string itemName = "cabbage")
         {
+            const ulong tomxGuildId = 271346318352449539;
             using (Context.Channel.EnterTypingState())
-            {                                    
-                ulong tomxGuildId = 271346318352449539;
-
+            {
                 if (Context.Guild.Id == tomxGuildId && Context.Channel.Id != 275374396003319808)
                 {
                     await ReplyAsync($"Please use the <#{275374396003319808}> channel for the price command.");
@@ -79,7 +78,7 @@
                 var newItems = inItems.Values.SelectMany(x => x)
                     .Except(GETrackerAPIClient.Items.Values.SelectMany(x => x))
                     .GroupBy(x => x.Name).ToDictionary(g => g.Key, g => g.OrderBy(x => x.ItemId).ToList());
-                var newItemCount = newItems.Count();
+                int newItemCount = newItems.Count();
 
                 foreach (var item in newItems)
                     GETrackerAPIClient.Items.Add(item.Key.ToLower(), item.Value);

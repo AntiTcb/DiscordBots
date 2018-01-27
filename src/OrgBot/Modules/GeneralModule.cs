@@ -14,10 +14,13 @@ namespace OrgBot.Modules
     public class GeneralModule : ModuleBase<SocketCommandContext>
     {
         [Command("site"), Summary("Returns the YGOrganization site url.")]
+        [Remarks("site")]
         public async Task SiteAsync() 
             => await ReplyAsync("https://ygorganization.com");
 
-        [Command("new", RunMode = RunMode.Async), Alias("latest", "article", "news"), Summary("Returns the URL of the latest article on YGOrganization.com")]
+        [Command("new", RunMode = RunMode.Async), Alias("latest", "article", "news")]
+        [Summary("Returns the URL of the latest article on YGOrganization.com")]
+        [Remarks("new")]
         public async Task GetNewestArticleAsync()
         {
             using (var c = new HttpClient())

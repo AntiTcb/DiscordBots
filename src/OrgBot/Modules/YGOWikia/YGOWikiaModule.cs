@@ -1,13 +1,4 @@
-﻿// Description:
-//
-// Solution: DiscordBots
-// Project: OrgBot
-//
-// Created: 10/29/2016 6:36 PM
-// Last Revised: 11/04/2016 12:49 AM
-// Last Revised by: Alex Gravely
-
-namespace OrgBot.Modules.YGOWikia {
+﻿namespace OrgBot.Modules.YGOWikia {
 
     using Discord.Commands;
     using Entities;

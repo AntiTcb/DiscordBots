@@ -251,3 +251,4 @@ AntiBot
 *.db
 
 bots/Angler/configs/
+/src/WiseOldBot/logs

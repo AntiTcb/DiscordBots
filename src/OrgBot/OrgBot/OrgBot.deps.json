@@ -9,7 +9,7 @@
       "OrgBot/2.0.1": {
         "dependencies": {
           "AngleSharp": "0.9.9",
-          "BCL": "2.1.1",
+          "BCL": "2.1.2",
           "RestEase": "1.4.3"
         },
         "runtime": {
@@ -1554,7 +1554,7 @@
           "System.Xml.XPath": "4.3.0"
         }
       },
-      "BCL/2.1.1": {
+      "BCL/2.1.2": {
         "dependencies": {
           "Discord.Net": "1.0.2",
           "Humanizer.Core": "2.2.0",
@@ -2452,7 +2452,7 @@
       "path": "system.xml.xpath.xdocument/4.3.0",
       "hashPath": "system.xml.xpath.xdocument.4.3.0.nupkg.sha512"
     },
-    "BCL/2.1.1": {
+    "BCL/2.1.2": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
