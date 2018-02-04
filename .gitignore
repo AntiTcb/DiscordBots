@@ -242,7 +242,7 @@ ModelManifest.xml
 .fake/
 
 # User defined ignore
-**/*config.json
+*config*.json
 **/src/AntiBot/
 /src/OrgBot
 bots/**/configs/
