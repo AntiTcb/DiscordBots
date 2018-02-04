@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Threading.Tasks;
 using Angler.Services;
 using Discord;
@@ -8,6 +9,7 @@ using Discord.WebSocket;
 using DiscordBCL;
 using DiscordBCL.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Serilog;
 
 namespace Angler
 {
@@ -28,6 +30,12 @@ namespace Angler
             ConfigureWebhooks();
 
             _client.Log += LogMessageAsync;
+
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Debug()
+                .WriteTo.File(Path.Combine("logs", DateTime.Now.Month.ToString(), "log.txt"), rollingInterval: RollingInterval.Day)
+                .WriteTo.Console()
+                .CreateLogger();
         }
 
         public async Task RunAsync()
@@ -69,7 +77,10 @@ namespace Angler
                 .AddSingleton(_config)
                 .BuildServiceProvider();
 
-        private Task LogMessageAsync(LogMessage logMsg)
-            => PrettyConsole.LogAsync(logMsg.Severity, logMsg.Source, logMsg.Exception?.ToString() ?? logMsg.Message);
+        private async Task LogMessageAsync(LogMessage logMsg)
+        {
+            await PrettyConsole.LogAsync(logMsg.Severity, logMsg.Source, logMsg.Exception?.ToString() ?? logMsg.Message);
+            Log.Debug(logMsg.Exception?.ToString() ?? logMsg.Message);
+        }
     }
 }

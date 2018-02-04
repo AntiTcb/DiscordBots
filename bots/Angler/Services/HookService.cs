@@ -1,10 +1,12 @@
-﻿using System.Collections.Concurrent;
+﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Angler.Extensions;
 using Discord;
 using DiscordBCL.Services;
+using Serilog;
 
 namespace Angler.Services
 {
@@ -48,7 +50,16 @@ namespace Angler.Services
             var whs = _webhooks.Where(x => x.Value.Site == site || x.Value.Site == Website.All).Select(x => x.Value);
 
             foreach (var wh in whs)
-                await wh.GetClient().SendMessageAsync(message);
+            {
+                try
+                {
+                    await wh.GetClient().SendMessageAsync(message);
+                }
+                catch (Exception e)
+                {
+                    Log.Debug(e.ToString());
+                }
+            }
         }
         public async Task FireWebhooksAsync(Website site, string url)
         {
