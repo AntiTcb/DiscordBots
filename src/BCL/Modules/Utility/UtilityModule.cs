@@ -89,7 +89,7 @@ namespace BCL.Modules.Utility
 
         [Command("requesthelp"), Alias("summonOwner", "reportbug"), RequireContext(ContextType.Guild)]
         [RequireBotPermission(ChannelPermission.CreateInstantInvite)]
-        [Summary("Gives AntiTcb an alert that something is wrong, and an invite to the guild to provide assitance."), Remarks("summonOwner")]
+        [Summary("Gives AntiTcb an alert that something is wrong, and an invite to the guild to provide assistance."), Remarks("summonOwner")]
         public async Task RequestOwnerAsync()
         {
             var owner = Context.Client.GetUser(Globals.OWNER_ID);

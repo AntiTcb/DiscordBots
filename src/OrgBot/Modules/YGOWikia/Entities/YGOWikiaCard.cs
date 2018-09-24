@@ -91,7 +91,7 @@ namespace OrgBot.Modules.YGOWikia.Entities
                 )
                 .AddField((f) =>
                     f.WithName("Effects:")
-                    .WithValue(Effect));
+                    .WithValue(Effect ?? "No effect."));
             return em;
         }
 

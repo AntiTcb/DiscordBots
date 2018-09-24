@@ -68,7 +68,7 @@ namespace BCL.Modules.Public
         }
 
         [Command("info"), Summary("Information about the bot.")]
-        public async virtual Task InfoAsync()
+        public async Task InfoAsync()
         {
             var app = await Context.Client.GetApplicationInfoAsync().ConfigureAwait(false);
 
@@ -88,10 +88,10 @@ namespace BCL.Modules.Public
         }
 
         [Command("join"), Alias("invite"), Summary("Returns the Invite URL of the bot.")]
-        public async virtual Task JoinAsync()
+        public async Task JoinAsync()
         {
             var app = await Context.Client.GetApplicationInfoAsync().ConfigureAwait(false);
-            await ReplyAsync($"<https://discordapp.com/oauth2/authorize?permissions=67496960&client_id={app.Id}&scope=bot>").ConfigureAwait(false);
+            await ReplyAsync($"Use this link to add me to your guild! <https://discordapp.com/oauth2/authorize?permissions=67496960&client_id={app.Id}&scope=bot>").ConfigureAwait(false);
         }                         
 
         static string GetHeapSize() => Math.Round(GC.GetTotalMemory(true) / (1024.0 * 1024.0), 2).ToString(CultureInfo.InvariantCulture);

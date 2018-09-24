@@ -10,7 +10,7 @@
     [Name("GE-Tracker")]
     public class GETrackerModule : ModuleBase<SocketCommandContext>
     {
-        static ulong[] WhitelistedPriceRoleIds => new ulong[] { 179648866138718212, 179649074260082688, 270649339225964554, 302269308451422228 };
+        static ulong[] WhitelistedPriceRoleIds => new ulong[] { 179648866138718212, 179649074260082688, 270649339225964554, 302269308451422228, 445961451023106058 };
 
         [Command("alch"), Summary("Gets the alchemy values for an item"), Remarks("alch rune platebody")]
         public async Task GetAlchPriceAsync([Remainder, Summary("Item name")] string itemName = "cabbage")
@@ -33,13 +33,13 @@
             const ulong tomxGuildId = 271346318352449539;
             using (Context.Channel.EnterTypingState())
             {
-                if (Context.Guild.Id == tomxGuildId && Context.Channel.Id != 275374396003319808)
+                if (Context.Guild?.Id == tomxGuildId && Context.Channel.Id != 275374396003319808)
                 {
                     await ReplyAsync($"Please use the <#{275374396003319808}> channel for the price command.");
                     return;
                 }
                 // GE-Tracker guild
-                if (Context.Guild.Id == 169578245837029376 && Context.Channel.Id != 181778450967822336 &&
+                if (Context.Guild?.Id == 169578245837029376 && Context.Channel.Id != 181778450967822336 &&
                     (Context.User is IGuildUser gUser && !gUser.RoleIds.Intersect(WhitelistedPriceRoleIds).Any()))
                 {
                     await ReplyAsync($"Please use the <#{181778450967822336}> channel for the price command.");

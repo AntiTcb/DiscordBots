@@ -5,15 +5,14 @@
     using Discord.Commands;
 
     [Name("Admin"), RequireUserPermission(GuildPermission.ManageGuild), RequireContext(ContextType.Guild)]
-    public class AdminModule : ModuleBase {
+    public class AdminModule : ModuleBase
+    {
+        [Command("prefix"), Summary("Gets the prefix for the bot.")]
+        public Task GetPrefixAsynx()
+            => ReplyAsync($"This guild's command prefix is currently set to `{Globals.ServerConfigs[Context.Guild.Id].CommandPrefix}`");
 
         [Command("setprefix"), Alias("prefix"), Summary("Changes the command prefix for the bot.")]
-        public async Task ChangePrefixAsync([Summary("Prefix to change to.")] string prefix = "") {
-            if (string.IsNullOrEmpty(prefix)) {
-                await ReplyAsync($"This guild's comand prefix is currently set to: `{Globals.ServerConfigs[Context.Guild.Id].CommandPrefix}`").ConfigureAwait(false);
-                return;
-            }
-
+        public async Task ChangePrefixAsync([Summary("Prefix to change to.")] string prefix) {
             var newConfig = Globals.ServerConfigs[Context.Guild.Id];
             newConfig.CommandPrefix = prefix;
             Globals.ServerConfigs[Context.Guild.Id] = newConfig;
