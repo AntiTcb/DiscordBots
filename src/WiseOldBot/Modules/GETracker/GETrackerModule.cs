@@ -108,8 +108,8 @@
                     Description = status.Data.Message.Humanize()
                 };
                 eb.AddInlineField("Status", status.Data.Status.Humanize());
-                eb.AddInlineField("Health", status.Data.Health);
-                eb.AddInlineField("UpdateFrequency", status.Data.UpdateFrequency);
+                eb.AddInlineField("Health", $"{status.Data.Health}%");
+                eb.AddInlineField("Update Frequency", status.Data.UpdateFrequency.Minutes());
 
                 await ReplyAsync("", embed: eb.Build());
             }

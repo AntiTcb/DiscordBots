@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace WiseOldBot
 {
@@ -10,7 +7,7 @@ namespace WiseOldBot
         [JsonProperty("status")]
         public string Status { get; set; }
         [JsonProperty("health")]
-        public decimal Health { get; set; }
+        public float Health { get; set; }
         [JsonProperty("updateFrequency")]
         public int UpdateFrequency { get; set; }
         [JsonProperty("msg")]
