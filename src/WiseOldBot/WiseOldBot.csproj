@@ -10,8 +10,8 @@
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
-    <AssemblyVersion>2.2.2.1</AssemblyVersion>
-    <FileVersion>2.2.2.1</FileVersion>
+    <AssemblyVersion>2.2.2.2</AssemblyVersion>
+    <FileVersion>2.2.2.2</FileVersion>
     <Version>2.2.2</Version>
   </PropertyGroup>
 

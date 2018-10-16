@@ -7,6 +7,7 @@
     using Discord.Commands;
     using Entities;
     using Humanizer;
+    using Humanizer.Localisation;
 
     [Name("GE-Tracker")]
     public class GETrackerModule : ModuleBase<SocketCommandContext>
@@ -109,7 +110,7 @@
                 };
                 eb.AddInlineField("Status", status.Data.Status.Humanize());
                 eb.AddInlineField("Health", $"{status.Data.Health}%");
-                eb.AddInlineField("Update Frequency", status.Data.UpdateFrequency.Minutes());
+                eb.AddInlineField("Update Frequency", TimeSpan.FromMinutes(status.Data.UpdateFrequency).Humanize());
 
                 await ReplyAsync("", embed: eb.Build());
             }
