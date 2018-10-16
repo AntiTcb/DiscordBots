@@ -6,6 +6,7 @@
     using Discord;
     using Discord.Commands;
     using Entities;
+    using Humanizer;
 
     [Name("GE-Tracker")]
     public class GETrackerModule : ModuleBase<SocketCommandContext>
@@ -59,7 +60,7 @@
                     await ReplyAsync("Item not found! If this is a new item, please run the `rebuild` command, then try again. If not, double check your spelling! :smiley_cat:");
                     return;
                 }
-                else if (returnItems.Count() == 1)
+                else if (returnItems.Count == 1)
                 {
                     await ReplyAsync("", embed: returnItems.FirstOrDefault().ToDiscordEmbed());
                     return;
@@ -78,17 +79,39 @@
                 var newItems = inItems.Values.SelectMany(x => x)
                     .Except(GETrackerAPIClient.Items.Values.SelectMany(x => x))
                     .GroupBy(x => x.Name).ToDictionary(g => g.Key, g => g.OrderBy(x => x.ItemId).ToList());
-                int newItemCount = newItems.Count();
-
-                foreach (var item in newItems)
-                    GETrackerAPIClient.Items.Add(item.Key.ToLower(), item.Value);
-
+                int newItemCount = newItems.Count;
+                
                 if (!newItems.Any())
                 {
                     await ReplyAsync("Item map rebuilt. No new items.");
                     return;
                 }
+
+                foreach (var item in newItems)
+                    GETrackerAPIClient.Items.Add(item.Key.ToLower(), item.Value);
+
                 await ReplyAsync($"Item map rebuilt! New items: {string.Join(", ", newItems.Select(x => x.Key.ToString()))}");
+            }
+        }
+
+        [Command("status"), Alias("osbstatus")]
+        [Summary("Get the OSBuddy API status.")]
+        [Remarks("status")]
+        public async Task GetOsbStatusAsync()
+        {
+            using (Context.Channel.EnterTypingState())
+            {
+                var status = await GETrackerAPIClient.GetOsbStatusAsync();
+
+                var eb = new EmbedBuilder
+                {
+                    Description = status.Data.Message.Humanize()
+                };
+                eb.AddInlineField("Status", status.Data.Status.Humanize());
+                eb.AddInlineField("Health", status.Data.Health);
+                eb.AddInlineField("UpdateFrequency", status.Data.UpdateFrequency);
+
+                await ReplyAsync("", embed: eb.Build());
             }
         }
     }

@@ -9,7 +9,7 @@
 
         public ItemMap(IDictionary<string, List<GETrackerItem>> dict) : base(dict) { }
 
-        public IEnumerable<GETrackerItem> FindItemOrItems(string itemName)
+        public IReadOnlyCollection<GETrackerItem> FindItemOrItems(string itemName)
         {
             itemName = itemName.ToLower();
             if (TryGetValue(itemName, out var returnItems))
@@ -19,7 +19,7 @@
             return FindItems(itemName);
         }
 
-        public IEnumerable<GETrackerItem> FindItems(string itemName)
-            => this.Where(x => x.Key.Contains(itemName.ToLower())).SelectMany(kvp => kvp.Value);
+        public IReadOnlyCollection<GETrackerItem> FindItems(string itemName)
+            => this.Where(x => x.Key.Contains(itemName.ToLower())).SelectMany(kvp => kvp.Value).ToArray();
     }
 }

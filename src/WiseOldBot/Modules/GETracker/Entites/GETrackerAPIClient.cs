@@ -20,13 +20,17 @@
             Items = new ItemMap(items);
         }
 
-        public static async Task<GETrackerItem.Wrapper> DownloadItemAsync(int id) => await API.DownloadItemAsync(id);
+        public static Task<GETrackerItem.Wrapper> DownloadItemAsync(int id) 
+            => API.DownloadItemAsync(id);
 
-        public static async Task<Dictionary<string, List<GETrackerItem>>> DownloadItemsAsync() => await API.DownloadItemsAsync();
+        public static Task<Dictionary<string, List<GETrackerItem>>> DownloadItemsAsync() 
+            => API.DownloadItemsAsync();
 
-        public static IEnumerable<GETrackerItem> FindItemOrItems(string itemName) => Items.FindItemOrItems(itemName);
+        public static IReadOnlyCollection<GETrackerItem> FindItemOrItems(string itemName) 
+            => Items.FindItemOrItems(itemName);
 
-        public static IEnumerable<GETrackerItem> FindItems(string itemName) => Items.FindItems(itemName);
+        public static IReadOnlyCollection<GETrackerItem> FindItems(string itemName) 
+            => Items.FindItems(itemName);
 
         public static GETrackerItem GetItemOrDefault(string itemName)
         {
@@ -35,5 +39,8 @@
 
             return Items.FindItems(itemName).FirstOrDefault();
         }
+
+        public static Task<OsbStatus.Wrapper> GetOsbStatusAsync() 
+            => API.GetOsbStatusAsync();
     }
 }

@@ -14,5 +14,8 @@
 
         [Get("items")]
         Task<Dictionary<string, List<GETrackerItem>>> DownloadItemsAsync();
+
+        [Get("osb-uptime/status")]
+        Task<OsbStatus.Wrapper> GetOsbStatusAsync();
     }
 }

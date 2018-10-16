@@ -1612,21 +1612,21 @@
     "Discord.Net.Rest/1.0.2": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-246NbaD1Pqochze2bIOUTLQg9/DWlw6O6JvCkJbVHBCKYyn6lCMkoxUECCPuluw9ZiT29F3UPgTZf/qyMiXHiQ==",
+      "sha512": "sha512-L88HkwTrSREXMsbWK0g4MKKksCl68gYiLBZSCVQYNEmvXsLiKhCvtpbl8hFwK+GAl3akAMap4/d16Ip3tYE2vA==",
       "path": "discord.net.rest/1.0.2",
       "hashPath": "discord.net.rest.1.0.2.nupkg.sha512"
     },
     "Discord.Net.Rpc/1.0.2": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-mVdtc+ACliV69AMb3pUtM3Cx0CeBietOih4HmmFDH4W9lQya8E/haVeUS6fhC9UMYvY7vcfLrvcrjwUhqx3Msw==",
+      "sha512": "sha512-Fz/ArOKrGyh+ec5t4VAu9+yF/ctNzXkmcYXOnXb+4lQVIdfCeg9i7Gamv6H9r77aFzsYK2BhVcH3Q05xqtfPnQ==",
       "path": "discord.net.rpc/1.0.2",
       "hashPath": "discord.net.rpc.1.0.2.nupkg.sha512"
     },
     "Discord.Net.Webhook/1.0.2": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-BM1EtaOS8d5VWz5MMMlvRyVKUIoDbre2JchhYuGDPBEMtagUC7bj8ymvoXVzpHY5tO5F7Q20sDIKSmsV9A/xbw==",
+      "sha512": "sha512-VXMLbMP5mFivzBCJQd18pZ7cxpxRzgrA9/z7ofXOV50J46NvWtv1kt9nha0ipWMl9o6P4BxuHb24e07eqS4ERQ==",
       "path": "discord.net.webhook/1.0.2",
       "hashPath": "discord.net.webhook.1.0.2.nupkg.sha512"
     },
@@ -1654,28 +1654,28 @@
     "Microsoft.CodeAnalysis.Common/2.4.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-L6S44+An50I8rbGhKnl8u4iKgutgctRKBgJhkffATt5z0l5xFp/4WLpLiBNiurkqdu3jKwHgs4gV7nkkQeLvFw==",
+      "sha512": "sha512-9SC//L8U2TN+qLtYsfP+zQnw5w1QSNeP3yWkdwG3NYbLKycR+bfxF8RFIgMI5/g3kOOQde0qVFVa2hqD+esc3Q==",
       "path": "microsoft.codeanalysis.common/2.4.0",
       "hashPath": "microsoft.codeanalysis.common.2.4.0.nupkg.sha512"
     },
     "Microsoft.CodeAnalysis.CSharp/2.4.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-X/YxFrTwEtLbd4X6Yb6Rws1dsFy+Zj0hmNies3Axwx8fep1BkuMG4WquWWSN6QA808ioJI+mGXkiRCuAf7GnFA==",
+      "sha512": "sha512-EiNUbB0/ovvLQT4+8kyPql/qK/4xXp/vL5cBEdMVohDbL91KZ6K5eWsgiRTkT7CMa5iomQv4+f2B2N/vfYcydw==",
       "path": "microsoft.codeanalysis.csharp/2.4.0",
       "hashPath": "microsoft.codeanalysis.csharp.2.4.0.nupkg.sha512"
     },
     "Microsoft.CodeAnalysis.CSharp.Scripting/2.4.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-Vj1ytUO92OHh/UFX5vwKGzHcJbQfKGhIF8eFZ3ta22hXw5sgPyfoDKA8UmmYeItauzwSIVkCsVwJJGl2IaSpgw==",
+      "sha512": "sha512-O16T2BO257xPzjtLFkyhiEF07rrBSPpc0GQPLX1rjcoBSe14SytmZsDZoAGi54lF2OOAzq3md79QmFJgs6fE6Q==",
       "path": "microsoft.codeanalysis.csharp.scripting/2.4.0",
       "hashPath": "microsoft.codeanalysis.csharp.scripting.2.4.0.nupkg.sha512"
     },
     "Microsoft.CodeAnalysis.Scripting.Common/2.4.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-ZAP77FT7ltDa3Zo7r17LxldT6eQXiJBuPhTB6w1Yu5gn6OwSAgzbni+pRV5HeeKZVwfK13U36qrFSPKPyPC1lw==",
+      "sha512": "sha512-od2L1NoInzarHg+Vj9ZfGgpOEpN8EMeentqhrJnbIIffZDMYQrvho9SWc7Y5dOELkrskIp/xtQcbbg2NCJpa9Q==",
       "path": "microsoft.codeanalysis.scripting.common/2.4.0",
       "hashPath": "microsoft.codeanalysis.scripting.common.2.4.0.nupkg.sha512"
     },
