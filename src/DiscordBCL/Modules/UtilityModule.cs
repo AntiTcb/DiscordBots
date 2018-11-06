@@ -90,7 +90,7 @@ namespace DiscordBCL.Modules
             switch (strategy)
             {
                 case DeleteStrategy.Bulk:
-                    await Context.Channel.DeleteMessagesAsync(messages).ConfigureAwait(false);
+                    await (Context.Channel as ITextChannel).DeleteMessagesAsync(messages).ConfigureAwait(false);
                     break;
 
                 case DeleteStrategy.Single:

@@ -8,7 +8,7 @@ namespace DiscordBCL
 {
     public class CommandInfoTypeReader : TypeReader
     {
-        public override Task<TypeReaderResult> Read(ICommandContext context, string input, IServiceProvider services)
+        public override Task<TypeReaderResult> ReadAsync(ICommandContext context, string input, IServiceProvider services)
         {
             var cmdService = services.GetRequiredService<CommandService>();
             var cmd = cmdService.Commands.FirstOrDefault(c => c.Aliases.Any(a => 

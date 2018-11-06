@@ -37,7 +37,7 @@ namespace Angler.Services
                     Color = Color.DarkRed,
                     Description = Format.Sanitize(cmdEx.InnerException.StackTrace).Truncate(5500)
                 };
-                await cmdEx.Context.Channel.SendMessageAsync("", embed: eb).ConfigureAwait(false);
+                await cmdEx.Context.Channel.SendMessageAsync("", embed: eb.Build()).ConfigureAwait(false);
             }
             await PrettyConsole.LogAsync(arg.Severity, arg.Source, msg).ConfigureAwait(false);
         }
@@ -51,8 +51,8 @@ namespace Angler.Services
             _cmdService.AddTypeReader<RestGuild>(new GuildTypeReader<RestGuild>());
             _cmdService.AddTypeReader<Uri>(new UriTypeReader());
 
-            await _cmdService.AddModulesAsync(Assembly.GetEntryAssembly()).ConfigureAwait(false);
-            await _cmdService.AddModulesAsync(typeof(BotBase).GetTypeInfo().Assembly).ConfigureAwait(false);
+            await _cmdService.AddModulesAsync(Assembly.GetEntryAssembly(), _services).ConfigureAwait(false);
+            await _cmdService.AddModulesAsync(typeof(BotBase).GetTypeInfo().Assembly, _services).ConfigureAwait(false);
         }
 
         private async Task MessageReceived(SocketMessage msg)

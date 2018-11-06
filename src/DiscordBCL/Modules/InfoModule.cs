@@ -98,14 +98,14 @@ namespace DiscordBCL.Modules
             eb.AddField("Library", $"[Discord.Net v{DiscordConfig.Version}](https://github.com/RogueException/Discord.Net)");
             eb.AddField("Runtime", $"{AppContext.TargetFrameworkName} {RuntimeInformation.ProcessArchitecture} " +
                     $"({RuntimeInformation.OSDescription} {RuntimeInformation.OSArchitecture})");
-            eb.AddInlineField("Uptime", GetUptime());
-            eb.AddInlineField("Heap", GetHeapSize());
-            eb.AddInlineField("Latency", Context.Client.Latency);
-            eb.AddInlineField("Guilds", Context.Client.Guilds.Count);
-            eb.AddInlineField("Channels", channelCount);
-            eb.AddInlineField("Users", memberCount);   
+            eb.AddField("Uptime", GetUptime(), true);
+            eb.AddField("Heap", GetHeapSize(), true);
+            eb.AddField("Latency", Context.Client.Latency, true);
+            eb.AddField("Guilds", Context.Client.Guilds.Count, true);
+            eb.AddField("Channels", channelCount, true);
+            eb.AddField("Users", memberCount, true);   
 
-            await ReplyAsync("", embed: eb).ConfigureAwait(false);
+            await ReplyAsync("", embed: eb.Build()).ConfigureAwait(false);
         }
 
         [Command("latency", RunMode = RunMode.Async)]
@@ -168,7 +168,7 @@ namespace DiscordBCL.Modules
                 },
                 ThumbnailUrl = app.IconUrl
             };
-            await ReplyAsync("", embed:eb).ConfigureAwait(false);
+            await ReplyAsync("", embed: eb.Build()).ConfigureAwait(false);
         }
 
         protected override void BeforeExecute(CommandInfo command)

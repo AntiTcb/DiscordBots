@@ -7,15 +7,15 @@ namespace DiscordBCL
 {
     public class RequireChannelAttribute : PreconditionAttribute
     {
-        private ulong[] _channelIds;
-        private string[] _channelNames;
+        private readonly ulong[] _channelIds;
+        private readonly string[] _channelNames;
 
         public RequireChannelAttribute(params ulong[] channelIds)
             => _channelIds = channelIds;
         public RequireChannelAttribute(params string[] channelNames)
             => _channelNames = channelNames;
 
-        public override Task<PreconditionResult> CheckPermissions(ICommandContext context, CommandInfo command, IServiceProvider services)
+        public override Task<PreconditionResult> CheckPermissionsAsync(ICommandContext context, CommandInfo command, IServiceProvider services)
         {
             bool isValidChannel = false;
 

@@ -2,10 +2,13 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Angler.Extensions;
 using Discord;
+using Discord.WebSocket;
 using DiscordBCL.Services;
+using Humanizer;
 using Serilog;
 
 namespace Angler.Services
@@ -14,10 +17,13 @@ namespace Angler.Services
     {
         private ConcurrentDictionary<ulong, Webhook> _webhooks;
         private readonly LiteDbService _dbService;
+        private readonly DiscordShardedClient _client;
 
-        public HookService(LiteDbService liteDb)
+        public HookService(LiteDbService liteDb, DiscordShardedClient client)
         {
             _dbService = liteDb;
+            _client = client;
+
             var whs = _dbService.GetAll<Webhook>();
             _webhooks = new ConcurrentDictionary<ulong, Webhook>(whs.Select(x => new KeyValuePair<ulong, Webhook>(x.Id, x)));
 
@@ -49,6 +55,8 @@ namespace Angler.Services
         {
             var whs = _webhooks.Where(x => x.Value.Site == site || x.Value.Site == Website.All).Select(x => x.Value);
 
+            var sb = new StringBuilder();
+
             foreach (var wh in whs)
             {
                 try
@@ -58,9 +66,16 @@ namespace Angler.Services
                 catch (Exception e)
                 {
                     Log.Debug(e.ToString());
+                    sb.AppendLine($"Webhook: {wh.Id} || {e.ToString()}");
                 }
             }
+
+            if (sb.Length > 0)
+            {
+                await (_client.GetChannel(363832894902501378) as SocketTextChannel).SendMessageAsync($"<@!89613772372574208> {sb.ToString().Truncate(2000)}");
+            }
         }
+
         public async Task FireWebhooksAsync(Website site, string url)
         {
             var whs = _webhooks.Where(x => x.Value.Site == site || x.Value.Site == Website.All).Select(x => x.Value);
@@ -71,9 +86,15 @@ namespace Angler.Services
                   ? "https://ygorganization.com/wp-content/uploads/2016/08/CCFBlogo-1.png"
                   : null;
 
-            foreach (var wh in whs)
-                await wh.GetClient().SendMessageAsync($"{Format.Bold("New Post!")}\n{url}", username: "OrgBot Jr.", avatarUrl: avatar);
+            var msgs = whs.Select(wh => wh.GetClient().SendMessageAsync($"{Format.Bold("New Post!")}\n{url}", username: "OrgBot Jr.", avatarUrl: avatar));
+
+            await Task.WhenAll(msgs);
         }
+
+        public Webhook GetWebhook(ulong webhookId)
+            => _webhooks.TryGetValue(webhookId, out var w) ? w : _dbService.Get<Webhook>(x => x.Id == webhookId);
+        public Webhook GetWebhook(string url)
+            => GetWebhook(Webhook.ParseUrl(url).Id);
 
         public (IEnumerable<Webhook> webhooks, IEnumerable<Webhook> dbHooks) ListWebhooks() 
             => (_webhooks.Values, _dbService.GetAll<Webhook>());

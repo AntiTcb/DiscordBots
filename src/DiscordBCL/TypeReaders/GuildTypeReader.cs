@@ -11,7 +11,7 @@ namespace DiscordBCL
     public class GuildTypeReader<T> : TypeReader
         where T : class, IGuild
     {
-        public override async Task<TypeReaderResult> Read(ICommandContext context, string input, IServiceProvider services)
+        public override async Task<TypeReaderResult> ReadAsync(ICommandContext context, string input, IServiceProvider services)
         {
             var results = new Dictionary<ulong, TypeReaderValue>();
             var guilds = await context.Client.GetGuildsAsync(CacheMode.CacheOnly).ConfigureAwait(false);

@@ -14,9 +14,9 @@
 
   <ItemGroup>
     <PackageReference Include="Discord.Addons.Interactive" Version="1.0.1" />
-    <PackageReference Include="Discord.Net.Commands" Version="1.0.2" />
-    <PackageReference Include="Discord.Net.Webhook" Version="1.0.2" />
-    <PackageReference Include="Discord.Net.WebSocket" Version="1.0.2" />
+    <PackageReference Include="Discord.Net.Commands" Version="2.0.0-beta2-01021" />
+    <PackageReference Include="Discord.Net.Webhook" Version="2.0.0-beta2-01021" />
+    <PackageReference Include="Discord.Net.WebSocket" Version="2.0.0-beta2-01021" />
     <PackageReference Include="Humanizer.Core" Version="2.2.0" />
     <PackageReference Include="LiteDB" Version="4.1.1" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="2.6.1" />

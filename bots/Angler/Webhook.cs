@@ -18,9 +18,11 @@ namespace Angler
         public ulong Id { get; set; }
         public string Token { get; set; }
 
-        public Webhook() 
-            => _client = new Lazy<DiscordWebhookClient>(() => new DiscordWebhookClient(Id, Token,
-                    new DiscordRestConfig { LogLevel = LogSeverity.Debug }));
+        public Webhook()
+        {
+            _client = new Lazy<DiscordWebhookClient>(() => new DiscordWebhookClient(Id, Token,
+                               new DiscordRestConfig { LogLevel = LogSeverity.Debug }));
+        }
 
         public Webhook(ulong id, string token, Website site) : this()
         {

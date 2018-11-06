@@ -31,20 +31,25 @@ namespace Angler.Modules
             }
         }
 
-        [Command("hook"), RequireOwner]
-        public async Task AddWebhookAsync(Website site, string webhookUrl)
+        [Command("hook")]
+        [RequireOwner(Group = "A"), RequireContext(ContextType.DM, Group = "A")]
+        [Summary("Add a webhook for the desired website, so you start receiving messages for new posts.")]
+        public async Task AddWebhookAsync(Website site, Uri webhookUrl)
         {
             //await Context.Message.DeleteAsync();
-            if (HookService.AddWebhook(site, webhookUrl))
+            if (HookService.AddWebhook(site, webhookUrl.ToString()))
+            {
                 await ReplyAsync($"Added a webhook for {site}!");
+                await HookService.GetWebhook(webhookUrl.ToString()).GetClient().SendMessageAsync($"This is a test message. If you can see it, you're all set up to receive messages from me for new posts on {site}. 😃");
+            }
             else
                 await ReplyAsync($"Couldn't add a webhook for {site}.");
         }
 
         [Command("updateHook"), RequireOwner]
-        public async Task UpdateWebhookAsync(string webhookUrl, Website site)
+        public async Task UpdateWebhookAsync(Uri webhookUrl, Website site)
         {
-            if (HookService.UpdateWebhook(Webhook.ParseUrl(webhookUrl).Id, site))
+            if (HookService.UpdateWebhook(Webhook.ParseUrl(webhookUrl.ToString()).Id, site))
                 await ReplyAsync("Updated!");
             else
                 await ReplyAsync("Couldn't update.");
@@ -60,23 +65,24 @@ namespace Angler.Modules
         [Command("listWhs"), RequireOwner]
         public async Task ListWebhooks()
         {
-            var whs = HookService.ListWebhooks();
-            string output = string.Join("\n", whs.webhooks.Select(x => $"{x.Id} : {x.Site}"));
+            var (webhooks, dbHooks) = HookService.ListWebhooks();
+            string output = string.Join("\n", webhooks.Select(x => $"{x.Id} : {x.Site}"));
             await ReplyAsync(output);
         }
 
-        [Command("testwh"), RequireOwner]
+        [Command("testallwhs"), RequireOwner]
         public async Task TestWebhooksAsync(string msg)
         {
             await HookService.FireWebhooksAsync(Website.YGOrg, Context.Message);
             await HookService.ListWebhooks().webhooks.First().GetClient().SendMessageAsync(msg);
         }
 
-        [Command("unhook"), RequireOwner]
-        public async Task RemoveWebhookAsync(string webhookUrl)
+        [Command("unhook")]
+        [RequireOwner(Group = "A"), RequireContext(ContextType.DM, Group = "A")]
+        public async Task RemoveWebhookAsync(Uri webhookUrl)
         {
             //await Context.Message.DeleteAsync();
-            if (HookService.RemoveWebhook(Webhook.ParseUrl(webhookUrl).Id))
+            if (HookService.RemoveWebhook(Webhook.ParseUrl(webhookUrl.ToString()).Id))
                 await ReplyAsync("Removed the webhook!");
             else
                 await ReplyAsync("Couldn't remove the webhook.");

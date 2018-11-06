@@ -8,7 +8,7 @@ namespace DiscordBCL
 {
     public class ModuleInfoTypeReader : TypeReader
     {
-        public override Task<TypeReaderResult> Read(ICommandContext context, string input, IServiceProvider services)
+        public override Task<TypeReaderResult> ReadAsync(ICommandContext context, string input, IServiceProvider services)
         {
             var cmdService = services.GetRequiredService<CommandService>();
             var module = cmdService.Modules.FirstOrDefault(m => 

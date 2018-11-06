@@ -6,7 +6,10 @@ namespace Angler
     public enum Website
     {
         YGOrg = 1,
+        YGOrganization = YGOrg,
         CardCoal = 2,
-        All = YGOrg | CardCoal
+        CardfightCoalition = CardCoal,
+        All = YGOrg | CardCoal,
+        Both = All
     }
 }
