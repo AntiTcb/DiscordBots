@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <VersionPrefix>1.7.4</VersionPrefix>
-    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
     <AssemblyName>WiseOldBot</AssemblyName>
     <OutputType>Exe</OutputType>
     <PackageId>WiseOldBot</PackageId>
