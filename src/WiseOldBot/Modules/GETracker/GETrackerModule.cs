@@ -108,9 +108,9 @@
                 {
                     Description = status.Data.Message.Humanize()
                 };
-                eb.AddInlineField("Status", status.Data.Status.Humanize());
-                eb.AddInlineField("Health", $"{status.Data.Health}%");
-                eb.AddInlineField("Update Frequency", TimeSpan.FromMinutes(status.Data.UpdateFrequency).Humanize());
+                eb.AddField("Status", status.Data.Status.Humanize(), true);
+                eb.AddField("Health", $"{status.Data.Health}%", true);
+                eb.AddField("Update Frequency", TimeSpan.FromMinutes(status.Data.UpdateFrequency).Humanize(), true);
 
                 await ReplyAsync("", embed: eb.Build());
             }

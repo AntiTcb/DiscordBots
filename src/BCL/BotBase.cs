@@ -1,17 +1,16 @@
 ﻿namespace BCL
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Text;
+    using System.Threading.Tasks;
     using Discord;
+    using Discord.Commands;
     using Discord.WebSocket;
     using Interfaces;
     using Microsoft.Extensions.DependencyInjection;
-    using System;
-    using System.Collections.Generic;
-    using System.Threading.Tasks;
-    using Discord.Commands;
-    using Humanizer;
     using Serilog;
-    using System.IO;
-    using System.Text;
 
     public abstract class BotBase : IBotBase
     {
@@ -83,9 +82,9 @@
                     ex = ex.InnerException;
                 }
                 eb.WithDescription(sb.ToString());
-                await cmdEx.Context.Channel.SendMessageAsync("", embed: eb).ConfigureAwait(false);
+                await cmdEx.Context.Channel.SendMessageAsync("", embed: eb.Build()).ConfigureAwait(false);
                 var loggingChannel = Client.GetChannel(Globals.BotConfig.LogChannel) as SocketTextChannel;
-                await loggingChannel.SendMessageAsync("", embed: eb).ConfigureAwait(false);
+                await loggingChannel.SendMessageAsync("", embed: eb.Build()).ConfigureAwait(false);
             }
         }
 

@@ -9,14 +9,14 @@
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
     public class RequireRoleAttribute : PreconditionAttribute
     {
-        ulong[] _roleIds;
+        private readonly ulong[] _roleIds;
 
         public RequireRoleAttribute(params ulong[] roleIds)
         {
             _roleIds = roleIds;
         }
 
-        public override Task<PreconditionResult> CheckPermissions(ICommandContext context, CommandInfo command, IServiceProvider services)
+        public override Task<PreconditionResult> CheckPermissionsAsync(ICommandContext context, CommandInfo command, IServiceProvider services)
         {
             if (context.Guild == null)
                 return Task.FromResult(PreconditionResult.FromError("This command may only be run within a guild."));

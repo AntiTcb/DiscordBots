@@ -50,8 +50,8 @@ namespace BCL
         }
 
         public async virtual Task InstallAsync() {
-            await CommandService.AddModulesAsync(typeof(BotBase).GetTypeInfo().Assembly).ConfigureAwait(false);
-            await CommandService.AddModulesAsync(Assembly.GetEntryAssembly()).ConfigureAwait(false);
+            await CommandService.AddModulesAsync(typeof(BotBase).GetTypeInfo().Assembly, Services).ConfigureAwait(false);
+            await CommandService.AddModulesAsync(Assembly.GetEntryAssembly(), Services).ConfigureAwait(false);
             Client.MessageReceived += HandleCommandAsync;
         }
 

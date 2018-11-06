@@ -8,13 +8,13 @@
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
     public class RequireUserAttribute : PreconditionAttribute
     {
-        ulong[] _userIds;
+        private readonly ulong[] _userIds;
         public RequireUserAttribute(params ulong[] userIds)
         {
             _userIds = userIds;
         }
 
-        public override Task<PreconditionResult> CheckPermissions(ICommandContext context, CommandInfo command, IServiceProvider services)
+        public override Task<PreconditionResult> CheckPermissionsAsync(ICommandContext context, CommandInfo command, IServiceProvider services)
         {
             var isWhitelistedUser = _userIds.Contains(context.User.Id);
             return isWhitelistedUser

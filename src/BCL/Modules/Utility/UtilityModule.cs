@@ -1,21 +1,11 @@
-﻿// Description:
-//
-// Solution: DiscordBots
-// Project: BCL
-//
-// Created: 10/30/2016 2:25 PM
-// Last Revised: 11/04/2016 1:12 AM
-// Last Revised by: Alex Gravely
-
-namespace BCL.Modules.Utility
+﻿namespace BCL.Modules.Utility
 {
-    using Discord;
-    using Discord.Commands;
-    using Preconditions;
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+    using Discord;
+    using Discord.Commands;
 
     public enum DeleteStrategy
     {
@@ -105,7 +95,7 @@ namespace BCL.Modules.Utility
             switch (strategy)
             {
                 case DeleteStrategy.BulkDelete:
-                    await Context.Channel.DeleteMessagesAsync(messages).ConfigureAwait(false);
+                    await (Context.Channel as ITextChannel).DeleteMessagesAsync(messages).ConfigureAwait(false);
                     break;
 
                 case DeleteStrategy.Manual:

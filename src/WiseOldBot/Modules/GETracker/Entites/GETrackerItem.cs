@@ -52,7 +52,7 @@
 
         public string OSRSExchange => $"http://services.runescape.com/m=itemdb_oldschool/Runescape/viewitem?obj={ItemId}";
         public string RSBExchange => $"https://rsbuddy.com/exchange?id={ItemId}&";
-        public string Wikia => $"http://2007.runescape.wikia.com/wiki/{Name.Replace(" ", "_")}";
+        public string Wikia => $"http://os.rs.wiki/w/{Name.Replace(" ", "_")}";
         public string RSIconUrl => $"http://services.runescape.com/m=itemdb_oldschool/1509361245218_obj_big.gif?id={ItemId}";
         public string RSIconSpriteUrl => $"http://services.runescape.com/m=itemdb_oldschool/1509361245218_obj_sprite.gif?id={ItemId}";
 
