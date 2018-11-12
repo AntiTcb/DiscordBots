@@ -6,10 +6,10 @@
   "compilationOptions": {},
   "targets": {
     ".NETCoreApp,Version=v2.1": {
-      "OrgBot/2.2.0": {
+      "OrgBot/2.2.1": {
         "dependencies": {
           "AngleSharp": "0.9.9",
-          "BCL": "3.0.0",
+          "BCL": "3.0.1",
           "RestEase": "1.4.3"
         },
         "runtime": {
@@ -1495,7 +1495,7 @@
           "System.Xml.XPath": "4.3.0"
         }
       },
-      "BCL/3.0.0": {
+      "BCL/3.0.1": {
         "dependencies": {
           "Discord.Net": "2.0.0-beta2-01021",
           "Humanizer.Core": "2.2.0",
@@ -1512,7 +1512,7 @@
     }
   },
   "libraries": {
-    "OrgBot/2.2.0": {
+    "OrgBot/2.2.1": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
@@ -2343,7 +2343,7 @@
       "path": "system.xml.xpath.xdocument/4.3.0",
       "hashPath": "system.xml.xpath.xdocument.4.3.0.nupkg.sha512"
     },
-    "BCL/3.0.0": {
+    "BCL/3.0.1": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
