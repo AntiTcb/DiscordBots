@@ -31,9 +31,11 @@ namespace Angler
 
             _client.Log += LogMessageAsync;
 
+            const string outputTemplate = "[{Timestamp:HH:mm:ss}] {Level:u3} {Message:lj}{Newline}{Exception}{Newline}";
+
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Debug()
-                .WriteTo.File(Path.Combine("logs", DateTime.Now.Month.ToString(), "log.txt"), rollingInterval: RollingInterval.Day)
+                .WriteTo.File(Path.Combine("logs", DateTime.Now.Month.ToString(), "log.txt"), rollingInterval: RollingInterval.Day, outputTemplate: outputTemplate)
                 .WriteTo.Console()
                 .CreateLogger();
         }
