@@ -20,13 +20,15 @@
 
         public BotBase()
         {
+            const string outputTemplate = "[{Timestamp:HH:mm:ss}] {Level:u3} {Message:lj}{Newline}{Exception}{Newline}";
+
             Client = new DiscordSocketClient(new DiscordSocketConfig { MessageCacheSize = 100, LogLevel = LogSeverity.Debug });
             Services = ConfigureServices();
             Commands = Services.GetRequiredService<CommandHandler>();
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Debug()
-                .WriteTo.File(Path.Combine("logs", "log.txt"), rollingInterval: RollingInterval.Day)
-                .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss}] {Level:u3} {Message:lj}{Newline}{Exception}{Newline}")
+                .WriteTo.File(Path.Combine("logs", "log.txt"), rollingInterval: RollingInterval.Day, outputTemplate: outputTemplate)
+                .WriteTo.Console()
                 .CreateLogger();
         }
 
