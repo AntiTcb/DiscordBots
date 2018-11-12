@@ -26,7 +26,7 @@
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Debug()
                 .WriteTo.File(Path.Combine("logs", "log.txt"), rollingInterval: RollingInterval.Day)
-                .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3} {Message:lj}{Newline}{Exception}{Newline}]")
+                .WriteTo.Console()
                 .CreateLogger();
         }
 
@@ -62,8 +62,7 @@
         {
             string msg = log.Exception?.ToString() ?? log.Message;
 
-            if (!msg.Contains("Received Dispatch"))
-                Log.Debug($"{msg}");
+            Log.Debug(msg);
 
             if (log.Exception is CommandException cmdEx)
             {

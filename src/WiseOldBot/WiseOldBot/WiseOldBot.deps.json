@@ -6,9 +6,9 @@
   "compilationOptions": {},
   "targets": {
     ".NETCoreApp,Version=v2.1": {
-      "WiseOldBot/2.3.1": {
+      "WiseOldBot/2.3.0": {
         "dependencies": {
-          "BCL": "3.0.1",
+          "BCL": "3.0.0",
           "Humanizer.Core": "2.2.0",
           "RestEase": "1.4.4"
         },
@@ -1442,7 +1442,7 @@
           "System.Xml.XPath": "4.3.0"
         }
       },
-      "BCL/3.0.1": {
+      "BCL/3.0.0": {
         "dependencies": {
           "Discord.Net": "2.0.0-beta2-01021",
           "Humanizer.Core": "2.2.0",
@@ -1459,7 +1459,7 @@
     }
   },
   "libraries": {
-    "WiseOldBot/2.3.1": {
+    "WiseOldBot/2.3.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
@@ -2276,7 +2276,7 @@
       "path": "system.xml.xpath.xdocument/4.3.0",
       "hashPath": "system.xml.xpath.xdocument.4.3.0.nupkg.sha512"
     },
-    "BCL/3.0.1": {
+    "BCL/3.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
