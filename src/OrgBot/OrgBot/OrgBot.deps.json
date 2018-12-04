@@ -6,7 +6,7 @@
   "compilationOptions": {},
   "targets": {
     ".NETCoreApp,Version=v2.1": {
-      "OrgBot/2.2.1": {
+      "OrgBot/2.2.2": {
         "dependencies": {
           "AngleSharp": "0.9.9",
           "BCL": "3.0.1",
@@ -1512,7 +1512,7 @@
     }
   },
   "libraries": {
-    "OrgBot/2.2.1": {
+    "OrgBot/2.2.2": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
@@ -1520,7 +1520,7 @@
     "AngleSharp/0.9.9": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-QtKjnhRl1ciGntp8+IxVXdObJc9Ph+kuT3QRetHvlBAli2JaefscG6tXRQx11RjKFG+IaCZ7RD6tFQgC6GzjxA==",
+      "sha512": "sha512-z3h0p8u7p7QFSStWaC+u9cx7+IaRvMmLXqczx5WYW5V9t58kGQg3xMyb4iRI2mIEnePQq2pp2sQAadEl4GhmBg==",
       "path": "anglesharp/0.9.9",
       "hashPath": "anglesharp.0.9.9.nupkg.sha512"
     },
@@ -1583,28 +1583,28 @@
     "Microsoft.CodeAnalysis.Common/2.4.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-9SC//L8U2TN+qLtYsfP+zQnw5w1QSNeP3yWkdwG3NYbLKycR+bfxF8RFIgMI5/g3kOOQde0qVFVa2hqD+esc3Q==",
+      "sha512": "sha512-L6S44+An50I8rbGhKnl8u4iKgutgctRKBgJhkffATt5z0l5xFp/4WLpLiBNiurkqdu3jKwHgs4gV7nkkQeLvFw==",
       "path": "microsoft.codeanalysis.common/2.4.0",
       "hashPath": "microsoft.codeanalysis.common.2.4.0.nupkg.sha512"
     },
     "Microsoft.CodeAnalysis.CSharp/2.4.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-EiNUbB0/ovvLQT4+8kyPql/qK/4xXp/vL5cBEdMVohDbL91KZ6K5eWsgiRTkT7CMa5iomQv4+f2B2N/vfYcydw==",
+      "sha512": "sha512-X/YxFrTwEtLbd4X6Yb6Rws1dsFy+Zj0hmNies3Axwx8fep1BkuMG4WquWWSN6QA808ioJI+mGXkiRCuAf7GnFA==",
       "path": "microsoft.codeanalysis.csharp/2.4.0",
       "hashPath": "microsoft.codeanalysis.csharp.2.4.0.nupkg.sha512"
     },
     "Microsoft.CodeAnalysis.CSharp.Scripting/2.4.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-O16T2BO257xPzjtLFkyhiEF07rrBSPpc0GQPLX1rjcoBSe14SytmZsDZoAGi54lF2OOAzq3md79QmFJgs6fE6Q==",
+      "sha512": "sha512-Vj1ytUO92OHh/UFX5vwKGzHcJbQfKGhIF8eFZ3ta22hXw5sgPyfoDKA8UmmYeItauzwSIVkCsVwJJGl2IaSpgw==",
       "path": "microsoft.codeanalysis.csharp.scripting/2.4.0",
       "hashPath": "microsoft.codeanalysis.csharp.scripting.2.4.0.nupkg.sha512"
     },
     "Microsoft.CodeAnalysis.Scripting.Common/2.4.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-od2L1NoInzarHg+Vj9ZfGgpOEpN8EMeentqhrJnbIIffZDMYQrvho9SWc7Y5dOELkrskIp/xtQcbbg2NCJpa9Q==",
+      "sha512": "sha512-ZAP77FT7ltDa3Zo7r17LxldT6eQXiJBuPhTB6w1Yu5gn6OwSAgzbni+pRV5HeeKZVwfK13U36qrFSPKPyPC1lw==",
       "path": "microsoft.codeanalysis.scripting.common/2.4.0",
       "hashPath": "microsoft.codeanalysis.scripting.common.2.4.0.nupkg.sha512"
     },
@@ -1618,14 +1618,14 @@
     "Microsoft.Extensions.DependencyInjection/2.0.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-wakg18gHYiUL1pcjjyZuYk6OvDpbSw1E7IWxm78TMepsr+gQ8W0tWzuRm0q/9RFblngwPwo15rrgZSUV51W5Iw==",
+      "sha512": "sha512-V6xeuEEpIIygDHtOtJ+0X0qkKtVSUS1+kwOC3O4pH0depJf8AfofGo8hanOxoRgooj7WmTtPcgOIjwAteEe28A==",
       "path": "microsoft.extensions.dependencyinjection/2.0.0",
       "hashPath": "microsoft.extensions.dependencyinjection.2.0.0.nupkg.sha512"
     },
     "Microsoft.Extensions.DependencyInjection.Abstractions/2.0.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-eUdJ0Q/GfVyUJc0Jal5L1QZLceL78pvEM9wEKcHeI24KorqMDoVX+gWsMGLulQMfOwsUaPtkpQM2pFERTzSfSg==",
+      "sha512": "sha512-P4dK3DZQFsp7fFzkBu9H9jesBj0KB3O9c50n9FeAOIF+A8aQKBRj63luC9gPqvcedNdMfYQoEUe5dLps1sqvuA==",
       "path": "microsoft.extensions.dependencyinjection.abstractions/2.0.0",
       "hashPath": "microsoft.extensions.dependencyinjection.abstractions.2.0.0.nupkg.sha512"
     },
@@ -2010,7 +2010,7 @@
     "System.Net.Security/4.3.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-IgJKNfALqw7JRWp5LMQ5SWHNKvXVz094U6wNE3c1i8bOkMQvgBL+MMQuNt3xl9Qg9iWpj3lFxPZEY6XHmROjMQ==",
+      "sha512": "sha512-qejRfondN7FBgBtRxCS0Vg2choxkK3zmY8sVw5o2Gc8/owLU6Dgb+e8CiuGR4jIzFxrCEqe2YF/XNw75rajL1A==",
       "path": "system.net.security/4.3.0",
       "hashPath": "system.net.security.4.3.0.nupkg.sha512"
     },
