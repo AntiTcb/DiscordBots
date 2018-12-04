@@ -12,7 +12,7 @@
             if (string.IsNullOrWhiteSpace(cardName))
                 await ReplyAsync("https://yugipedia.com");
             else
-                await ReplyAsync($"https://yugpedia.com/wiki/{cardName.Replace(' ', '_')}");
+                await ReplyAsync($"https://yugipedia.com/wiki/{cardName.Replace(' ', '_')}");
         }
     }
 }

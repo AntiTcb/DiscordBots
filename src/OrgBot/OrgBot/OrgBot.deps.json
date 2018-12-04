@@ -6,7 +6,7 @@
   "compilationOptions": {},
   "targets": {
     ".NETCoreApp,Version=v2.1": {
-      "OrgBot/2.2.2": {
+      "OrgBot/2.2.2.1": {
         "dependencies": {
           "AngleSharp": "0.9.9",
           "BCL": "3.0.1",
@@ -1512,7 +1512,7 @@
     }
   },
   "libraries": {
-    "OrgBot/2.2.2": {
+    "OrgBot/2.2.2.1": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
