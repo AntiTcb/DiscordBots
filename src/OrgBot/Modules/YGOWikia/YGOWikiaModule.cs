@@ -1,5 +1,6 @@
 ﻿namespace OrgBot.Modules.YGOWikia {
     using BCL;
+    using Discord;
     using Discord.Commands;
     using Entities;
     using System.Threading.Tasks;
@@ -24,7 +25,7 @@
                     return;
                 }
                 var prefix = Context.IsPrivate ? ServerConfig.DefaultPrefix : Globals.ServerConfigs[Context.Guild.Id].CommandPrefix;
-                await ReplyAsync($"This command is being removed in a future update. Please begin using the {prefix}card command instead. The card embed for that command will be fully added in a future update.", embed: card?.ToDiscordEmbed().Build());
+                await ReplyAsync(Format.Bold($"This command is being removed in a future update. Please begin using the {prefix}card command instead. The card embed for that command will be fully added in a future update."), embed: card?.ToDiscordEmbed().Build());
             }
         }
     }
