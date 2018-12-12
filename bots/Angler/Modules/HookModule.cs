@@ -79,10 +79,14 @@ namespace Angler.Modules
 
         [Command("unhook")]
         [RequireOwner(Group = "A"), RequireContext(ContextType.DM, Group = "A")]
-        public async Task RemoveWebhookAsync(Uri webhookUrl)
+        public Task RemoveWebhookAsync(Uri webhookUrl)
+            => RemoveWebhookAsync(Webhook.ParseUrl(webhookUrl.ToString()).Id);
+
+        [Command("unhook")]
+        [RequireOwner(Group = "A"), RequireContext(ContextType.DM, Group = "A")]
+        public async Task RemoveWebhookAsync(ulong webhookId)
         {
-            //await Context.Message.DeleteAsync();
-            if (HookService.RemoveWebhook(Webhook.ParseUrl(webhookUrl.ToString()).Id))
+            if (HookService.RemoveWebhook(webhookId))
                 await ReplyAsync("Removed the webhook!");
             else
                 await ReplyAsync("Couldn't remove the webhook.");

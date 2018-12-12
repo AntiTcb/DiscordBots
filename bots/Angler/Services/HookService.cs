@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Angler.Extensions;
 using Discord;
+using Discord.Net;
 using Discord.WebSocket;
 using DiscordBCL.Services;
 using Humanizer;
@@ -62,6 +63,11 @@ namespace Angler.Services
                 try
                 {
                     await wh.GetClient().SendMessageAsync(message);
+                }
+                catch (HttpException http) when (http.DiscordCode == 10015)
+                {
+                    RemoveWebhook(wh.Id);
+                    sb.AppendLine($"Webhook {wh.Id} has been deleted. Automatically removed it from the DB.");
                 }
                 catch (Exception e)
                 {
