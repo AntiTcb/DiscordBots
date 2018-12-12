@@ -39,6 +39,23 @@ namespace Angler.Services
             return _webhooks.TryAdd(wh.Id, wh);
         }
 
+        public bool TryAddWebhook(Website site, string webhookUrl, out Webhook webhook)
+        {
+            var wh = new Webhook(webhookUrl, site);
+            _dbService.Add(wh);
+
+            if (_webhooks.TryAdd(wh.Id, wh))
+            {
+                webhook = wh;
+                return true;
+            }
+            else
+            {
+                webhook = null;
+                return false;
+            }
+        }
+
         public bool UpdateWebhook(ulong webhookId, Website site)
         {
             var wh = _dbService.Get<Webhook>(x => x.Id == webhookId);
