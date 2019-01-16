@@ -38,7 +38,7 @@
             Globals.ServerConfigs.Add(guild.Id, newServerConfig);
             await ConfigHandler.SaveAsync(Globals.SERVER_CONFIG_PATH, Globals.ServerConfigs).ConfigureAwait(false);
 
-            if (guild.DefaultChannel != null)
+            if (guild.DefaultChannel != null && guild.CurrentUser.GetPermissions(guild.DefaultChannel).SendMessages)
                 await guild.DefaultChannel.SendMessageAsync($"Thank you for adding me to the server! The default prefix is currently set to `{Globals.DEFAULT_PREFIX}`." +
                     $"Any user with the Manage Server permission may change this with the `setprefix` command. Use `{Globals.DEFAULT_PREFIX}help` to see all my commands").ConfigureAwait(false);
         }
