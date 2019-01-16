@@ -5,9 +5,9 @@
     using System;
     using System.Net.Http;
 
-    public class AccountDeserializer : IResponseDeserializer
+    public class AccountDeserializer : ResponseDeserializer
     {
-        public T Deserialize<T>(string content, HttpResponseMessage response)
+        public override T Deserialize<T>(string content, HttpResponseMessage response, ResponseDeserializerInfo info)
         {
             var username = response.RequestMessage.RequestUri.ToString().Split(new[] { "player=" }, StringSplitOptions.None)[1];
             var returnAccount = new Account(username.Replace('+', ' ').ToTitleCase(), response.RequestMessage.RequestUri.ToString(), content.Split('\n'));

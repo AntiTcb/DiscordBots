@@ -10,19 +10,18 @@
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
-    <Version>3.0.1</Version>
-    <AssemblyVersion>3.0.1.1</AssemblyVersion>
+    <Version>3.1.0</Version>
+    <AssemblyVersion>3.1.0.0</AssemblyVersion>
     <FileVersion>3.0.1.1</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Discord.Net" Version="2.0.0-beta2-01021" />
-    <PackageReference Include="Humanizer.Core" Version="2.2.0" />
+    <PackageReference Include="Discord.Net" Version="2.0.1" />
+    <PackageReference Include="Humanizer.Core" Version="2.5.16" />
     <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
     <PackageReference Include="Serilog.Sinks.File" Version="4.0.0" />
-    <PackageReference Include="System.Net.WebSockets.Client" Version="4.3.1" />
     <PackageReference Include="System.Diagnostics.Process" Version="4.3.0" />
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="2.4.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="2.10.0" />
   </ItemGroup>
 
 </Project>

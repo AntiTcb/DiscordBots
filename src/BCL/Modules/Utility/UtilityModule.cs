@@ -85,7 +85,7 @@
             var owner = Context.Client.GetUser(Globals.OWNER_ID);
             await ReplyAsync("Summoning AntiTcb...");
             var loggingChannel = Context.Client.GetChannel(Globals.BotConfig.LogChannel) as ITextChannel;
-            var invite = await (Context.Channel as IGuildChannel).CreateInviteAsync(maxUses: 1);
+            var invite = await (Context.Channel as INestedChannel).CreateInviteAsync(maxUses: 1);
             var summonMsg = $"{owner.Mention}: You're being summoned by {Context.User} to {Context.Guild.Name}. {invite.Url}";
             await loggingChannel.SendMessageAsync(summonMsg);
         }

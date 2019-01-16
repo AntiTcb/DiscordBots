@@ -20,7 +20,7 @@
 
         public BotBase()
         {
-            const string outputTemplate = "[{Timestamp:HH:mm:ss}] {Level:u3} {Message:lj}{Newline}{Exception}{Newline}";
+            const string outputTemplate = "[{Timestamp:HH:mm:ss}] {Level:u3} {Message:lj}{Exception}{Newline}";
 
             Client = new DiscordSocketClient(new DiscordSocketConfig { MessageCacheSize = 100, LogLevel = LogSeverity.Debug });
             Services = ConfigureServices();
@@ -34,13 +34,13 @@
 
         public async virtual Task CreateGuildConfigAsync(SocketGuild guild)
         {
-            if (guild.DefaultChannel != null)
-                await guild.DefaultChannel.SendMessageAsync($"Thank you for adding me to the server! The default prefix is currently set to `{Globals.DEFAULT_PREFIX}`." +
-                    $"Any user with the Manage Server permission may change this with the `setprefix` command. Use `{Globals.DEFAULT_PREFIX}help` to see all my commands").ConfigureAwait(false);
-
             var newServerConfig = new ServerConfig(Globals.DEFAULT_PREFIX, new Dictionary<string, string>());
             Globals.ServerConfigs.Add(guild.Id, newServerConfig);
             await ConfigHandler.SaveAsync(Globals.SERVER_CONFIG_PATH, Globals.ServerConfigs).ConfigureAwait(false);
+
+            if (guild.DefaultChannel != null)
+                await guild.DefaultChannel.SendMessageAsync($"Thank you for adding me to the server! The default prefix is currently set to `{Globals.DEFAULT_PREFIX}`." +
+                    $"Any user with the Manage Server permission may change this with the `setprefix` command. Use `{Globals.DEFAULT_PREFIX}help` to see all my commands").ConfigureAwait(false);
         }
 
         public async virtual Task DeleteGuildConfigAsync(SocketGuild guild)

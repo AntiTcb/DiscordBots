@@ -4,7 +4,9 @@
     using Discord;
     using Discord.Commands;
 
-    [Name("Admin"), RequireUserPermission(GuildPermission.ManageGuild), RequireContext(ContextType.Guild)]
+    [Name("Admin")]
+    [RequireUserPermission(GuildPermission.ManageGuild, Group = "Permissions"), RequireOwner(Group = "Permissions")]
+    [RequireContext(ContextType.Guild)]
     public class AdminModule : ModuleBase
     {
         [Command("prefix"), Summary("Gets the prefix for the bot.")]

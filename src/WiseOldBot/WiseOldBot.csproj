@@ -10,9 +10,9 @@
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
-    <AssemblyVersion>2.3.1.1</AssemblyVersion>
-    <FileVersion>2.3.1.1</FileVersion>
-    <Version>2.3.1</Version>
+    <AssemblyVersion>2.4.0.0</AssemblyVersion>
+    <FileVersion>2.4.0.0</FileVersion>
+    <Version>2.4.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
@@ -20,8 +20,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Humanizer.Core" Version="2.2.0" />
-    <PackageReference Include="RestEase" Version="1.4.4" />
+    <PackageReference Include="Humanizer.Core" Version="2.5.16" />
+    <PackageReference Include="RestEase" Version="1.4.7" />
   </ItemGroup>
 
 </Project>
