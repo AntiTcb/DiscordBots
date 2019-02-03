@@ -128,7 +128,7 @@ namespace OrgBot.Modules.YGOPrices.Entities
         [JsonProperty("updated_at")]
         public DateTime UpdatedAt { get; set; }
 
-        public string ToPriceString() => $"Low: {Low:C} || Avg: {Average:C} || High: {High:C}";
+        public string ToPriceString() => $"Low: {Low:C} | Avg: {Average:C} | High: {High:C}";
 
         #endregion Public Fields + Properties
     }
