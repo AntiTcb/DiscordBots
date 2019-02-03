@@ -55,7 +55,7 @@ namespace OrgBot.Modules.YGOPrices.Entities
             SetData = prices.Sets
                 .OrderByDescending(s => s.PriceInfo.Data.Prices.Average)
                 .Take(5)
-                .ToDictionary(s => $"{s.SetName} || {s.PrintTag} || {s.Rarity}", s => s.PriceInfo);                        
+                .ToDictionary(s => $"{s.SetName} | {s.PrintTag} | {s.Rarity}", s => s.PriceInfo);                        
         }
 
         public EmbedBuilder ToDiscordEmbed()

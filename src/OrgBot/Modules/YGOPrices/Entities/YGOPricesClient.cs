@@ -18,7 +18,7 @@
                 var priceResponse = await API.GetCardPriceAsync(cardName);
                 return new YGOPricesCard(dataResponse, priceResponse);
             }
-            catch (ApiException e) when (e.StatusCode == HttpStatusCode.NotFound)
+            catch (ApiException e)
             {
                 return null;
             }
