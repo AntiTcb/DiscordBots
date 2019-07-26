@@ -44,7 +44,7 @@ namespace DiscordBCL
                 },
                 Author = new EmbedAuthorBuilder
                 {
-                    Name = ctx.Guild.CurrentUser.Nickname ?? ctx.Guild.CurrentUser.Username,
+                    Name = ctx.Guild?.CurrentUser.Nickname ?? ctx.Guild?.CurrentUser.Username ?? ctx.Client.CurrentUser.Username,
                     IconUrl = ctx.Client.CurrentUser.GetAvatarUrl() ?? ""
                 },
                 Color = new Color(0x81DAF5),
@@ -64,7 +64,7 @@ namespace DiscordBCL
                 Description = "Commands:",
                 Author = new EmbedAuthorBuilder
                 {
-                    Name = ctx.Guild.CurrentUser.Nickname ?? ctx.Guild.CurrentUser.Username,
+                    Name = ctx.Guild?.CurrentUser.Nickname ?? ctx.Guild?.CurrentUser.Username ?? ctx.Client.CurrentUser.Username,
                     IconUrl = ctx.Client.CurrentUser.GetAvatarUrl() ?? ""
                 },
                 Color = new Color(0x81DAF5),
@@ -100,7 +100,7 @@ namespace DiscordBCL
                 Description = $"{aliases}**__{cmd.Summary}__**{signature}{example}",
                 Author = new EmbedAuthorBuilder
                 {
-                    Name = ctx.Guild.CurrentUser.Nickname ?? ctx.Guild.CurrentUser.Username,
+                    Name = ctx.Guild?.CurrentUser.Nickname ?? ctx.Guild?.CurrentUser.Username ?? ctx.Client.CurrentUser.Username,
                     IconUrl = ctx.Client.CurrentUser.GetAvatarUrl() ?? ""
                 },
                 Color = new Color(0x81DAF5),

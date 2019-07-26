@@ -12,7 +12,6 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
-using DiscordBCL.Configuration;
 
 namespace DiscordBCL.Modules
 {
@@ -22,8 +21,6 @@ namespace DiscordBCL.Modules
         public CommandService CommandService { get; set; }
         public IServiceProvider Provider { get; set; }
         public GuildConfigService GuildConfigs { get; set; }
-
-        private string _prefix;
 
         [Command("help", RunMode = RunMode.Async)]
         [Alias("commands")]
@@ -169,14 +166,6 @@ namespace DiscordBCL.Modules
                 ThumbnailUrl = app.IconUrl
             };
             await ReplyAsync("", embed: eb.Build()).ConfigureAwait(false);
-        }
-
-        protected override void BeforeExecute(CommandInfo command)
-        {
-            if (Context.Guild != null)
-                _prefix = Context.Client.CurrentUser.Mention;
-            else
-                _prefix = GuildConfigs.GetConfig(Context.Guild.Id).Prefix ?? Context.Guild.CurrentUser.Mention;
         }
 
         private static string GetUptime()

@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <Version>1.1.0</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -14,12 +15,12 @@
 
   <ItemGroup>
     <PackageReference Include="Discord.Addons.Interactive" Version="1.0.1" />
-    <PackageReference Include="Discord.Net.Commands" Version="2.0.0-beta2-01021" />
-    <PackageReference Include="Discord.Net.Webhook" Version="2.0.0-beta2-01021" />
-    <PackageReference Include="Discord.Net.WebSocket" Version="2.0.0-beta2-01021" />
-    <PackageReference Include="Humanizer.Core" Version="2.2.0" />
+    <PackageReference Include="Discord.Net.Commands" Version="2.1.1" />
+    <PackageReference Include="Discord.Net.Webhook" Version="2.1.1" />
+    <PackageReference Include="Discord.Net.WebSocket" Version="2.1.1" />
+    <PackageReference Include="Humanizer.Core" Version="2.6.2" />
     <PackageReference Include="LiteDB" Version="4.1.1" />
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="2.6.1" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="3.1.0" />
     <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
     <PackageReference Include="Serilog.Sinks.File" Version="4.0.0" />
     <PackageReference Include="System.Diagnostics.Process" Version="4.3.0" />

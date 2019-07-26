@@ -41,8 +41,10 @@ namespace Angler.Modules
             {
                 try
                 {
-                    await webhook.GetClient().SendMessageAsync($"This is a test message. If you can see it, you're all set up to receive messages from me for new posts on {site}. 😃");
-                    await ReplyAsync($"Added a webhook for {site}!");
+                    ulong msgId = await webhook.GetClient().SendMessageAsync($"This is a test message. If you can see it, you're all set up to receive messages from me for new posts on {site}. 😃");
+
+                    if (msgId > 0)
+                        await ReplyAsync($"Added a webhook for {site}!");
                 }
                 catch (InvalidOperationException)
                 {

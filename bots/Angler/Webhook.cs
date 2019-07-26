@@ -12,7 +12,7 @@ namespace Angler
         static readonly Regex _webhookRegex = new Regex(@".*webhooks\/(\d*)\/(.*)");
 
         [BsonIgnore]
-        private Lazy<DiscordWebhookClient> _client;
+        private readonly Lazy<DiscordWebhookClient> _client;
         
         public Website Site { get; set; }
         public ulong Id { get; set; }
@@ -33,9 +33,7 @@ namespace Angler
 
         public Webhook(string webhookUrl, Website site) : this()
         {
-            var whTuple = ParseUrl(webhookUrl);
-            Id = whTuple.Id;
-            Token = whTuple.Token;
+            (Id, Token) = ParseUrl(webhookUrl);
             Site = site;
         }
 

@@ -11,7 +11,7 @@ namespace DiscordBCL
 
         protected virtual Task CreateGuildConfigAsync(SocketGuild guild)
         {
-            _guildConfigService.AddConfig(guild.Id, "--");
+            _guildConfigService.AddConfig(guild.Id, "!");
             return Task.CompletedTask;
         }
         protected virtual Task ValidateGuildConfigAsync(SocketGuild guild)
