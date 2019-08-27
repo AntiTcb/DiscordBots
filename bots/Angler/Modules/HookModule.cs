@@ -45,6 +45,13 @@ namespace Angler.Modules
 
                     if (msgId > 0)
                         await ReplyAsync($"Added a webhook for {site}!");
+
+                    // DM AntiTcb if webhook was created by someone else.
+                    if (Context.IsPrivate)
+                    {
+                        var owner = Context.Client.GetUser(89613772372574208);
+                        await owner.SendMessageAsync($"User {Context.User} : {Context.User.Id} created a webhook. {webhookUrl} for site {webhook.Site}");
+                    }
                 }
                 catch (InvalidOperationException)
                 {
