@@ -18,9 +18,11 @@ namespace DiscordBCL.Modules
             var config = GuildConfigService.GetConfig(Context.Guild.Id);
 
             if (config == null)
+            {
                 await ReplyAsync("No config found!");
-
-            if (string.IsNullOrWhiteSpace(prefix))
+                GuildConfigService.AddConfig(Context.Guild.Id, prefix);
+            }
+            else if (string.IsNullOrWhiteSpace(prefix))
             {
                 await ReplyAsync(config.Prefix).ConfigureAwait(false);
                 return;
