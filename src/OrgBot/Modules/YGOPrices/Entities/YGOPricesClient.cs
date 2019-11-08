@@ -1,8 +1,7 @@
 ﻿namespace OrgBot.Modules.YGOPrices.Entities
 {
-    using RestEase;
-    using System.Net;
     using System.Threading.Tasks;
+    using RestEase;
 
     public static class YGOPricesClient
     {
@@ -18,7 +17,7 @@
                 var priceResponse = await API.GetCardPriceAsync(cardName);
                 return new YGOPricesCard(dataResponse, priceResponse);
             }
-            catch (ApiException e)
+            catch (ApiException)
             {
                 return null;
             }
