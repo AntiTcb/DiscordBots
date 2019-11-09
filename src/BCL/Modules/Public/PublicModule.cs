@@ -42,7 +42,7 @@ namespace BCL.Modules.Public
             switch (helpMode)
             {
                 case HelpMode.All:
-                    var errMsg = name == "" ? "" :
+                string errMsg = name == "" ? "" :
                         module == null && cmd == null ? "Module/Command not found, showing generic help instead." : "";
                     await ReplyAsync(errMsg, embed: HelpService.GetGenericHelpEmbed(modules, Context).WithAuthor(Context.Client.CurrentUser).Build());
                     break;

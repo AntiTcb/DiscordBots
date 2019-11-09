@@ -14,9 +14,9 @@
     {
         public static EmbedBuilder GetCommandHelpEmbed(CommandInfo command, SocketCommandContext ctx)
         {
-            var prefix = Globals.ServerConfigs[ctx.Guild.Id].CommandPrefix;
-            var title = command.Name.ToTitleCase();
-            var description = (command.Aliases.Any(a => a != command.Name) ? $"**Aliases: {string.Join(", ", command.Aliases)}**\n\n" : "") +
+            string prefix = Globals.ServerConfigs[ctx.Guild.Id].CommandPrefix;
+            string title = command.Name.ToTitleCase();
+            string description = (command.Aliases.Any(a => a != command.Name) ? $"**Aliases: {string.Join(", ", command.Aliases)}**\n\n" : "") +
                 $"**__{command.Summary}__**" +
                 $"\n\tSignature: `{prefix}{command.Name} {(command.Parameters.Any() ? string.Join(" ", command.Parameters.Select(p => p.Name)) : "")}`" +
                 $"\n\tExample: `{prefix}{command.Remarks}`";
@@ -66,7 +66,7 @@
         public static EmbedBuilder GetGenericHelpEmbed(IEnumerable<ModuleInfo> modules, SocketCommandContext ctx)
         {
             var mods = modules.Where(m => m.CanExecute(ctx));
-            var prefix = ctx.Guild == null ? Globals.DEFAULT_PREFIX : Globals.ServerConfigs[ctx.Guild.Id].CommandPrefix;
+            string prefix = ctx.Guild == null ? Globals.DEFAULT_PREFIX : Globals.ServerConfigs[ctx.Guild.Id].CommandPrefix;
             var em = new EmbedBuilder()
                 .WithTitle("Help")
                 .WithDescription("A quick list of all available commands.")
@@ -96,7 +96,7 @@
 
         public static EmbedBuilder GetModuleHelpEmbed(ModuleInfo module, SocketCommandContext ctx)
         {
-            var prefix = ctx.Guild == null ? Globals.DEFAULT_PREFIX : Globals.ServerConfigs[ctx.Guild.Id].CommandPrefix;
+            string prefix = ctx.Guild == null ? Globals.DEFAULT_PREFIX : Globals.ServerConfigs[ctx.Guild.Id].CommandPrefix;
             var em = new EmbedBuilder()
                 .WithTitle(module.Name)
                 .WithDescription("Commands:")

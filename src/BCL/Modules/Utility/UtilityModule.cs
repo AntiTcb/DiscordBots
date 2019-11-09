@@ -32,7 +32,7 @@
          [Summary("The strategy to delete messages - BulkDelete or Manual")] DeleteStrategy deleteStrategy =
              DeleteStrategy.BulkDelete)
         {
-            var index = 0;
+            int index = 0;
             var deleteMessages = new List<IMessage>(count);
             var messages = Context.Channel.GetMessagesAsync();
             await messages.ForEachAsync
@@ -86,7 +86,7 @@
             await ReplyAsync("Summoning AntiTcb...");
             var loggingChannel = Context.Client.GetChannel(Globals.BotConfig.LogChannel) as ITextChannel;
             var invite = await (Context.Channel as INestedChannel).CreateInviteAsync(maxUses: 1);
-            var summonMsg = $"{owner.Mention}: You're being summoned by {Context.User} to {Context.Guild.Name}. {invite.Url}";
+            string summonMsg = $"{owner.Mention}: You're being summoned by {Context.User} to {Context.Guild.Name}. {invite.Url}";
             await loggingChannel.SendMessageAsync(summonMsg);
         }
 

@@ -21,8 +21,7 @@ namespace BCL
         }
 
         public async virtual Task HandleCommandAsync(SocketMessage msg) {
-            var message = msg as SocketUserMessage;
-            if (message == null || msg.Author.Id == Client.CurrentUser.Id) 
+            if (!(msg is SocketUserMessage message) || msg.Author.Id == Client.CurrentUser.Id)
                 return;
 
             int argPos = 0;
@@ -30,8 +29,7 @@ namespace BCL
             string prefix = guildChannel?.Guild == null
                              ? ServerConfig.DefaultPrefix : Globals.ServerConfigs[guildChannel.Guild.Id].CommandPrefix;
 
-            if (!(message.HasMentionPrefix(Client.CurrentUser, ref argPos) ||
-                  message.HasStringPrefix(prefix, ref argPos)))
+            if (!(message.HasMentionPrefix(Client.CurrentUser, ref argPos) || message.HasStringPrefix(prefix, ref argPos)))
                 return;
 
             var ctx = new SocketCommandContext(Client, message);

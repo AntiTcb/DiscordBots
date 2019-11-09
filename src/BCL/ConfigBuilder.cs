@@ -25,7 +25,7 @@ namespace BCL {
                         continue;
                     }
                     Console.WriteLine($"Input the value for property {prop.Name}:");
-                    var propValue = Console.ReadLine();
+                    string propValue = Console.ReadLine();
                     prop.SetValue(boxedConfig, Convert.ChangeType(propValue, prop.PropertyType));
                 }
                 return (T)boxedConfig;

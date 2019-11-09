@@ -27,14 +27,12 @@
 
             [Command("execute"),
                 Alias("run", "exec", "=>"), Summary("Executes a valid C# expression"), Remarks("eval execute 1+1")]
-            public async Task EvaluateAsync([Remainder, Summary("C# expression to evaluate")] string expression) {
-                await EvalService.EvaluateAsync(Context, expression).ConfigureAwait(false);
-            }
+            public async Task EvaluateAsync([Remainder, Summary("C# expression to evaluate")] string expression) 
+                => await EvalService.EvaluateAsync(Context, expression).ConfigureAwait(false);
 
             [Command("list"), Alias("l"), Summary("Lists all the current namespace imports."), Remarks("eval list")]
-            public async Task ListImportsAsync() {
+            public async Task ListImportsAsync() => 
                 await ReplyAsync(string.Join(", ", Globals.EvalImports.Select(x => x))).ConfigureAwait(false);
-            }
 
             [Command("remove"),
                 Alias("delete"),

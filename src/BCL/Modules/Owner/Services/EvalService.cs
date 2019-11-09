@@ -22,7 +22,7 @@
                 var _globals = new ScriptGlobals { client = context.Client as DiscordSocketClient, context = context };
                 script = script.Trim('`');
                 try {
-                    var eval = await CSharpScript.EvaluateAsync(script, options, _globals, typeof(ScriptGlobals));
+                    object eval = await CSharpScript.EvaluateAsync(script, options, _globals, typeof(ScriptGlobals));
                     await context.Channel.SendMessageAsync(eval.ToString());
                 }
                 catch (Exception e) {

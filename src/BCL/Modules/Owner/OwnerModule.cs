@@ -10,9 +10,8 @@
     public partial class OwnerModule : ModuleBase<SocketCommandContext> {
 
         [Command("echo"), Summary("Echos the user input."), Remarks("echo potato")]
-        public async Task EchoAsync([Remainder, Summary("Text to echo")] string text) {
-            await ReplyAsync(text).ConfigureAwait(false);
-        }
+        public async Task EchoAsync([Remainder, Summary("Text to echo")] string text) 
+            => await ReplyAsync(text).ConfigureAwait(false);
 
         [Command("powerdown", RunMode = RunMode.Async), Alias("pd"), Summary("Terminates the bot application"), Remarks("powerdown")]
         public async Task PowerdownAsync() {
@@ -48,7 +47,7 @@
                     break;
 
                 case UserProperty.Avatar:
-                    var url = value;
+                string url = value;
                     if (value == "reset") {
                         var app = await Context.Client.GetApplicationInfoAsync().ConfigureAwait(false);
                         url = app.IconUrl;
