@@ -73,7 +73,7 @@ namespace OrgBot.Modules.YGOPrices.Entities
                 {
                     eb.WithDescription("Could not find card information. Double check your input; Card names must be exact.");
                 }
-                var status = DataStatus;
+                string status = DataStatus;
                 eb.AddField((f) => f.WithName("Error Status:").WithValue(status).WithIsInline(true));
             } else
             {

@@ -66,7 +66,7 @@ namespace OrgBot.Modules.YGOPrices.Entities
             var eb = new EmbedBuilder();
             foreach (var set in Sets)
             {
-                var fieldName = $"{set.SetName} - {set.Rarity} - {set.PrintTag}";
+                string fieldName = $"{set.SetName} - {set.Rarity} - {set.PrintTag}";
                 string fieldValue;
                 if (set.PriceInfo.Status == "success")
                 {
