@@ -64,7 +64,7 @@ namespace OrgBot
 
         public int? LinkRating => LinkArrows?.Split(',')?.Count();
         public string Description => WikiFormat.ResolveMarkup(DescriptionRaw);
-        public string ImageUrl => $"https://yugipedia.com/wiki/File:{Image}";
+        public string ImageUrl => $"https://yugipedia.com/wiki/Special:FilePath/{Image}";
         public string PendulumEffect => WikiFormat.ResolveMarkup(PendulumEffectRaw);
         public string Type => string.Join("/", Types.Where(t => !string.IsNullOrEmpty(t)));
 

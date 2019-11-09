@@ -25,7 +25,7 @@ namespace OrgBot.Modules
         {
             using (var c = new HttpClient())
             {
-                var json = await c.GetStringAsync("https://ygorganization.com/wp-json/wp/v2/posts/?per_page=1");
+                string json = await c.GetStringAsync("https://ygorganization.com/wp-json/wp/v2/posts/?per_page=1");
                 var dummyModel = JsonConvert.DeserializeObject<PostsModel[]>(json).FirstOrDefault();
                 await ReplyAsync(dummyModel?.Link ?? "Latest article could not be found.");
             }

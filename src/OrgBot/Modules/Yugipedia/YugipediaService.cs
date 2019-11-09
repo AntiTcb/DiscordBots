@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -15,16 +16,21 @@ namespace OrgBot
 
         private static readonly Regex _cardTableParser = new Regex(@"\|\s([\w|_]+)\s*=\s(.*)", RegexOptions.Compiled);
 
-        public YugipediaService(WikiSite site)
-        {
-            Site = site;
-        }
-        
+        public YugipediaService(WikiSite site) 
+            => Site = site;
+
         public async Task<YugipediaCard> GetCardAsync(string cardName)
         {
             var page = new WikiPage(Site, cardName);
-            await page.RefreshAsync(PageQueryOptions.FetchContent | PageQueryOptions.ResolveRedirects);
-
+            try
+            {
+                await page.RefreshAsync(PageQueryOptions.FetchContent | PageQueryOptions.ResolveRedirects);
+            }
+            catch (TimeoutException e)
+            {
+                var ex = new TimeoutException("The Yugipedia API timed out; please try again.", e);
+                throw ex;
+            }
             if (string.IsNullOrEmpty(page.Content) || page.NamespaceId != 0 || !page.Content.Contains("{{CardTable2")) return null;
 
             var propDict = new Dictionary<string, string>

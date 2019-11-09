@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Discord.Commands;
 
 namespace OrgBot
@@ -14,11 +15,18 @@ namespace OrgBot
         {
             using (Context.Channel.EnterTypingState())
             {
-                var card = await Yugipedia.GetCardAsync(cardName);
-                if (card is null)
-                    await ReplyAsync("Couldn't find a matching card in the TCG/OCG.");
-                else
-                    await ReplyAsync(embed: card.ToEmbed());
+                try
+                {
+                    var card = await Yugipedia.GetCardAsync(cardName); 
+                    if (card is null)
+                        await ReplyAsync("Couldn't find a matching card in the TCG/OCG.");
+                    else
+                        await ReplyAsync(embed: card.ToEmbed());
+                }
+                catch (TimeoutException e) when (e.Message == "The Yugipedia API timed out; please try again.")
+                {
+                    await ReplyAsync(e.Message);
+                }
             }
         }
     }
