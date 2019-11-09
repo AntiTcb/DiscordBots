@@ -99,12 +99,12 @@ namespace OrgBot
 
                 if (isPend)
                 {
-                    descriptionBuilder.AppendLine($"{CustomEmoji.LeftScale}{PendulumScale} / {CustomEmoji.RightScale}");
-                    descriptionBuilder.AppendLine($"{Bold("Pendulum Effect:")}\n{PendulumEffect}\n");
+                    descriptionBuilder.AppendLine($"{CustomEmoji.LeftScale} {PendulumScale} / {PendulumScale} {CustomEmoji.RightScale}\n");
+                    descriptionBuilder.AppendLine($"{Bold("Pendulum Effect:")}\n{PendulumEffect}");
                 }
             }
 
-            descriptionBuilder.AppendLine($"{Bold("Description")}\n{Description}");
+            descriptionBuilder.AppendLine($"\n{Bold("Description")}\n{Description}");
 
 
             var em = new EmbedBuilder
