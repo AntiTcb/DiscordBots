@@ -12,15 +12,21 @@ namespace OrgBot
 {
     public class YugipediaService
     {
-        public WikiSite Site { get;set; }
+        public WikiSite Site { get; set; }
 
         private static readonly Regex _cardTableParser = new Regex(@"\|\s([\w|_]+)\s*=\s(.*)", RegexOptions.Compiled);
+        private static readonly Regex _searchFiltering = new Regex(@"\((anime|BAM)\)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
         public YugipediaService(WikiSite site) 
             => Site = site;
 
         public async Task<YugipediaCard> GetCardAsync(string cardName)
         {
+            var searchResults = (await Site.OpenSearchAsync(cardName)).Where(r => !_searchFiltering.IsMatch(r.Url));
+            cardName = searchResults.First().Title;
+
+            if (cardName is null) return null;
+
             var page = new WikiPage(Site, cardName);
             try
             {
