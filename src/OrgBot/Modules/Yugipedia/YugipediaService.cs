@@ -23,7 +23,10 @@ namespace OrgBot
         public async Task<YugipediaCard> GetCardAsync(string cardName)
         {
             var searchResults = (await Site.OpenSearchAsync(cardName)).Where(r => !_searchFiltering.IsMatch(r.Url));
-            cardName = searchResults.First().Title;
+
+            if (!searchResults.Any()) return null;
+
+            cardName = searchResults.FirstOrDefault().Title;
 
             if (cardName is null) return null;
 
