@@ -20,13 +20,13 @@ namespace OrgBot
             set => _attribute = value?.ToTitleCase() ?? string.Empty;
         }
         [JsonProperty("atk")]
-        public int? Attack { get; set; }
+        public string Attack { get; set; }
         [JsonProperty("card_type")]
         public string CardType { get; set; }
         [JsonProperty("database_id")]
         public string DatabaseId { get; set; }
         [JsonProperty("def")]
-        public int? Defense { get; set; }
+        public string Defense { get; set; }
         [JsonProperty("image")]
         public string Image { get; set; }
         [JsonProperty("link_arrows")]
