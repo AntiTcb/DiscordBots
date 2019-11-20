@@ -11,7 +11,7 @@
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
-    <AssemblyVersion>2.4.0.1</AssemblyVersion>
+    <AssemblyVersion>2.4.0.2</AssemblyVersion>
     <FileVersion>2.4.0.1</FileVersion>
     <Version>2.4.0</Version>
     <RepositoryUrl>https://github.com/AntiTcb/DiscordBots</RepositoryUrl>
