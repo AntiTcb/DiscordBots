@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Discord;
 using Discord.Commands;
 
 namespace OrgBot
@@ -26,6 +27,17 @@ namespace OrgBot
                 catch (TimeoutException e) when (e.Message == "The Yugipedia API timed out; please try again.")
                 {
                     await ReplyAsync(e.Message);
+
+                    var eb = new EmbedBuilder
+                    {
+                        Title = "Yugipedia timeout",
+                        Description = e.Data["requestProcess"].ToString()
+                    }
+                    .AddField("Caller", Context.User.ToString(), true)
+                    .AddField("Guild", Context.IsPrivate ? Context.Guild.ToString() : "DM")
+                    .AddField("Channel", Context.Channel.Id);
+
+                    await (Context.Client.GetChannel(229841705128427532) as IMessageChannel).SendMessageAsync(embed: eb.Build());
                 }
             }
         }

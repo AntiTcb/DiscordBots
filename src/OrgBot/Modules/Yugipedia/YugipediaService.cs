@@ -22,9 +22,11 @@ namespace OrgBot
 
         public async Task<YugipediaCard> GetCardAsync(string cardName)
         {
+            var requestProcess = "Start.";
             try
             {
                 var searchResults = (await Site.OpenSearchAsync(cardName)).Where(r => !_searchFiltering.IsMatch(r.Url));
+                requestProcess = "After search.";
 
                 if (!searchResults.Any()) return null;
 
@@ -34,6 +36,7 @@ namespace OrgBot
 
                 var page = new WikiPage(Site, cardName);
                 await page.RefreshAsync(PageQueryOptions.FetchContent | PageQueryOptions.ResolveRedirects);
+                requestProcess = "Fetch Content & Resolve Redirects.";
 
                 if (string.IsNullOrEmpty(page.Content) || page.NamespaceId != 0 || !page.Content.Contains("{{CardTable2")) return null;
 
@@ -58,6 +61,7 @@ namespace OrgBot
             catch (TimeoutException e)
             {
                 var ex = new TimeoutException("The Yugipedia API timed out; please try again.", e);
+                ex.Data.Add("requestProcess", requestProcess);
                 throw ex;
             }           
         }
