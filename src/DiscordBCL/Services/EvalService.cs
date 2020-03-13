@@ -47,7 +47,7 @@ namespace DiscordBCL.Services
                     Footer = new EmbedFooterBuilder { Text = $"Elapsed: {sw.Elapsed.Humanize()}" }
                 };
 
-                await working.ModifyAsync(x => { x.Content = ""; x.Embed = eb.Build(); });
+                await working.ModifyAsync(x => { x.Content = "Done!"; x.Embed = eb.Build(); });
             }
             catch (Exception e)
             {
