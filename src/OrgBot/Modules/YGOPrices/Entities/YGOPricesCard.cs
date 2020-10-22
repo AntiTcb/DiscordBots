@@ -2,10 +2,8 @@
 
 namespace OrgBot.Modules.YGOPrices.Entities
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Threading.Tasks;
     using Discord;
 
     public struct YGOPricesCard
@@ -64,9 +62,9 @@ namespace OrgBot.Modules.YGOPrices.Entities
                .WithTitle(CardName)
                .WithAuthor((a) => 
                     a.WithName("YugiohPrices.com")
-                     .WithIconUrl("http://www.appsgalery.com/pictures/000/629/-ugioh--rices-629524.png")
-                     .WithUrl("http://yugiohprices.com"))
-               .WithThumbnailUrl("http://yugiohprices.com/img/banner.png");
+                     .WithIconUrl("https://yugiohprices.com/img/banner.png")
+                     .WithUrl("https://yugiohprices.com/"))
+               .WithThumbnailUrl("https://yugiohprices.com/img/banner.png");
             if (DataStatus != "success")
             {
                 if (DataStatus == "fail")

@@ -7,7 +7,7 @@
     {
         internal static readonly IYGOPricesAPI API = RestClient.For<IYGOPricesAPI>(BASE_URI);
 
-        const string BASE_URI = "http://yugiohprices.com/api/";
+        const string BASE_URI = "https://yugiohprices.com/api/";
 
         public static async Task<YGOPricesCard?> GetCardAndPriceResponseAsync(string cardName)
         {
