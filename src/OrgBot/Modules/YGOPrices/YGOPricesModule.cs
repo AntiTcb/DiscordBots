@@ -11,18 +11,25 @@
         [Command("card"), Alias("c"), Summary("Looks up the top 5 prices of a Yu-Gi-Oh! card. Names must be exact."), Remarks("price c sangan")]
         public async Task GetCardPriceAsync([Summary("Card name. Must be exact."), Remainder] string cardName)
         {
-            using (Context.Channel.EnterTypingState())
+            try
             {
-                var card = await YGOPricesClient.GetCardAndPriceResponseAsync(cardName);
-
-                if (card == null)
+                using (Context.Channel.EnterTypingState())
                 {
-                    await ReplyAsync("Card was null. Data could not be found.");
-                    return;
+                    var card = await YGOPricesClient.GetCardAndPriceResponseAsync(cardName);
+
+                    if (card == null)
+                    {
+                        await ReplyAsync("Card was null. Data could not be found.");
+                        return;
+                    }
+                    var em = card?.ToDiscordEmbed();
+                    em.WithUrl(Uri.EscapeUriString($"http://yugiohprices.com/card_price?name={cardName}"));
+                    await ReplyAsync("", embed: em.Build());
                 }
-                var em = card?.ToDiscordEmbed();
-                em.WithUrl(Uri.EscapeUriString($"http://yugiohprices.com/card_price?name={cardName}"));
-                await ReplyAsync("", embed: em.Build());
+            }
+            catch (Exception e)
+            {
+                await ReplyAsync($"Error: {e}");
             }
         }
 
