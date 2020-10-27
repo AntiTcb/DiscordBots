@@ -8,6 +8,9 @@
     using System.Threading.Tasks;
     using Microsoft.Extensions.DependencyInjection;
     using Modules.GETracker.Entities;
+    using WiseOldBot.Modules.GETracker;
+    using global::WiseOldBot.Modules.GETracker;
+    using System.Linq;
 
     public class WiseOldBot : BotBase
     {
@@ -47,6 +50,23 @@
             Client.GuildAvailable += CheckForGuildConfigAsync;
             Client.JoinedGuild += CreateGuildConfigAsync;
             Client.LeftGuild += DeleteGuildConfigAsync;
+            Client.MessageReceived += HandleRSUpdateAsync;
+        }
+
+        private async Task HandleRSUpdateAsync(SocketMessage msg)
+        {
+            if (msg.Author.IsWebhook && msg.Author.Id == 710419964254748722 && msg.Content.Contains("[RS Update]"))
+            {
+                var newItems = await GETrackerModule.RebuildItemsAsync();
+
+                if (!newItems.Any())
+                {
+                    await msg.Channel.SendMessageAsync("Item map rebuilt. No new items.");
+                    return;
+                }
+
+                await msg.Channel.SendMessageAsync($"Item map rebuilt! New items: {string.Join(", ", newItems.Select(x => x.Key.ToString()))}");
+            }
         }
 
         private async Task CheckForGuildConfigAsync(SocketGuild socketGuild)
