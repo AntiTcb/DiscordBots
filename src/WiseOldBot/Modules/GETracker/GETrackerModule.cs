@@ -1,6 +1,7 @@
 ﻿namespace WiseOldBot.Modules.GETracker
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
     using Discord;
@@ -75,12 +76,7 @@
         {
             using (Context.Channel.EnterTypingState())
             {
-                var inItems = (await GETrackerAPIClient.DownloadItemsAsync())["data"].GroupBy(x => x.Name).
-                    ToDictionary(g => g.Key, g => g.OrderBy(x => x.ItemId).ToList());
-                var newItems = inItems.Values.SelectMany(x => x)
-                    .Except(GETrackerAPIClient.Items.Values.SelectMany(x => x))
-                    .GroupBy(x => x.Name).ToDictionary(g => g.Key, g => g.OrderBy(x => x.ItemId).ToList());
-                int newItemCount = newItems.Count;
+                var newItems = await RebuildItemsAsync();
                 
                 if (!newItems.Any())
                 {
@@ -88,11 +84,22 @@
                     return;
                 }
 
-                foreach (var item in newItems)
-                    GETrackerAPIClient.Items.Add(item.Key.ToLower(), item.Value);
-
                 await ReplyAsync($"Item map rebuilt! New items: {string.Join(", ", newItems.Select(x => x.Key.ToString()))}");
             }
+        }
+
+        public static async Task<Dictionary<string, List<GETrackerItem>>> RebuildItemsAsync()
+        {
+            var inItems = (await GETrackerAPIClient.DownloadItemsAsync())["data"].GroupBy(x => x.Name).
+                    ToDictionary(g => g.Key, g => g.OrderBy(x => x.ItemId).ToList());
+            var newItems = inItems.Values.SelectMany(x => x)
+                    .Except(GETrackerAPIClient.Items.Values.SelectMany(x => x))
+                    .GroupBy(x => x.Name).ToDictionary(g => g.Key, g => g.OrderBy(x => x.ItemId).ToList());
+
+            foreach (var item in newItems)
+                GETrackerAPIClient.Items.Add(item.Key.ToLower(), item.Value);
+
+            return newItems;
         }
 
         [Command("status"), Alias("osbstatus")]
