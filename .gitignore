@@ -249,3 +249,4 @@ AntiBot
 
 bots/Angler/configs/
 /src/WiseOldBot/logs
+/bots/Angler/publishSlim/configs/bot_config.json
