@@ -14,7 +14,7 @@
     {
         public static EmbedBuilder GetCommandHelpEmbed(CommandInfo command, SocketCommandContext ctx)
         {
-            string prefix = Globals.ServerConfigs[ctx.Guild.Id].CommandPrefix;
+            string prefix = (ctx.Guild is null) ? Globals.DEFAULT_PREFIX : Globals.ServerConfigs[ctx.Guild.Id].CommandPrefix;
             string title = command.Name.ToTitleCase();
             string description = (command.Aliases.Any(a => a != command.Name) ? $"**Aliases: {string.Join(", ", command.Aliases)}**\n\n" : "") +
                 $"**__{command.Summary}__**" +

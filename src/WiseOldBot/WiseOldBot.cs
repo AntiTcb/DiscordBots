@@ -8,8 +8,7 @@
     using System.Threading.Tasks;
     using Microsoft.Extensions.DependencyInjection;
     using Modules.GETracker.Entities;
-    using WiseOldBot.Modules.GETracker;
-    using global::WiseOldBot.Modules.GETracker;
+    using Modules.GETracker;
     using System.Linq;
 
     public class WiseOldBot : BotBase
