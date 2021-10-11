@@ -52,9 +52,10 @@
 
         public string OSRSExchange => $"http://services.runescape.com/m=itemdb_oldschool/Runescape/viewitem?obj={ItemId}";
         public string RSBExchange => $"https://rsbuddy.com/exchange?id={ItemId}&";
-        public string Wikia => $"http://os.rs.wiki/w/{Name.Replace(" ", "_")}";
+        public string Wikia => $"https://os.rs.wiki/w/{Name.Replace(" ", "_")}";
         public string RSIconUrl => $"http://services.runescape.com/m=itemdb_oldschool/1509361245218_obj_big.gif?id={ItemId}";
         public string RSIconSpriteUrl => $"http://services.runescape.com/m=itemdb_oldschool/1509361245218_obj_sprite.gif?id={ItemId}";
+        public string WikiExchange => $"https://prices.runescape.wiki/osrs/item/{ItemId}";
 
         public override bool Equals(object item) => ItemId == (item as GETrackerItem)?.ItemId;
         public override int GetHashCode() => ItemId;
@@ -64,7 +65,7 @@
             var eb = new EmbedBuilder()
             {
                 Title = $"{Name} (ID: {ItemId})",
-                Description = $"[GE-Tracker]({Url}) | [OSRS Exchange]({OSRSExchange}) | [RSB Exchange]({RSBExchange}) | [2007 Wiki]({Wikia})\nUpdated: {(DateTime.UtcNow - UpdatedAt.Value).Humanize(3, minUnit: TimeUnit.Second, maxUnit: TimeUnit.Minute)} ago.",
+                Description = $"[GE-Tracker]({Url}) | [OSRS Exchange]({OSRSExchange}) | [RSB Exchange]({RSBExchange}) | [2007 Wiki]({Wikia}) | [Wiki Exchange]()\nUpdated: {(DateTime.UtcNow - UpdatedAt.Value).Humanize(3, minUnit: TimeUnit.Second, maxUnit: TimeUnit.Minute)} ago.",
                 Url = Url.ToString(),
                 ThumbnailUrl = RSIconUrl
             }

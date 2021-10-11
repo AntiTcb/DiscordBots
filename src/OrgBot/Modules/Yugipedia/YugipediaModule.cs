@@ -12,6 +12,7 @@ namespace OrgBot
 
         [Command("card"), Alias("c", "wikia card", "wikia c", "wiki card", "wiki c")]
         [Summary("Searches Yugipedia and returns card information."), Remarks("card sangan")]
+        [RequireBotPermission(ChannelPermission.EmbedLinks)]
         public async Task GetCardAsync([Summary("Card name, case insensitive"), Remainder] string cardName)
         {
             using (Context.Channel.EnterTypingState())
