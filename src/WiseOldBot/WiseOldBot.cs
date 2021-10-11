@@ -54,7 +54,7 @@
 
         private async Task HandleRSUpdateAsync(SocketMessage msg)
         {
-            if (msg.Author.IsWebhook && msg.Author.Id == 710419964254748722 && msg.Content.Contains("[RS Update]"))
+            if (msg.Author.IsWebhook && msg.Author.Id == 710419964254748722 && (msg.Content.Contains("[RS Update]") || msg.Content.Contains("Import")))
             {
                 var newItems = await GETrackerModule.RebuildItemsAsync();
 
