@@ -54,17 +54,17 @@
 
         private async Task HandleRSUpdateAsync(SocketMessage msg)
         {
-            if (msg.Author.IsWebhook && msg.Author.Id == 710419964254748722 && msg.Content.Contains("[RS Update]"))
+            if (msg.Author.IsWebhook && msg.Author.Id == 710419964254748722 && (msg.Content.Contains("[RS Update]") || msg.Content.Contains("Import")))
             {
                 var newItems = await GETrackerModule.RebuildItemsAsync();
 
                 if (!newItems.Any())
                 {
-                    await msg.Channel.SendMessageAsync("Item map rebuilt. No new items.");
+                    await (Client.GetChannel(229841725722460160) as IMessageChannel).SendMessageAsync("Item map rebuilt. No new items.");
                     return;
                 }
 
-                await msg.Channel.SendMessageAsync($"Item map rebuilt! New items: {string.Join(", ", newItems.Select(x => x.Key.ToString()))}");
+                await (Client.GetChannel(229841725722460160) as IMessageChannel).SendMessageAsync($"Item map rebuilt! New items: {string.Join(", ", newItems.Select(x => x.Key.ToString()))}");
             }
         }
 
