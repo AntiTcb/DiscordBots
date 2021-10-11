@@ -15,7 +15,7 @@ namespace Angler
 {
     public class Angler
     {
-        private IServiceProvider _services;
+        private readonly IServiceProvider _services;
         private readonly DiscordShardedClient _client;
         private readonly BotConfig _config;
         private readonly HookService _hookService;
