@@ -1,5 +1,6 @@
 ﻿namespace OrgBot.Modules.YGOPrices
 {
+    using Discord;
     using Discord.Commands;
     using Entities;
     using System;
@@ -9,6 +10,7 @@
     public class YGOPricesModule : ModuleBase
     {
         [Command("card"), Alias("c"), Summary("Looks up the top 5 prices of a Yu-Gi-Oh! card. Names must be exact."), Remarks("price c sangan")]
+        [RequireBotPermission(ChannelPermission.EmbedLinks)]
         public async Task GetCardPriceAsync([Summary("Card name. Must be exact."), Remainder] string cardName)
         {
             try
