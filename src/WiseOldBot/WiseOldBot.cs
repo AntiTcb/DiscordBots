@@ -60,11 +60,11 @@
 
                 if (!newItems.Any())
                 {
-                    await msg.Channel.SendMessageAsync("Item map rebuilt. No new items.");
+                    await (Client.GetChannel(229841725722460160) as IMessageChannel).SendMessageAsync("Item map rebuilt. No new items.");
                     return;
                 }
 
-                await msg.Channel.SendMessageAsync($"Item map rebuilt! New items: {string.Join(", ", newItems.Select(x => x.Key.ToString()))}");
+                await (Client.GetChannel(229841725722460160) as IMessageChannel).SendMessageAsync($"Item map rebuilt! New items: {string.Join(", ", newItems.Select(x => x.Key.ToString()))}");
             }
         }
 
