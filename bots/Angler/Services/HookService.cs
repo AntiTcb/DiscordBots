@@ -81,7 +81,7 @@ namespace Angler.Services
                 {
                     await wh.GetClient().SendMessageAsync(message);
                 }
-                catch (HttpException http) when (http.DiscordCode == 10015)
+                catch (HttpException http) when (http.DiscordCode == DiscordErrorCode.UnknownWebhook)
                 {
                     RemoveWebhook(wh.Id);
                     sb.AppendLine($"Webhook {wh.Id} has been deleted. Automatically removed it from the DB.");
@@ -89,7 +89,7 @@ namespace Angler.Services
                 catch (Exception e)
                 {
                     Log.Debug(e.ToString());
-                    sb.AppendLine($"Webhook: {wh.Id} || {e.ToString()}");
+                    sb.AppendLine($"Webhook: {wh.Id} || {e}");
                 }
             }
 
